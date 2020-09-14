@@ -1,5 +1,5 @@
-PATH_TO_SERVE="./"
-PORT = 4542
+PATH_TO_SERVE="/home/bestosinworldnot/PiElectricsEagles/target"
+PORT = 4142
 
 import http.server
 import socketserver
@@ -16,12 +16,13 @@ pass
 
 
 def build_via_cargo_docs():
-	os.chdir(PATH_TO_SERVE)
+
 	if PATH_TO_SERVE=="./":
 		print("YOU WHAT REMOVE SYSTEM NOT BE IDIOT")
 	else:
 		os.system("rm -rf "+PATH_TO_SERVE)
-	os.system("cargo doc")	
+	os.system("cargo doc")
+	os.chdir(PATH_TO_SERVE)
 pass
 
 
