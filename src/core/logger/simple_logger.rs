@@ -1,6 +1,21 @@
 /*
 Simple Rust Logger for Drone code. It is really simple ,but helpfull
 Write for Alex Zaslavskis
+
+API :
+The  Usage :
+
+#[path = "core/logger/simple_logger.rs"] mod simple_logger;
+
+fn main() {
+
+    simple_logger::logger(1, false, "NO ERRORS".parse().unwrap());
+    simple_logger::logger(1, true, "NO ERRORS".parse().unwrap());
+    #1 is mode
+    #false - is write to file
+
+}
+
  */
 
 
