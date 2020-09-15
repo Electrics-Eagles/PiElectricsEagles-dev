@@ -24,7 +24,9 @@ use chrono;
 use std::fs::{OpenOptions, File};
 use std::io::{Write, Read};
 
-
+pub fn logger_verison() -> &'static str {
+    return "LOGGER VER V1.0.1 15/09/2020";
+}
 pub fn logger(mode : i32, file:bool, msg : String ) {
     let mut _mode_name = "".to_string();
     match mode {

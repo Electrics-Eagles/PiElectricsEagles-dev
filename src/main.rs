@@ -9,9 +9,13 @@ mod config_parser;
 
 
 fn main() {
+    simple_logger::logger(1, false, simple_logger::logger_verison().parse().unwrap());
+    simple_logger::logger(1, false, config_parser::config_parser_version().parse().unwrap());
+
     simple_logger::logger(1, false, "SOFTWARE RUN".parse().unwrap());
     simple_logger::logger(1, false, "CONFIG READ&PARSE".parse().unwrap());
     let pids_values = get_pids();
     println!("{}",pids_values.get(0).unwrap()[0]);
     simple_logger::logger(1, false, "CONFIG READ&PARSE=OK".parse().unwrap());
+
 }

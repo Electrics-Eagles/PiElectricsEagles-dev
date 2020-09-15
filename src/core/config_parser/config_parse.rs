@@ -35,6 +35,9 @@ fn parse(first_number_str: &str) -> Result<i32, ParseIntError> {
     let value = first_number_str.parse::<i32>()?;
     Ok(value)
 }
+pub fn config_parser_version() -> &'static str {
+    return "CONFIG PARSER VERSION V2.0.0 Alpha 15/09/2020";
+}
 
 //Takes from config data parser it and return in i32 format
 pub fn pid_parse(section:String, p_str:String, i_str:String, d_str:String, max:String) -> [i32; 4] {
