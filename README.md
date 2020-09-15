@@ -8,3 +8,4 @@ Code Style:
 3) Use KISS,DRY , SOLID principa
 4) add public function that returns code module verison
 5) do not edit other modules if is not requrired.
+6) add dependency if you really need it.
