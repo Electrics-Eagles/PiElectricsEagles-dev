@@ -9,3 +9,7 @@ Code Style:
 4) add public function that returns code module verison
 5) do not edit other modules if is not requrired.
 6) add dependency if you really need it.
+
+
+**DO NOT COMMIT TARGET FOLDER WITH DOCS AND BUILD RESULT **
+**SOURCE CODE ONLY**
