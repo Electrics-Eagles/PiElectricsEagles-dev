@@ -5,6 +5,9 @@ mod simple_logger;
 #[path = "core/config_parser/config_parse.rs"]
 mod config_parser;
 
+#[path = "core/sbus_transmiter/sbus.rs"]
+mod sbus;
+
 
 
 
@@ -17,5 +20,9 @@ fn main() {
     let pids_values = get_pids();
     println!("{}",pids_values.get(0).unwrap()[0]);
     simple_logger::logger(1, false, "CONFIG READ&PARSE=OK".parse().unwrap());
+    let sbus=config_parser::sbus_receiver_conifg();
+    sbus::read_sbus(sbus.baudrate, sbus.parity, sbus.data_bits as u8, sbus.stop_bit as u8, sbus.port);
+
+
 
 }
