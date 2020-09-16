@@ -43,6 +43,10 @@ fn parse_u32(first_number_str: &str) -> Result<u32, ParseIntError> {
 pub fn config_parser_version() -> &'static str {
     return "CONFIG PARSER VERSION V2.0.1 Alpha 16/09/2020";
 }
+
+pub fn logger_verison() -> &'static str {
+    return "LOGGER VER V1.0.1 15/09/2020";
+}
 pub struct SbusConfig {
     pub baudrate: u32,
     pub parity: u32,

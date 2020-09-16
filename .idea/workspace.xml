@@ -23,12 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c89d9f9e-8fbb-4894-855f-9c37833dba93" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/sbus_transmiter/sbus.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/core.ini" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/core.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/config_parser/config_parse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/config_parser/config_parse.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/sbus_transmiter/sbus.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/sbus_transmiter/sbus.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,22 +133,22 @@
       <screen x="0" y="27" width="1600" height="814" />
     </state>
     <state x="535" y="286" width="519" height="328" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1600.814@0.27.1600.814" timestamp="1600204116327" />
-    <state width="1554" height="181" key="GridCell.Tab.0.bottom" timestamp="1600293069248">
+    <state width="1554" height="181" key="GridCell.Tab.0.bottom" timestamp="1600293746023">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
-    <state width="1554" height="181" key="GridCell.Tab.0.bottom/0.27.1600.814@0.27.1600.814" timestamp="1600293069248" />
-    <state width="1554" height="181" key="GridCell.Tab.0.center" timestamp="1600293069247">
+    <state width="1554" height="181" key="GridCell.Tab.0.bottom/0.27.1600.814@0.27.1600.814" timestamp="1600293746023" />
+    <state width="1554" height="181" key="GridCell.Tab.0.center" timestamp="1600293746022">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
-    <state width="1554" height="181" key="GridCell.Tab.0.center/0.27.1600.814@0.27.1600.814" timestamp="1600293069247" />
-    <state width="1554" height="181" key="GridCell.Tab.0.left" timestamp="1600293069247">
+    <state width="1554" height="181" key="GridCell.Tab.0.center/0.27.1600.814@0.27.1600.814" timestamp="1600293746022" />
+    <state width="1554" height="181" key="GridCell.Tab.0.left" timestamp="1600293746021">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
-    <state width="1554" height="181" key="GridCell.Tab.0.left/0.27.1600.814@0.27.1600.814" timestamp="1600293069247" />
-    <state width="1554" height="181" key="GridCell.Tab.0.right" timestamp="1600293069248">
+    <state width="1554" height="181" key="GridCell.Tab.0.left/0.27.1600.814@0.27.1600.814" timestamp="1600293746021" />
+    <state width="1554" height="181" key="GridCell.Tab.0.right" timestamp="1600293746023">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
-    <state width="1554" height="181" key="GridCell.Tab.0.right/0.27.1600.814@0.27.1600.814" timestamp="1600293069248" />
+    <state width="1554" height="181" key="GridCell.Tab.0.right/0.27.1600.814@0.27.1600.814" timestamp="1600293746023" />
     <state x="289" y="68" width="1265" height="730" key="SettingsEditor" timestamp="1600244055459">
       <screen x="0" y="27" width="1600" height="814" />
     </state>

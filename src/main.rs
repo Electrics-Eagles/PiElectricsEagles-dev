@@ -1,3 +1,5 @@
+
+
 use crate::config_parser:: get_pids;
 
 #[path = "core/logger/simple_logger.rs"]
@@ -10,13 +12,15 @@ mod sbus;
 
 
 
-
-fn main() {
+fn display_verison(){
     simple_logger::logger(1, false, simple_logger::logger_verison().parse().unwrap());
     simple_logger::logger(1, false, config_parser::config_parser_version().parse().unwrap());
-
+    simple_logger::logger(1, false,sbus::sbus_verison().parse().unwrap());
     simple_logger::logger(1, false, "SOFTWARE RUN".parse().unwrap());
     simple_logger::logger(1, false, "CONFIG READ&PARSE".parse().unwrap());
+}
+fn main() {
+    display_verison();
     let pids_values = get_pids();
     println!("{}",pids_values.get(0).unwrap()[0]);
     simple_logger::logger(1, false, "CONFIG READ&PARSE=OK".parse().unwrap());
