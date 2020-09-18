@@ -35,6 +35,10 @@ fn parse(first_number_str: &str) -> Result<i32, ParseIntError> {
     let value = first_number_str.parse::<i32>()?;
     Ok(value)
 }
+fn parse_u8(first_number_str: &str) -> Result<u8, ParseIntError> {
+    let value = first_number_str.parse::<u8>()?;
+    Ok(value)
+}
 
 fn parse_u32(first_number_str: &str) -> Result<u32, ParseIntError> {
     let value = first_number_str.parse::<u32>()?;
@@ -55,6 +59,26 @@ pub struct SbusConfig {
 
 }
 
+pub struct EscMotors {
+    pub driver : String,
+    pub port : String,
+    pub amount: u8
+}
+pub fn esc_config_parser() -> EscMotors {
+    let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
+    let esc_config = conf.section(Some("esc-config")).unwrap();
+    let amount=parse_u8((esc_config.get("amount")).unwrap()).unwrap();
+    let driver=(esc_config.get("driver")).unwrap();
+    let port=(esc_config.get("port")).unwrap();
+    let esc_motors_val= EscMotors {
+        driver: driver.parse().unwrap(),
+        port: port.parse().unwrap(),
+        amount: amount
+    };
+    return esc_motors_val;
+
+
+}
 pub fn sbus_receiver_conifg() -> SbusConfig {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let sbus_config = conf.section(Some("sbus_config")).unwrap();
