@@ -44,9 +44,7 @@ pub fn config_parser_version() -> &'static str {
     return "CONFIG PARSER VERSION V2.0.1 Alpha 16/09/2020";
 }
 
-pub fn logger_verison() -> &'static str {
-    return "LOGGER VER V1.0.1 15/09/2020";
-}
+
 pub struct SbusConfig {
     pub baudrate: u32,
     pub parity: u32,
@@ -56,6 +54,7 @@ pub struct SbusConfig {
 
 
 }
+
 pub fn sbus_receiver_conifg() -> SbusConfig {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let sbus_config = conf.section(Some("sbus_config")).unwrap();
@@ -63,7 +62,7 @@ pub fn sbus_receiver_conifg() -> SbusConfig {
     let parity=parse_u32((sbus_config.get("parity")).unwrap()).unwrap();
     let data_bits=parse_u32((sbus_config.get("data_bits")).unwrap()).unwrap();
     let stop_bit=parse_u32((sbus_config.get("stop_bit")).unwrap()).unwrap();
-    let port=(sbus_config.get("port").unwrap());
+    let port=sbus_config.get("port").unwrap();
     let sbus = SbusConfig {
         baudrate: baudrate,
         parity: parity,
@@ -73,6 +72,7 @@ pub fn sbus_receiver_conifg() -> SbusConfig {
     };
     return sbus;
 }
+
 //Takes from config data parser it and return in i32 format
 pub fn pid_parse(section:String, p_str:String, i_str:String, d_str:String, max:String) -> [i32; 4] {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();

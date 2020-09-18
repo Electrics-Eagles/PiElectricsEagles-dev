@@ -1,3 +1,7 @@
+# Tool writen by Alex Zaslavskis (and deprecated)
+# 17/09/2020
+
+
 PATH_TO_SERVE="/home/bestosinworldnot/PiElectricsEagles/target"
 PORT = 4142
 
@@ -21,7 +25,7 @@ def build_via_cargo_docs():
 		print("YOU WHAT REMOVE SYSTEM NOT BE IDIOT")
 	else:
 		os.system("rm -rf "+PATH_TO_SERVE)
-	os.system("cargo doc")
+	os.system("cargo doc --no-deps  ")
 	os.chdir(PATH_TO_SERVE)
 pass
 

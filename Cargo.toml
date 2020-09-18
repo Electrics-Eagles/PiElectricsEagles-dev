@@ -10,3 +10,9 @@ edition = "2018"
 chrono = "0.4"
 rust-ini = "0.15"
 rppal = "0.11.3"
+
+[dev-dependencies]
+chrono = "0.4"
+rust-ini = "0.15"
+rppal = "0.11.3"
+mpu6050 = "0.1.3"
