@@ -23,13 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c89d9f9e-8fbb-4894-855f-9c37833dba93" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/esc_motors_controller/controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/core.ini" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/core.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/config_parser/config_parse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/config_parser/config_parse.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/sbus_transmiter/sbus.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/sbus_transmiter/sbus.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/esc_motors_controller/controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/esc_motors_controller/controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +54,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="NamedScopeManager">
+    <scope name="Electrics Eagles Core Copyright" pattern="lib:*..*" />
+  </component>
   <component name="ProjectId" id="1hSgIDfBTdASXvaLdH0Ua127WKR" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -72,9 +72,21 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="http.proxy" />
+    <property name="settings.editor.selected.configurable" value="project.scopes" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo Command.Run pi">
+    <configuration name="Expand pi::controller" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="expand --bin pi --color=always --theme=GitHub --tests controller" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run pi" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --package pi --bin pi" />
@@ -91,6 +103,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Cargo Command.Run pi" />
+        <item itemvalue="Cargo Command.Expand pi::controller" />
       </list>
     </recent_temporary>
   </component>
@@ -138,26 +151,31 @@
       <screen x="0" y="27" width="1600" height="814" />
     </state>
     <state x="535" y="286" width="519" height="328" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1600.814@0.27.1600.814" timestamp="1600204116327" />
-    <state width="1554" height="171" key="GridCell.Tab.0.bottom" timestamp="1600440052091">
-      <screen x="0" y="27" width="1600" height="814" />
+    <state width="1874" height="213" key="GridCell.Tab.0.bottom" timestamp="1600538918410">
+      <screen x="0" y="27" width="1920" height="994" />
     </state>
-    <state width="1554" height="171" key="GridCell.Tab.0.bottom/0.27.1600.814@0.27.1600.814" timestamp="1600440052091" />
-    <state width="1554" height="171" key="GridCell.Tab.0.center" timestamp="1600440052090">
-      <screen x="0" y="27" width="1600" height="814" />
+    <state width="1554" height="171" key="GridCell.Tab.0.bottom/0.27.1600.814@0.27.1600.814" timestamp="1600444595666" />
+    <state width="1874" height="213" key="GridCell.Tab.0.bottom/0.27.1920.994@0.27.1920.994" timestamp="1600538918410" />
+    <state width="1874" height="213" key="GridCell.Tab.0.center" timestamp="1600538918409">
+      <screen x="0" y="27" width="1920" height="994" />
     </state>
-    <state width="1554" height="171" key="GridCell.Tab.0.center/0.27.1600.814@0.27.1600.814" timestamp="1600440052090" />
-    <state width="1554" height="171" key="GridCell.Tab.0.left" timestamp="1600440052089">
-      <screen x="0" y="27" width="1600" height="814" />
+    <state width="1554" height="171" key="GridCell.Tab.0.center/0.27.1600.814@0.27.1600.814" timestamp="1600444595665" />
+    <state width="1874" height="213" key="GridCell.Tab.0.center/0.27.1920.994@0.27.1920.994" timestamp="1600538918409" />
+    <state width="1874" height="213" key="GridCell.Tab.0.left" timestamp="1600538918408">
+      <screen x="0" y="27" width="1920" height="994" />
     </state>
-    <state width="1554" height="171" key="GridCell.Tab.0.left/0.27.1600.814@0.27.1600.814" timestamp="1600440052089" />
-    <state width="1554" height="171" key="GridCell.Tab.0.right" timestamp="1600440052091">
-      <screen x="0" y="27" width="1600" height="814" />
+    <state width="1554" height="171" key="GridCell.Tab.0.left/0.27.1600.814@0.27.1600.814" timestamp="1600444595665" />
+    <state width="1874" height="213" key="GridCell.Tab.0.left/0.27.1920.994@0.27.1920.994" timestamp="1600538918408" />
+    <state width="1874" height="213" key="GridCell.Tab.0.right" timestamp="1600538918409">
+      <screen x="0" y="27" width="1920" height="994" />
     </state>
-    <state width="1554" height="171" key="GridCell.Tab.0.right/0.27.1600.814@0.27.1600.814" timestamp="1600440052091" />
-    <state x="289" y="68" width="1265" height="730" key="SettingsEditor" timestamp="1600244055459">
-      <screen x="0" y="27" width="1600" height="814" />
+    <state width="1554" height="171" key="GridCell.Tab.0.right/0.27.1600.814@0.27.1600.814" timestamp="1600444595666" />
+    <state width="1874" height="213" key="GridCell.Tab.0.right/0.27.1920.994@0.27.1920.994" timestamp="1600538918409" />
+    <state x="347" y="77" width="1265" height="730" key="SettingsEditor" timestamp="1600537017265">
+      <screen x="0" y="27" width="1920" height="994" />
     </state>
     <state x="289" y="68" width="1265" height="730" key="SettingsEditor/0.27.1600.814@0.27.1600.814" timestamp="1600244055459" />
+    <state x="347" y="77" key="SettingsEditor/0.27.1920.994@0.27.1920.994" timestamp="1600537017265" />
     <state x="410" y="46" width="770" height="773" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600417469079">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
@@ -166,10 +184,10 @@
       <screen x="0" y="27" width="1600" height="814" />
     </state>
     <state x="492" y="156" width="616" height="554" key="find.popup/0.27.1600.814@0.27.1600.814" timestamp="1600205214083" />
-    <state x="464" y="193" key="run.anything.popup" timestamp="1600244019654">
+    <state x="464" y="193" key="run.anything.popup" timestamp="1600462425162">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
-    <state x="464" y="193" key="run.anything.popup/0.27.1600.814@0.27.1600.814" timestamp="1600244019654" />
+    <state x="464" y="193" key="run.anything.popup/0.27.1600.814@0.27.1600.814" timestamp="1600462425162" />
     <state x="463" y="162" width="672" height="678" key="search.everywhere.popup" timestamp="1600243538310">
       <screen x="0" y="27" width="1600" height="814" />
     </state>
