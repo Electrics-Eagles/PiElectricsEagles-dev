@@ -15,3 +15,7 @@ Code Style:
 
 **SOURCE CODE ONLY**
 
+
+Good links
+
+https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf
