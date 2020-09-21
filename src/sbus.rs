@@ -27,3 +27,5 @@ pub fn read_sbus(baudrate:u32,parity:u32,data_bits:u8,stop_bit:u8,port:String) -
 pub fn sbus_verison() -> &'static str {
     return "S_BUS MODULE VERSION  16/09/2020";
 }
+
+fn main() {}

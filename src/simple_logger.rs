@@ -68,3 +68,5 @@ pub fn file_logger(mode : String, msg : String) {
 pub fn  console_logger(mode : String, msg : String ) {
     println!("{}",mode.to_string()+" "+ &*chrono::offset::Utc::now().to_string() +" "+ &*msg.to_string());
 }
+
+fn main() {}

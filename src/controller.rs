@@ -32,3 +32,4 @@ pub fn set_throttle_external_pwm(mut i2c_controller: Pca9685<I2cdev>, ch1: u16, 
     i2c_controller.set_channel_on(Channel::C3, ch4).unwrap();
 }
 
+fn main() {}
