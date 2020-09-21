@@ -17,7 +17,7 @@ pub fn mpu6050_perpare() -> Mpu6050<Result<I2cdev, LinuxI2CError>, Delay> {
 
 
 pub fn driver_mpu6050_version() -> &'static str {
-    return "MPU6050 DRIVER  V0.0.1 Alpha 21/09/2020";
+    return "MPU6050 DRIVER  V0.0.1 Beta 21/09/2020";
 }
 pub fn get_gyro_values(mut mpu: Mpu6050<Result<I2cdev, LinuxI2CError>, Delay>) -> Owned<f32, U3, U1> {
     return mpu.get_gyro().unwrap().data;
