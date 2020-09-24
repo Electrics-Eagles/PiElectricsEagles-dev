@@ -2,18 +2,14 @@ use mpu6050::*;
 use linux_embedded_hal::{I2cdev, Delay};
 
 
-pub struct mpu6050_perpare {
-    
-}
-pub fn mpu6050_perpare() -> Mpu6050<I2cdev, Delay> {
-    let i2c = I2cdev::new("/dev/i2c-1").expect("alert no port found");
-
+pub fn mpu6050_perpare(port:String, step:u8) -> Mpu6050<I2cdev, Delay> {
+    let i2c = I2cdev::new(port).expect("alert no port found");
     let delay = Delay;
-
     let mut mpu = Mpu6050::new(i2c, delay);
     mpu.init().unwrap();
+    mpu.soft_calib(Steps(step)).expect("");
+    mpu.calc_variance(Steps(step)).expect("");
     return mpu;
-
 }
 pub struct gyro_MPU650_raw_data {
     x:i32,
@@ -27,11 +23,9 @@ pub struct acc_MPU6050_raw_data {
     z:i32,
 }
 
-
 pub fn driver_mpu6050_version() -> &'static str {
     return "MPU6050 DRIVER  V0.0.1 Beta 24/09/2020";
 }
-
 
 pub fn get_acc_values(mut mpu: Mpu6050<I2cdev, Delay>) -> acc_MPU6050_raw_data {
     let data  = acc_MPU6050_raw_data{
