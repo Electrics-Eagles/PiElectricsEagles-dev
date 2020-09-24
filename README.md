@@ -24,7 +24,6 @@ Code Style:
 | 6 | Firefox / Chrome / Opera | higher that 2018 year of release           | Web apps , google     |
 | 7 | Whatsapp                 | Lastest                                    | Comunication          |
 | 8 | Discord                  | not older that 2019 year of release        | Comunication          |
-| 9 |                          |                                            |                       |
 
 Good links
 
