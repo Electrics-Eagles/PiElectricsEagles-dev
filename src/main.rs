@@ -32,9 +32,9 @@ fn main() {
     simple_logger::logger(1, FILE_LOG, "CONFIG READ&PARSE=OK".parse().unwrap());
     let motors_config = esc_config_parser();
     println!("{}",motors_config.amount);
-   // let i2c_controller = controller::external_pwm_prepare(motors_config.port, motors_config.amount, motors_config.driver);
-   // let sbus=config_parse::sbus_receiver_conifg();
-  //  sbus::read_sbus(sbus.baudrate, sbus.parity, sbus.data_bits as u8, sbus.stop_bit as u8, sbus.port).unwrap();
+    let i2c_controller = controller::external_pwm_prepare(motors_config.port, motors_config.amount, motors_config.driver);
+    let sbus=config_parse::sbus_receiver_conifg();
+     sbus::read_sbus(sbus.baudrate, sbus.parity, sbus.data_bits as u8, sbus.stop_bit as u8, sbus.port).unwrap();
     let mpu6050_  = mpu_config_parser();
     mpu6050::mpu6050_perpare(mpu6050_.port, mpu6050_.sample_amount as u8);
 

@@ -24,10 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c89d9f9e-8fbb-4894-855f-9c37833dba93" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/core.ini" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/core.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config_parse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/config_parse.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mpu6050.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/mpu6050.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
