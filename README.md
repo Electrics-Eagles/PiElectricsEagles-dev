@@ -15,6 +15,15 @@ Code Style:
 
 **SOURCE CODE ONLY**
 
+Software Needed to Work  ID	Software Name	Version 	Purpose 
+1	Windows / Ubuntu 	Win7 SP1 Higher or Ubuntu 12.04 and Higher	OS
+2	PiDebug 	V2 	Debuging code via ssh
+3	rust /cargo	1.46.0 higher	Build code
+4	Python 	3.6 and higher	Use python tools
+5	Dia	dia 0.97+git	Plot alogritms
+6	Firefox / Chrome / Opera	higher that 2018 year of release	Web apps , google 
+7	Whatsapp 	Lastest 	Comunication
+8	Discord	not older that 2019 year of release	Comunication
 
 Good links
 
