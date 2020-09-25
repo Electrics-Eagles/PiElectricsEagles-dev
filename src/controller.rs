@@ -1,5 +1,5 @@
 const FREQ_CONST: i32 = 200; // Const to set freq of signal
-
+use crate::config_parse::esc_config_parser;
 use linux_embedded_hal::I2cdev;
 use pwm_pca9685::{Address, Channel, Pca9685};
 
@@ -9,9 +9,11 @@ fn check_driver_config_check(driver: String, amount: u8) {
     }
 }
 
-pub fn external_pwm_prepare(port: String, amount: u8, driver: String) -> Pca9685<I2cdev> {
-    check_driver_config_check(driver, amount);
-    let dev = I2cdev::new(port).unwrap();
+pub fn external_pwm_prepare() -> Pca9685<I2cdev> {
+    //port: String, amount: u8, driver: String
+    let value=esc_config_parser();
+    check_driver_config_check(value.driver, value.amount);
+    let dev = I2cdev::new(value.port).unwrap();
     let address = Address::default();
     let mut pwm = Pca9685::new(dev, address).unwrap();
     pwm.set_prescale(FREQ_CONST as u8).unwrap();
@@ -31,5 +33,3 @@ pub fn set_throttle_external_pwm(mut i2c_controller: Pca9685<I2cdev>, ch1: u16, 
     i2c_controller.set_channel_on(Channel::C2, ch3).unwrap();
     i2c_controller.set_channel_on(Channel::C3, ch4).unwrap();
 }
-
-fn main() {}

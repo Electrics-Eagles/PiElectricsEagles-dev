@@ -55,14 +55,14 @@ pub fn config_parser_version() -> &'static str {
 pub struct SbusConfig {
     pub baudrate: u32,
     pub parity: u32,
-    pub data_bits: u32,
-    pub stop_bit: u32,
+    pub data_bits: u8,
+    pub stop_bit: u8,
     pub port: String,
 }
 
 pub struct MPU6050_Conifg {
     pub port: String,
-    pub sample_amount: i32,
+    pub sample_amount: u8,
 }
 
 pub struct EscMotors {
@@ -87,7 +87,7 @@ pub fn esc_config_parser() -> EscMotors {
 pub fn  mpu_config_parser() -> MPU6050_Conifg {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let mpu_config = conf.section(Some("mpu6050")).unwrap();
-    let sample= parse((mpu_config.get("sample")).unwrap()).unwrap();
+    let sample= parse_u8((mpu_config.get("sample")).unwrap()).unwrap();
     let port= (mpu_config.get("port")).unwrap();
     let mpu6050_config = MPU6050_Conifg{
         port: port.parse().unwrap(),
@@ -101,8 +101,8 @@ pub fn sbus_receiver_conifg() -> SbusConfig {
     let sbus_config = conf.section(Some("sbus_config")).unwrap();
     let baudrate = parse_u32((sbus_config.get("baudrate")).unwrap()).unwrap();
     let parity = parse_u32((sbus_config.get("parity")).unwrap()).unwrap();
-    let data_bits = parse_u32((sbus_config.get("data_bits")).unwrap()).unwrap();
-    let stop_bit = parse_u32((sbus_config.get("stop_bit")).unwrap()).unwrap();
+    let data_bits = parse_u8((sbus_config.get("data_bits")).unwrap()).unwrap();
+    let stop_bit = parse_u8((sbus_config.get("stop_bit")).unwrap()).unwrap();
     let port = sbus_config.get("port").unwrap();
     let sbus = SbusConfig {
         baudrate: baudrate,
@@ -145,5 +145,3 @@ pub fn get_pids() -> Vec<[i32; 4]> {
     return values;
 }
 
-
-fn main() {}
