@@ -28,7 +28,7 @@ fn version_display(){
 }
 
 fn main() {
-    version_display(); // call function that display software verison
+   version_display(); // call function that display software verison
    main_loop();
 
 
