@@ -4,6 +4,7 @@ use crate::config_parse::mpu_config_parser;
 
 pub fn mpu6050_perpare() -> Mpu6050<I2cdev, Delay> {
     let mpu6050_conifg=mpu_config_parser();
+    println!("{}",mpu6050_conifg.port);
     let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
     let delay = Delay;
     let mut mpu = Mpu6050::new(i2c, delay);

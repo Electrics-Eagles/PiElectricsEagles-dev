@@ -1,7 +1,8 @@
 
 const FILE_LOG:bool=false;
 
-use loggics::init_harware;
+
+use loggics::main_loop;
 
 use crate::config_parse::{esc_config_parser, get_pids, config_parser_version, mpu_config_parser};
 use crate::mpu6050::driver_mpu6050_version;
@@ -28,7 +29,9 @@ fn version_display(){
 
 fn main() {
     version_display(); // call function that display software verison
-    init_harware();
+   main_loop();
+
+
 
 
 }

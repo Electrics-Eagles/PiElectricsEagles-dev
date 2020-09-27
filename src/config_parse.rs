@@ -143,5 +143,12 @@ pub fn get_pids() -> Vec<[i32; 4]> {
     values.push(yaw);
     values.push(pitch);
     return values;
+
+
+
 }
+
+pub fn config_parse_get_verison() -> &'static str {
+    return "config_parse   verison is 9/27/2020 ID is: tK9FNvps"
+} 
 

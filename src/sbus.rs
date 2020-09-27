@@ -5,10 +5,10 @@ use rppal::uart::{Parity, Uart};
 
 
 pub struct controller_values {
-    ch1:i32,
-    ch2:i32,
-    ch3:i32,
-    ch4:i32
+    pub ch1:i32,
+    pub ch2:i32,
+    pub ch3:i32,
+    pub ch4:i32
 }
 pub fn sbus_uart_init() -> Uart {
     let values=sbus_receiver_conifg();

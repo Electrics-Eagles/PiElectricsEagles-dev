@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (activeTextEditor) {
             const { document } = activeTextEditor;
             if (document) {
-				let template=`pub fn `+document.fileName+"_get_verison"+` -> &'static str {
+				let template=`pub fn `+document.filename+"_get_verison"+` -> &'static str {
 				return `+document.fileName+`   verison is `+today+` ID is: `+makeid(8) + `
 			} \n`
 				
