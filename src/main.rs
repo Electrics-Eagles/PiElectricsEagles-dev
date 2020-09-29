@@ -4,7 +4,7 @@ const FILE_LOG:bool=false;
 
 use loggics::main_loop;
 
-use crate::config_parse::{esc_config_parser, get_pids, config_parser_version, mpu_config_parser};
+use crate::config_parse::{esc_config_parser, config_parser_version, mpu_config_parser};
 use crate::mpu6050::driver_mpu6050_version;
 use crate::controller::get_esc_verison;
 use crate::sbus::sbus_verison;
