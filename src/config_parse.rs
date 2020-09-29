@@ -163,6 +163,7 @@ pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, m
     };
     return pid_config
 }
+/*
 pub fn get_pids() -> Vec<[i32; 4]> {
     let roll = pid_parse("pid-config".parse().unwrap(), "p_pid_roll".parse().unwrap(), "i_pid_roll".parse().unwrap(), "d_pid_roll".parse().unwrap(), "max_roll".parse().unwrap());
     let yaw = pid_parse("pid-config".parse().unwrap(), "p_pid_yaw".parse().unwrap(), "i_pid_yaw".parse().unwrap(), "d_pid_yaw".parse().unwrap(), "max_yaw".parse().unwrap());
@@ -176,6 +177,7 @@ pub fn get_pids() -> Vec<[i32; 4]> {
 
 
 }
+*/
 
 
 pub fn AutoLevel_Config() -> i32{
