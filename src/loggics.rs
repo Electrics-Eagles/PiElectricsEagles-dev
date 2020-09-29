@@ -51,7 +51,7 @@ pub fn init_hardware() -> ReadyHardware {
   
 
 }
-pub fn calc_pid(){
+pub fn calc_pid(){ }
    
 pub fn main_loop() {
  
@@ -80,6 +80,7 @@ pub fn main_loop() {
    let mut angle_roll:f64=0.0;
    let mut pitch_level_correction:f64=0.0;
    let mut roll_level_correction:f64=0.0;
+
    
 
  
@@ -128,7 +129,8 @@ pub fn main_loop() {
  
    let mut pid = Pid::new(10.0, 0.0, 0.0, 100.0, 100.0, 100.0, 15.0);
    let output = pid.next_control_output(10.0);
-   
+
+
 }
 }
 
@@ -138,4 +140,3 @@ pub fn main_loop() {
    
 
 
-}
