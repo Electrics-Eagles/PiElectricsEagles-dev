@@ -15,4 +15,5 @@ pwm-pca9685 = "0.3.0"
 linux-embedded-hal = "0.3.0"
 i2cdev = "0.4.4"
 cgmath = "0.17.0"
+pid = "2.1.0"
 

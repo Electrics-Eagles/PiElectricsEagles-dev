@@ -297,9 +297,18 @@ dependencies = [
  "i2cdev 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "linux-embedded-hal 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "mpu6050 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pid 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pwm-pca9685 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rppal 0.11.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "rust-ini 0.15.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "pid"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "num-traits 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -627,6 +636,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum num-rational 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "5c000134b5dbf44adc5cb772486d335293351644b801551abe8f75c84cfa4aef"
 "checksum num-traits 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)" = "ac267bcc07f48ee5f8935ab0d24f316fb722d7a1292e2913f0cc196b29ffd611"
 "checksum ordered-multimap 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "e88f947c6799d5eff50e6cf8a2365c17ac4aa8f8f43aceeedc29b616d872a358"
+"checksum pid 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5222362a342cf1f0e5bfd031177a34e3d879bdcc2d89b6a7b7e4d0c089c5de4e"
 "checksum ppv-lite86 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)" = "c36fa947111f5c62a733b652544dd0016a43ce89619538a8ef92724a6f501a20"
 "checksum pwm-pca9685 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4054e9a80d73f754c17d09673744d8b5538b4b3cd5c91fa20373ec1e845d0238"
 "checksum rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)" = "6d71dacdc3c88c1fde3885a3be3fbab9f35724e6ce99467f7d9c5026132184ca"

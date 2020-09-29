@@ -148,7 +148,22 @@ pub fn get_pids() -> Vec<[i32; 4]> {
 
 }
 
+
+pub fn AutoLevel_Config() -> i32{
+    let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
+    let autoconfig = conf.section(Some("auto-level")).unwrap();
+    let amount = (autoconfig.get("autolevel")).unwrap().to_string();
+    if amount.eq("on") {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+    
+}
+
 pub fn config_parse_get_verison() -> &'static str {
-    return "config_parse   verison is 9/27/2020 ID is: tK9FNvps"
+    return "config_parse   verison is 9/29/2020 ID is: 7DniMjvm"
 } 
+
 
