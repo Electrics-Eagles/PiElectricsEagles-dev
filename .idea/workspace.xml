@@ -23,12 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c89d9f9e-8fbb-4894-855f-9c37833dba93" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/loggics.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithm.dia" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm.dia" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config_parse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/config_parse.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loggics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/loggics.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mpu6050.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/mpu6050.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sbus.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/sbus.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,9 +192,10 @@
       <screen x="0" y="27" width="1600" height="814" />
     </state>
     <state x="492" y="156" width="616" height="554" key="find.popup/0.27.1600.814@0.27.1600.814" timestamp="1600205214083" />
-    <state x="269" y="89" width="1372" height="868" key="new project wizard" timestamp="1600552640455">
-      <screen x="0" y="27" width="1920" height="994" />
+    <state x="224" y="78" width="1372" height="868" key="new project wizard" timestamp="1602083982781">
+      <screen x="0" y="27" width="1600" height="814" />
     </state>
+    <state x="224" y="78" key="new project wizard/0.27.1600.814@0.27.1600.814" timestamp="1602083982781" />
     <state x="269" y="89" width="1372" height="868" key="new project wizard/0.27.1920.994@0.27.1920.994" timestamp="1600552640455" />
     <state x="464" y="193" key="run.anything.popup" timestamp="1600462425162">
       <screen x="0" y="27" width="1600" height="814" />
