@@ -5,7 +5,7 @@ const STEP:u8=10;
 
 
 
-use std::error;
+
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
 use rppal::uart::Uart;
@@ -135,19 +135,10 @@ let esc_4;
    );
  
   }
-//while(receiver_input_channel_3 < 990 || receiver_input_channel_3 > 1020 || receiver_input_channel_4 < 1400){
-   /*
-    if(receiver_input_channel_3 < 1050 && receiver_input_channel_4 < 1050)start = 1;
-  //When yaw stick is back in the center position start the motors (step 2).
-  if(start == 1 && receiver_input_channel_3 < 1050 && receiver_input_channel_4 > 1450){
-    start = 2;
-   */
 
- 
-
-   if(reciver.ch3 < 1050 && reciver.ch4 < 1050) {start = 1;}
+   if reciver.ch3 < 1050 && reciver.ch4 < 1050 {start = 1;}
    //When yaw stick is back in the center position start the motors (step 2).
-   if(start == 1 && reciver.ch3 < 1050 && reciver.ch4 > 1450){
+   if start == 1 && reciver.ch3 < 1050 && reciver.ch4 > 1450{
      start = 2;
  angle_pitch = angle_pitch_acc;                                          //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
  angle_roll = angle_roll_acc;  
@@ -160,15 +151,15 @@ let esc_4;
 
 }
 
-if(start == 2 && reciver.ch3 < 1050 && reciver.ch4 > 1950) {start = 0;}
+if start == 2 && reciver.ch3 < 1050 && reciver.ch4 > 1950 {start = 0;}
 
 
 pid_roll.setpoint = 0.0;
 //We need a little dead band of 16us for better results.
-if(reciver.ch1 > 1508) {
+if reciver.ch1 > 1508 {
    pid_roll.setpoint = reciver.ch1 as f64 - 1508.0;
 }
-else if(reciver.ch1 < 1492) {
+else if reciver.ch1 < 1492 {
    pid_roll.setpoint = reciver.ch1 as f64 - 1492.0;
 }
 
@@ -178,10 +169,10 @@ pid_roll.setpoint /= 3.0;
 
 pid_pitch.setpoint = 0.0;
 //We need a little dead band of 16us for better results.
-if(reciver.ch2 > 1508){
+if reciver.ch2 > 1508{
 pid_pitch.setpoint = reciver.ch2 as f64 - 1508.0;
 }
-else if(reciver.ch2 < 1492){
+else if reciver.ch2 < 1492{
    pid_pitch.setpoint = reciver.ch2 as f64 - 1492.0;
 }
 
@@ -190,15 +181,14 @@ pid_pitch.setpoint /= 3.0;
 
 
 
- //The PID set point in degrees per second is determined by the yaw receiver input.
-  //In the case of deviding by 3 the max yaw rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
+ 
 pid_yaw.setpoint = 0.0;
   //We need a little dead band of 16us for better results.
-  if(reciver.ch3 > 1050){ //Do not yaw when turning off the motors.
-    if(reciver.ch4 > 1508) {
+  if reciver.ch3 > 1050 { //Do not yaw when turning off the motors.
+    if reciver.ch4 > 1508  {
        pid_yaw.setpoint = (reciver.ch4 as f64 - 1508.0)/3.0 as f64;
       }
-    else if(reciver.ch4 < 1492) {
+    else if reciver.ch4 < 1492 {
        pid_yaw.setpoint = (reciver.ch4 as f64 - 1492.0)/3.0 as f64;
   }
 }
@@ -209,22 +199,22 @@ let pid_output_yaw=pid_yaw.next_control_output(gyro_values.z  as f64 -  pid_yaw.
 throllite=reciver.ch3;
 
 
-if(start==2) {
-   if (throllite > 1800) { throllite = 1800;  }
+if start==2  {
+   if  throllite > 1800 { throllite = 1800;  }
    esc_1 = throllite as f64 - pid_output_pitch + pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 1 (front-right - CCW)
    esc_2 = throllite as f64 +  pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
    esc_3 = throllite as f64+ pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
    esc_4 = throllite as f64 - pid_output_pitch - pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 4 (front-left - CW)
 
-   if (esc_1 < 1100.0) {esc_1 = 1100.0;}                                         //Keep the motors running.
-   if (esc_2 < 1100.0) {esc_2 = 1100.0;     }                                    //Keep the motors running.
-   if (esc_3 < 1100.0){ esc_3 = 1100.0; }                                        //Keep the motors running.
-   if (esc_4 < 1100.0) {esc_4 = 1100.0;    }                                     //Keep the motors running.
+   if esc_1 < 1100.0  {esc_1 = 1100.0;}                                         //Keep the motors running.
+   if esc_2 < 1100.0  {esc_2 = 1100.0;     }                                    //Keep the motors running.
+   if esc_3 < 1100.0{ esc_3 = 1100.0; }                                        //Keep the motors running.
+   if esc_4 < 1100.0 {esc_4 = 1100.0;    }                                     //Keep the motors running.
 
-   if(esc_1 > 2000.0) {esc_1 = 2000.0;  }                                         //Limit the esc-1 pulse to 2000us.
-   if(esc_2 > 2000.0){esc_2 = 2000.0;  }                                         //Limit the esc-2 pulse to 2000us.
-   if(esc_3 > 2000.0){esc_3 = 2000.0;   }                                        //Limit the esc-3 pulse to 2000us.
-   if(esc_4 > 2000.0){esc_4 = 2000.0; } 
+   if esc_1 > 2000.0 {esc_1 = 2000.0;  }                                         //Limit the esc-1 pulse to 2000us.
+   if esc_2 > 2000.0{esc_2 = 2000.0;  }                                         //Limit the esc-2 pulse to 2000us.
+   if esc_3 > 2000.0 {esc_3 = 2000.0;   }                                        //Limit the esc-3 pulse to 2000us.
+   if esc_4 > 2000.0 {esc_4 = 2000.0; } 
 }
 else{
    esc_1 = 1000.0;                                                           //If start is not 2 keep a 1000us pulse for ess-1.
@@ -233,58 +223,10 @@ else{
    esc_4 = 1000.0;                                                           //If start is not 2 keep a 1000us pulse for ess-4.
  }
  set_throttle_external_pwm(esc,esc_1 as u16,esc_2 as u16 ,esc_3 as u16,esc_4 as u16);
-/*
-  //For starting the motors: throttle low and yaw left (step 1).
-  if(receiver_input_channel_3 < 1050 && receiver_input_channel_4 < 1050)start = 1;
-  //When yaw stick is back in the center position start the motors (step 2).
-  if(start == 1 && receiver_input_channel_3 < 1050 && receiver_input_channel_4 > 1450){
-    start = 2;
-
-    angle_pitch = angle_pitch_acc;                                          //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
-    angle_roll = angle_roll_acc;                                            //Set the gyro roll angle equal to the accelerometer roll angle when the quadcopter is started.
-    gyro_angles_set = true;                                                 //Set the IMU started flag.
-
-    //Reset the PID controllers for a bumpless start.
-    pid_i_mem_roll = 0;
-    pid_last_roll_d_error = 0;
-    pid_i_mem_pitch = 0;
-    pid_last_pitch_d_error = 0;
-    pid_i_mem_yaw = 0;
-    pid_last_yaw_d_error = 0;
-  }
-  //Stopping the motors: throttle low and yaw right.
-  if(start == 2 && receiver_input_channel_3 < 1050 && receiver_input_channel_4 > 1950)start = 0;
-
-  //The PID set point in degrees per second is determined by the roll receiver input.
-  //In the case of deviding by 3 the max roll rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
-  pid_roll_setpoint = 0;
-  //We need a little dead band of 16us for better results.
-  if(receiver_input_channel_1 > 1508)pid_roll_setpoint = receiver_input_channel_1 - 1508;
-  else if(receiver_input_channel_1 < 1492)pid_roll_setpoint = receiver_input_channel_1 - 1492;
-
-  pid_roll_setpoint -= roll_level_adjust;                                   //Subtract the angle correction from the standardized receiver roll input value.
-  pid_roll_setpoint /= 3.0;                                                 //Divide the setpoint for the PID roll controller by 3 to get angles in degrees.
-
-
-  //The PID set point in degrees per second is determined by the pitch receiver input.
-  //In the case of deviding by 3 the max pitch rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
-  pid_pitch_setpoint = 0;
-  //We need a little dead band of 16us for better results.
-  if(receiver_input_channel_2 > 1508)pid_pitch_setpoint = receiver_input_channel_2 - 1508;
-  else if(receiver_input_channel_2 < 1492)pid_pitch_setpoint = receiver_input_channel_2 - 1492;
-
-  pid_pitch_setpoint -= pitch_level_adjust;                                  //Subtract the angle correction from the standardized receiver pitch input value.
-  pid_pitch_setpoint /= 3.0; */
-
-
-
-
-
 
 }
 
 
-   //make sbus
 
 
    
