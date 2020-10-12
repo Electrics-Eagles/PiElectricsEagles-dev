@@ -74,7 +74,14 @@ pub struct EscMotors {
 pub struct PID {
     pub p: i32,
     pub i: i32,
-    pub d: i32
+    pub d: i32,
+    pub max:i32,
+}
+
+pub struct PIDS {
+    pub roll:PID,
+    pub pitch:PID,
+    pub yaw:PID
 }
 
 pub fn esc_config_parser() -> EscMotors {
@@ -156,28 +163,30 @@ pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, m
     pid[1] = i32_i_pid;
     pid[2] = i32_d_pid;Steps
     return pid;*/ // OLD STYLE CODE
+   
     let pid_config:PID = PID {
         p: i32_p_pid,
         i: i32_i_pid,
-        d: i32_d_pid
+        d: i32_d_pid,
+        max: i32_max
     };
     return pid_config
 }
-/*
-pub fn get_pids() -> Vec<[i32; 4]> {
+
+pub fn get_pids() -> PIDS{
     let roll = pid_parse("pid-config".parse().unwrap(), "p_pid_roll".parse().unwrap(), "i_pid_roll".parse().unwrap(), "d_pid_roll".parse().unwrap(), "max_roll".parse().unwrap());
     let yaw = pid_parse("pid-config".parse().unwrap(), "p_pid_yaw".parse().unwrap(), "i_pid_yaw".parse().unwrap(), "d_pid_yaw".parse().unwrap(), "max_yaw".parse().unwrap());
     let pitch = pid_parse("pid-config".parse().unwrap(), "p_pid_pitch".parse().unwrap(), "i_pid_pitch".parse().unwrap(), "d_pid_pitch".parse().unwrap(), "max_pitch".parse().unwrap());
-    let mut values = Vec::new();
-    values.push(roll);
-    values.push(yaw);
-    values.push(pitch);
-    return values;
 
-
+    let pid_config:PIDS = PIDS {
+        roll:roll,
+        yaw:yaw,
+        pitch:pitch,
+    };
+    return pid_config;
 
 }
-*/
+
 
 
 pub fn AutoLevel_Config() -> i32{
