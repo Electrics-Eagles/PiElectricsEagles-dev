@@ -31,3 +31,14 @@ Code Style:
 Good links
 
 https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf
+
+
+Core status :
+![96%](https://progress-bar.dev/96)
+
+Bug fix status:
+
+![9%](https://progress-bar.dev/9)
+CLI status:
+![0%](https://progress-bar.dev/0)
+
