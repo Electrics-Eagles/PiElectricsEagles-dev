@@ -31,3 +31,35 @@ Code Style:
 Good links
 
 https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf
+
+
+Core status :
+![96%](https://progress-bar.dev/96)
+
+
+Bug fix status:
+![9%](https://progress-bar.dev/9)
+
+CLI status:
+![0%](https://progress-bar.dev/0)
+
+VS Stdio Code Plugin:
+![5%](https://progress-bar.dev/5)
+
+
+MPU6050 Driver:
+![91%](https://progress-bar.dev/91)
+
+SBUS:
+![15%](https://progress-bar.dev/15)
+
+ESC_Driver 
+![95%](https://progress-bar.dev/95)
+
+
+Logger
+![100%](https://progress-bar.dev/100)
+
+Config_Parser
+![81%](https://progress-bar.dev/100)
+
