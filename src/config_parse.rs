@@ -1,30 +1,3 @@
-/*
-encoding=utf-8
-
-[pid-config]
-# roll PID settings
-p_pid_roll= 1
-i_pid_roll=2
-d_pid_roll=3
-max_roll= 400
-
-# Yaw PID settings
-p_pid_yaw=1
-i_pid_yaw=2
-d_pid_yaw=3
-max_yaw=400
-# Yaw PID settings
-
-p_pid_pitch=1
-i_pid_pitch=2
-d_pid_pitch = 3
-# Pitch PID settings
-
-
-
-
- */
-
 
 extern crate ini;
 
@@ -48,9 +21,8 @@ fn parse_u32(first_number_str: &str) -> Result<u32, ParseIntError> {
 }
 
 pub fn config_parser_version() -> &'static str {
-    return "CONFIG PARSER VERSION V2.0.2 Alpha 24/09/2020";
+    return "CONFIG PARSER VERSION V2.0.2 Alpha 11/10/2020";
 }
-
 
 pub struct SbusConfig {
     pub baudrate: u32,
@@ -60,7 +32,7 @@ pub struct SbusConfig {
     pub port: String,
 }
 
-pub struct MPU6050_Conifg {
+pub struct Mpu6050Conifg {
     pub port: String,
     pub sample_amount: u8,
 }
@@ -68,20 +40,20 @@ pub struct MPU6050_Conifg {
 pub struct EscMotors {
     pub driver: String,
     pub port: String,
-    pub amount: u8
+    pub amount: u8,
 }
 
 pub struct PID {
     pub p: i32,
     pub i: i32,
     pub d: i32,
-    pub max:i32,
+    pub max: i32,
 }
 
 pub struct PIDS {
-    pub roll:PID,
-    pub pitch:PID,
-    pub yaw:PID
+    pub roll: PID,
+    pub pitch: PID,
+    pub yaw: PID,
 }
 
 pub fn esc_config_parser() -> EscMotors {
@@ -93,21 +65,20 @@ pub fn esc_config_parser() -> EscMotors {
     let esc_motors_val = EscMotors {
         driver: driver.parse().unwrap(),
         port: port.parse().unwrap(),
-        amount: amount
+        amount: amount,
     };
     return esc_motors_val;
 }
-pub fn  mpu_config_parser() -> MPU6050_Conifg {
+pub fn mpu_config_parser() -> Mpu6050Conifg {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let mpu_config = conf.section(Some("mpu6050")).unwrap();
-    let sample= parse_u8((mpu_config.get("sample")).unwrap()).unwrap();
-    let port= (mpu_config.get("port")).unwrap();
-    let mpu6050_config = MPU6050_Conifg{
+    let sample = parse_u8((mpu_config.get("sample")).unwrap()).unwrap();
+    let port = (mpu_config.get("port")).unwrap();
+    let mpu6050_config = Mpu6050Conifg {
         port: port.parse().unwrap(),
         sample_amount: sample,
     };
-    return mpu6050_config
-
+    return mpu6050_config;
 }
 pub fn sbus_receiver_conifg() -> SbusConfig {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
@@ -126,27 +97,7 @@ pub fn sbus_receiver_conifg() -> SbusConfig {
     };
     return sbus;
 }
-/*
-//Takes from config data parser it and return in i32 format
-pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, max: String) -> [i32; 4] {
-    let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
-    let pid_configuration = conf.section(Some(section)).unwrap();
-    let p_pid = (pid_configuration.get(p_str)).unwrap();
-    let i_pid = pid_configuration.get(i_str).unwrap();
-    let d_pid = pid_configuration.get(d_str).unwrap();
-    let max = pid_configuration.get(max).unwrap();
-    let i32_p_pid = parse(p_pid).unwrap();
-    let i32_i_pid = parse(i_pid).unwrap();
-    let i32_d_pid = parse(d_pid).unwrap();
-    let i32_max = parse(max).unwrap();
-    let mut pid: [i32; 4] = [0; 4];
-    pid[0] = i32_p_pid;
-    pid[1] = i32_i_pid;
-    pid[2] = i32_d_pid;
-    pid[3] = i32_max;
-    return pid;
-}
-*/
+
 pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, max: String) -> PID {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let pid_configuration = conf.section(Some(section)).unwrap();
@@ -158,52 +109,55 @@ pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, m
     let i32_i_pid = parse(i_pid).unwrap();
     let i32_d_pid = parse(d_pid).unwrap();
     let i32_max = parse(max).unwrap();
-    /*let mut pid: [i32; 4] = [0; 4];
-    pid[0] = i32_p_pid;
-    pid[1] = i32_i_pid;
-    pid[2] = i32_d_pid;Steps
-    return pid;*/ // OLD STYLE CODE
-   
-    let pid_config:PID = PID {
+
+
+    let pid_config: PID = PID {
         p: i32_p_pid,
         i: i32_i_pid,
         d: i32_d_pid,
-        max: i32_max
-    };
-    return pid_config
-}
-
-pub fn get_pids() -> PIDS{
-    let roll = pid_parse("pid-config".parse().unwrap(), "p_pid_roll".parse().unwrap(), "i_pid_roll".parse().unwrap(), "d_pid_roll".parse().unwrap(), "max_roll".parse().unwrap());
-    let yaw = pid_parse("pid-config".parse().unwrap(), "p_pid_yaw".parse().unwrap(), "i_pid_yaw".parse().unwrap(), "d_pid_yaw".parse().unwrap(), "max_yaw".parse().unwrap());
-    let pitch = pid_parse("pid-config".parse().unwrap(), "p_pid_pitch".parse().unwrap(), "i_pid_pitch".parse().unwrap(), "d_pid_pitch".parse().unwrap(), "max_pitch".parse().unwrap());
-
-    let pid_config:PIDS = PIDS {
-        roll:roll,
-        yaw:yaw,
-        pitch:pitch,
+        max: i32_max,
     };
     return pid_config;
-
 }
 
+pub fn get_pids() -> PIDS {
+    let roll = pid_parse(
+        "pid-config".parse().unwrap(),
+        "p_pid_roll".parse().unwrap(),
+        "i_pid_roll".parse().unwrap(),
+        "d_pid_roll".parse().unwrap(),
+        "max_roll".parse().unwrap(),
+    );
+    let yaw = pid_parse(
+        "pid-config".parse().unwrap(),
+        "p_pid_yaw".parse().unwrap(),
+        "i_pid_yaw".parse().unwrap(),
+        "d_pid_yaw".parse().unwrap(),
+        "max_yaw".parse().unwrap(),
+    );
+    let pitch = pid_parse(
+        "pid-config".parse().unwrap(),
+        "p_pid_pitch".parse().unwrap(),
+        "i_pid_pitch".parse().unwrap(),
+        "d_pid_pitch".parse().unwrap(),
+        "max_pitch".parse().unwrap(),
+    );
 
+    let pid_config: PIDS = PIDS {
+        roll: roll,
+        yaw: yaw,
+        pitch: pitch,
+    };
+    return pid_config;
+}
 
-pub fn AutoLevel_Config() -> i32{
+pub fn auto_level_config() -> i32 {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let autoconfig = conf.section(Some("auto-level")).unwrap();
     let amount = (autoconfig.get("autolevel")).unwrap().to_string();
     if amount.eq("on") {
         return 1;
-    }
-    else {
+    } else {
         return 0;
     }
-    
 }
-
-pub fn config_parse_get_verison() -> &'static str {
-    return "config_parse   verison is 9/29/2020 ID is: 7DniMjvm"
-} 
-
-
