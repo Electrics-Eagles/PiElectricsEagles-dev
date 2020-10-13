@@ -47,4 +47,19 @@ VS Stdio Code Plugin:
 ![5%](https://progress-bar.dev/5)
 
 
+MPU6050 Driver:
+![91%](https://progress-bar.dev/91)
+
+SBUS:
+![15%](https://progress-bar.dev/15)
+
+ESC_Driver 
+![95%](https://progress-bar.dev/95)
+
+
+Logger
+![100%](https://progress-bar.dev/100)
+
+Config_Parser
+![81%](https://progress-bar.dev/100)
 
