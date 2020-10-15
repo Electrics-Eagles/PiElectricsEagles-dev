@@ -34,7 +34,7 @@ https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf
 
 
 Core status :
-![100https://progress-bar.dev/100
+![100](https://progress-bar.dev/100)
 
 
 Bug fix status:
@@ -51,7 +51,7 @@ MPU6050 Driver:
 ![91%](https://progress-bar.dev/91)
 
 SBUS:
-![3%](https://progress-bar.dev/35
+![3%](https://progress-bar.dev/35)
 
 ESC_Driver 
 ![95%](https://progress-bar.dev/95)
