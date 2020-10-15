@@ -63,3 +63,5 @@ Logger
 Config_Parser
 ![81%](https://progress-bar.dev/100)
 
+Dependencies:
+<img src="https://raw.githubusercontent.com/alex5250/PiElectricsEagles/master/graph.png?token=AE4DJS7CQEPYLGF5S6UJRO27RAZ2I"></img>
