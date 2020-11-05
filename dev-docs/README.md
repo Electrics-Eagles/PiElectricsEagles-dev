@@ -1,4 +1,4 @@
-** The dev docs setcion **
+The dev docs folder
 There are all docs needed for drone development
 Include the API and all others diagrams.
 
