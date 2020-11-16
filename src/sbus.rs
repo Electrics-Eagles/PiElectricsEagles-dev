@@ -11,7 +11,6 @@ pub struct ControllerValues {
 pub fn sbus_uart_init_() -> i32 {
     let values = sbus_receiver_conifg();
 
-    
     return 6;
 }
 pub fn read_sbus(mut uart: Uart) -> ControllerValues {
@@ -32,10 +31,9 @@ pub fn read_sbus(mut uart: Uart) -> ControllerValues {
     }
 }
 pub fn read_sbus_no() -> ControllerValues {
+    loop {
+        // Fill the buffer variable with any incoming data.
 
-  
-       loop {   // Fill the buffer variable with any incoming data.
-        
         let values = ControllerValues {
             ch1: 1000,
             ch2: 1000,

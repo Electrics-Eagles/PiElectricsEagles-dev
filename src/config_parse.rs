@@ -1,4 +1,3 @@
-
 extern crate ini;
 
 use ini::Ini;
@@ -109,7 +108,6 @@ pub fn pid_parse(section: String, p_str: String, i_str: String, d_str: String, m
     let i32_i_pid = parse(i_pid).unwrap();
     let i32_d_pid = parse(d_pid).unwrap();
     let i32_max = parse(max).unwrap();
-
 
     let pid_config: PID = PID {
         p: i32_p_pid,

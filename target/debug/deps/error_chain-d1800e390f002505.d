@@ -1,0 +1,10 @@
+/home/bestosinworldnot/Documents/pi_/PiElectricsEagles/target/debug/deps/error_chain-d1800e390f002505.rmeta: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_error.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/error_chain.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_main.rs
+
+/home/bestosinworldnot/Documents/pi_/PiElectricsEagles/target/debug/deps/liberror_chain-d1800e390f002505.rlib: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_error.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/error_chain.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_main.rs
+
+/home/bestosinworldnot/Documents/pi_/PiElectricsEagles/target/debug/deps/error_chain-d1800e390f002505.d: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_error.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/error_chain.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_main.rs
+
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/lib.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_error.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/error_chain.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.10.0/src/quick_main.rs:
