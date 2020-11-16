@@ -48,10 +48,10 @@ VS Stdio Code Plugin:
 
 
 MPU6050 Driver:
-![91%](https://progress-bar.dev/91)
+![99%](https://progress-bar.dev/91)
 
-SBUS:
-![3%](https://progress-bar.dev/35)
+iBUS:
+![100%](https://progress-bar.dev/35)
 
 ESC_Driver 
 ![95%](https://progress-bar.dev/95)
@@ -63,5 +63,7 @@ Logger
 Config_Parser
 ![81%](https://progress-bar.dev/100)
 
-Dependencies:
-<img src="https://raw.githubusercontent.com/alex5250/PiElectricsEagles/master/graph.png?token=AE4DJS7CQEPYLGF5S6UJRO27RAZ2I"></img>
+
+We are using power of squrrels:
+<img src="https://i.ibb.co/QkJ0P2g/Whats-App-Image-2020-10-15-at-12-19-41.jpg"></img>
+

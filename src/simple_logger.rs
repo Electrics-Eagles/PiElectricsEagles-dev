@@ -12,7 +12,7 @@ fn main() {
     simple_logger::logger(1, false, "NO ERRORS".parse().unwrap());
     simple_logger::logger(1, true, "NO ERRORS".parse().unwrap());
     #1 is mode
-    #false - is write to file
+    #false - is write to console
 
 }
 
