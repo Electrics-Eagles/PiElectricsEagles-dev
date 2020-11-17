@@ -54,7 +54,24 @@ pub struct PIDS {
     pub pitch: PID,
     pub yaw: PID,
 }
+pub struct IBUS {
+    pub port:String,
+    pub baudrates,u32,
+}
 
+
+pub fn ibus_parser() -> IBUS {
+    let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
+    let ibus = conf.section(Some("ibus")).unwrap();
+    let baud = parse_u8((esc_config.get("baudrate")).unwrap()).unwrap();
+    let port = (esc_config.get("port")).unwrap();
+    let ibus = IBUS {
+        driver: port.parse().unwrap(),
+        port: baud.parse().unwrap(),
+     
+    };
+    return IBUS;
+}
 pub fn esc_config_parser() -> EscMotors {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
     let esc_config = conf.section(Some("esc-config")).unwrap();
