@@ -1,7 +1,32 @@
+
+
+use mut_static::MutStatic;
 const FREQ_CONST: i32 = 200; // Const to set freq of signal
+
+
 use crate::config_parse::esc_config_parser;
 use linux_embedded_hal::I2cdev;
 use pwm_pca9685::{Address, Channel, Pca9685};
+
+pub struct Controller {
+    value: Pca9685<I2cdev>,
+}
+
+impl Controller {
+    pub fn new(v: Pca9685<I2cdev>) -> Self {
+        Controller { value: v }
+    }
+    pub fn getvalue(&self) -> Pca9685<I2cdev> {
+        self.value
+    }
+    pub fn setvalue(&mut self, v: Pca9685<I2cdev>) {
+        self.value = v
+    }
+}
+
+lazy_static! {
+    static ref controller: MutStatic<Controller> = MutStatic::new();
+}
 
 fn check_driver_config_check(driver: String, amount: u8) {
     if !amount == 4 || !driver.eq("pca9685") {
@@ -9,16 +34,16 @@ fn check_driver_config_check(driver: String, amount: u8) {
     }
 }
 
-pub fn external_pwm_prepare() -> Pca9685<I2cdev> {
+pub fn external_pwm_prepare(){
     //port: String, amount: u8, driver: String
     let value = esc_config_parser();
     check_driver_config_check(value.driver, value.amount);
     let dev = I2cdev::new(value.port).unwrap();
     let address = Address::default();
-    let mut pwm = Pca9685::new(dev, address).unwrap();
+    let mut pwm:Pca9685<I2cdev> = Pca9685::new(dev, address).unwrap();
     pwm.set_prescale(FREQ_CONST as u8).unwrap();
     pwm.enable().expect("Error");
-    return pwm;
+    controller.set(Controller{value:pwm});
 }
 
 pub fn get_esc_verison() -> &'static str {
@@ -31,8 +56,7 @@ pub fn map(x: i32, in_min: i32, in_max: i32, out_min: i32, out_max: i32) -> i32 
 
 pub fn set_throttle_external_pwm(ch1: u16, ch2: u16, ch3: u16, ch4: u16) {
     let mut i2c_controller;
-    i2c_controller = external_pwm_prepare();
-
+    i2c_controller =  controller.read().unwrap().getvalue();
     i2c_controller
         .set_channel_on(Channel::C0, map(ch1 as i32, 1000, 2000, 0, 4095) as u16)
         .unwrap();

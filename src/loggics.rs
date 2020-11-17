@@ -2,26 +2,29 @@ const START_MOTOS_VALUE: u16 = 10;
 
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
-use rppal::uart::Uart;
 extern crate pid;
 use pid::Pid;
 
 use crate::controller::external_pwm_prepare;
 use crate::mpu6050::get_gyro_values;
 use crate::mpu6050::mpu6050_perpare;
-use crate::{controller::set_throttle_external_pwm, sbus::sbus_uart_init};
+use crate::controller::set_throttle_external_pwm;
 
 use crate::config_parse::auto_level_config;
 use crate::config_parse::get_pids;
 use crate::mpu6050::get_acc_values;
-use crate::sbus::read_sbus;
+use std::time::Duration;
+use crate::ibus::init_uart;
+use crate::ibus::get_data_of_channel_form_ibus_receiver;
+
 
 use pwm_pca9685::Pca9685;
 
 pub struct ReadyHardware {
     mpu6050: Mpu6050<I2cdev, Delay>,
     motors_esc: Pca9685<I2cdev>,
-    sbus: Uart,
+  
+   
 }
 
 pub fn start_motors() {
@@ -36,25 +39,22 @@ pub fn start_motors() {
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
-pub fn init_hardware() -> ReadyHardware {
-    let mpu6050 = mpu6050_perpare();
-    let sbus = sbus_uart_init();
-    let motors_esc = external_pwm_prepare();
-    let loaded_hardware = ReadyHardware {
-        mpu6050: mpu6050,
-        motors_esc: motors_esc,
-        sbus: sbus,
-    };
-    return loaded_hardware;
+pub fn init_hardware()  {
+    mpu6050_perpare();
+    init_uart();
+    
+
+
+   
 }
 
 pub fn main_loop() {
     let mut loops = 0;
-    let hardware = init_hardware();
-    let reciver_values = hardware.sbus;
-    let reciver = read_sbus(reciver_values);
+    let reciver = get_data_of_channel_form_ibus_receiver();
     let autolevel = auto_level_config();
     let pid_settings = get_pids();
+    print!("Reciver dat ch1 {:?}",reciver.ch3);
+    set_throttle_external_pwm(1000 as u16, 1000 as u16, 1000 as u16, 1000 as u16);
 
     let mut pid_roll = Pid::new(
         pid_settings.roll.p as f64,
@@ -234,4 +234,5 @@ pub fn main_loop() {
         esc_4 = 1000.0; //If start is not 2 keep a 1000us pulse for ess-4.
     }
     set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
+  
 }

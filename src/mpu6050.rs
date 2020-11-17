@@ -1,11 +1,16 @@
-#[macro_use]
 extern crate lazy_static;
 extern crate mut_static;
+
+#[macro_use]
+
+
+
 
 use crate::config_parse::mpu_config_parser;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
 use mut_static::MutStatic;
+use lazy_static::LazyStatic;
 
 pub struct MPU6050_Driver {
     value: Mpu6050<I2cdev, Delay>,
