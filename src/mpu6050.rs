@@ -3,8 +3,7 @@
 use crate::config_parse::mpu_config_parser;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
-use mut_static::MutStatic;
-use lazy_static::LazyStatic;
+
 
 
 
