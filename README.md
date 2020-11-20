@@ -67,3 +67,5 @@ Config_Parser
 We are using power of squrrels:
 <img src="https://i.ibb.co/QkJ0P2g/Whats-App-Image-2020-10-15-at-12-19-41.jpg"></img>
 
+
+All soft is V2 APi
