@@ -1,60 +1,45 @@
 const START_MOTOS_VALUE: u16 = 10;
 
+
+use crate::mpu6050::Mpu6050_driver;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
 extern crate pid;
 use pid::Pid;
-
-use crate::controller::external_pwm_prepare;
-use crate::mpu6050::get_gyro_values;
-use crate::mpu6050::mpu6050_perpare;
-use crate::controller::set_throttle_external_pwm;
+use pwm_pca9685::{Address, Channel, Pca9685};
+use std::{thread, time};
 
 use crate::config_parse::auto_level_config;
 use crate::config_parse::get_pids;
-use crate::mpu6050::get_acc_values;
-use std::time::Duration;
-use crate::ibus::init_uart;
-use crate::ibus::get_data_of_channel_form_ibus_receiver;
+
+use crate::ibus::*;
+use crate::mpu6050::*;
+use crate::controller::*;
 
 
-use pwm_pca9685::Pca9685;
 
-pub struct ReadyHardware {
-    mpu6050: Mpu6050<I2cdev, Delay>,
-    motors_esc: Pca9685<I2cdev>,
-  
-   
-}
 
-pub fn start_motors() {
-    set_throttle_external_pwm(
-        START_MOTOS_VALUE,
-        START_MOTOS_VALUE,
-        START_MOTOS_VALUE,
-        START_MOTOS_VALUE,
-    );
-}
+
+
 
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
-pub fn init_hardware()  {
-    mpu6050_perpare();
-    init_uart();
-    
 
-
-   
-}
 
 pub fn main_loop() {
     let mut loops = 0;
-    let reciver = get_data_of_channel_form_ibus_receiver();
+    let mut  reciver_driver=ibus_receiver::new();
+    let mut  mpu6050=Mpu6050_driver::new();
+    let mut controller=Controller::new();
+    
+    /* init*/
+    loop {
+    let  reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+    
     let autolevel = auto_level_config();
     let pid_settings = get_pids();
-    print!("Reciver dat ch1 {:?}",reciver.ch3);
-    set_throttle_external_pwm(1000 as u16, 1000 as u16, 1000 as u16, 1000 as u16);
+    print!("Reciver dat ch3{:?}",reciver.ch3);
 
     let mut pid_roll = Pid::new(
         pid_settings.roll.p as f64,
@@ -84,7 +69,7 @@ pub fn main_loop() {
         0.0,
     );
 
-    let acc_value = get_acc_values(1);
+    let acc_value = mpu6050.get_acc_values(1);
     let acc_x = acc_value.x;
     let acc_y = acc_value.y;
     let acc_z = acc_value.z;
@@ -97,7 +82,7 @@ pub fn main_loop() {
     let mut pitch_level_correction;
     let mut roll_level_correction;
     let mut start: i32 = 0;
-    let gyro_values = get_gyro_values(1);
+    let gyro_values = mpu6050.get_gyro_values(1);
     let mut throllite;
     let mut esc_1;
     let mut esc_2;
@@ -131,7 +116,11 @@ pub fn main_loop() {
     loops = loops + 1;
 
     if reciver.ch1 == 1000 && reciver.ch3 == 1500 {
-        start_motors();
+        controller.turn_motor(Channel::C0, 1000);
+        controller.turn_motor(Channel::C1, 1000);
+        controller.turn_motor(Channel::C2, 1000);
+        controller.turn_motor(Channel::C3, 1000);
+
     }
 
     if reciver.ch3 < 1050 && reciver.ch4 < 1050 {
@@ -233,6 +222,18 @@ pub fn main_loop() {
         esc_3 = 1000.0; //If start is not 2 keep a 1000us pulse for ess-3.
         esc_4 = 1000.0; //If start is not 2 keep a 1000us pulse for ess-4.
     }
+    controller.set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
+
+    let ten_millis = time::Duration::from_millis(100);
+let now = time::Instant::now();
+
+thread::sleep(ten_millis);
+  /*
     set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
-  
+    controller.turn_motor(Channel::C0, esc_1 as u16);
+    controller.turn_motor(Channel::C1,  esc_2 as u16);
+    controller.turn_motor(Channel::C2, esc_3 as u16);
+    controller.turn_motor(Channel::C3, esc_4 as u16);
+    */
+}
 }
