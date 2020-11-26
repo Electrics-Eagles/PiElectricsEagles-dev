@@ -1,0 +1,46 @@
+{
+	"publisher": "AlexZaslavskis",
+	"name": "vs-code-rust-new-verion",
+	"displayName": "vs-code-rust-new-verion",
+	"description": "small extension for help work",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.49.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:vs-code-rust-new-verion.helloWorld"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "vs-code-rust-new-verion.helloWorld",
+				"title": "Add verison ID/Date to code"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint src --ext ts",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.49.0",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.0",
+		"@types/node": "^14.0.27",
+		"eslint": "^7.9.0",
+		"@typescript-eslint/eslint-plugin": "^4.1.1",
+		"@typescript-eslint/parser": "^4.1.1",
+		"glob": "^7.1.6",
+		"mocha": "^8.1.3",
+		"typescript": "^4.0.2",
+		"vscode-test": "^1.4.0"
+	}
+}
