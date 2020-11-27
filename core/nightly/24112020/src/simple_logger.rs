@@ -25,9 +25,7 @@ use std::io::{Read, Write};
 pub fn logger_verison() -> &'static str {
     return "LOGGER VER V1.0.1 15/09/2020";
 }
-pub fn logger(mode: i32, file: bool, msg: String) {
-   
-}
+pub fn logger(mode: i32, file: bool, msg: String) {}
 
 fn read_config() -> String {
     let mut conifg = std::fs::File::open("./src/config/logger.config").unwrap();
@@ -38,9 +36,7 @@ fn read_config() -> String {
     return words[1].to_string().replace("\n", "");
 }
 
-pub fn file_logger(mode: String, msg: String) {
-    
-}
+pub fn file_logger(mode: String, msg: String) {}
 
 pub fn console_logger(mode: String, msg: String) {
     println!(

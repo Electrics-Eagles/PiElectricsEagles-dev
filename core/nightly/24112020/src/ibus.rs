@@ -56,8 +56,8 @@ impl ibus_receiver {
             {
                 // each two bytes need convert opposite site form second byte of each channel into first byte of each channel
 
-               // simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION".parse().unwrap());
-               //simple_logger::logger(1, true, input_string_in_hex.parse().unwrap());
+                // simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION".parse().unwrap());
+                //simple_logger::logger(1, true, input_string_in_hex.parse().unwrap());
                 // support maxiumun 14 number of channels
                 // starting at 3th and 4th bytes of one reading lenght of ibus, but need set opposite of these bytes that get correctly value of each channel
                 // each new channel new number of char
