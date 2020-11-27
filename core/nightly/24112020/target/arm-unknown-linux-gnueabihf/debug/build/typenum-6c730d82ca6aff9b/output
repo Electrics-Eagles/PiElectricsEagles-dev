@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/arm-unknown-linux-gnueabihf/debug/build/typenum-6c730d82ca6aff9b/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/arm-unknown-linux-gnueabihf/debug/build/typenum-6c730d82ca6aff9b/out/op.rs

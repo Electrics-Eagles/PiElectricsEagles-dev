@@ -57,7 +57,7 @@ pub struct PIDS {
 
 pub fn esc_config_parser() -> EscMotors {
     let conf = Ini::load_from_file("./src/config/core.ini").unwrap();
-    
+
     let esc_config = conf.section(Some("esc-config")).unwrap();
     let amount = parse_u8((esc_config.get("amount")).unwrap()).unwrap();
     let driver = (esc_config.get("driver")).unwrap();

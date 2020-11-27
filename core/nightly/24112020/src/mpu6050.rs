@@ -1,7 +1,7 @@
 use crate::config_parse::mpu_config_parser;
+use crate::simple_logger;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
-use crate::simple_logger;
 
 pub struct GyroMpu6050RawData {
     pub x: i32,
@@ -38,7 +38,7 @@ impl Mpu6050_driver {
     }
 
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
-          simple_logger::logger(1, true, "Read acc values".parse().unwrap());
+        simple_logger::logger(1, true, "Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
             x: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().x as u8,
             y: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().y as u8,
@@ -51,7 +51,7 @@ impl Mpu6050_driver {
         return data;
     }
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
-         simple_logger::logger(1, true, "Read gyro values".parse().unwrap());
+        simple_logger::logger(1, true, "Read gyro values".parse().unwrap());
         let data = GyroMpu6050RawData {
             x: self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().x as i32,
             y: self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().y as i32,
@@ -66,7 +66,16 @@ impl Mpu6050_driver {
     pub fn get_temp(&mut self) -> f32 {
         simple_logger::logger(1, true, "Read temp values".parse().unwrap());
         simple_logger::logger(1, true, "GYRO VALUE:".parse().unwrap());
-        simple_logger::logger(1, true, self.value_of_gyro.get_temp().expect("error in fetch temp").to_string().parse().unwrap());
+        simple_logger::logger(
+            1,
+            true,
+            self.value_of_gyro
+                .get_temp()
+                .expect("error in fetch temp")
+                .to_string()
+                .parse()
+                .unwrap(),
+        );
         return self.value_of_gyro.get_temp().expect("error in fetch temp");
     }
 }

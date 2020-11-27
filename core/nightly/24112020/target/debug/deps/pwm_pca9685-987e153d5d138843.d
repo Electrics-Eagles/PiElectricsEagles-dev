@@ -1,0 +1,10 @@
+/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/debug/deps/pwm_pca9685-987e153d5d138843.rmeta: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/config.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/register_access.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/channels.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/device_impl.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/types.rs
+
+/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/debug/deps/pwm_pca9685-987e153d5d138843.d: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/config.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/register_access.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/channels.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/device_impl.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/types.rs
+
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/lib.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/config.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/register_access.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/channels.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/device_impl.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/pwm-pca9685-0.3.0/src/types.rs:

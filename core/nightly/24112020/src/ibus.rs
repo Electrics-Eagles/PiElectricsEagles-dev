@@ -7,7 +7,7 @@ use std::vec::Vec;
 
 use crate::simple_logger;
 
-static mut value_before: [u16; 6] = [1000,1000,1000,1000,1000,1000];
+static mut value_before: [u16; 6] = [1000, 1000, 1000, 1000, 1000, 1000];
 /* structure for getting a data of all neccessary chanell */
 pub struct type_of_data_from_channels {
     pub ch1: u16,
@@ -18,28 +18,23 @@ pub struct type_of_data_from_channels {
     pub ch6: u16,
 }
 
-
-
 pub struct ibus_receiver {
     uart_mod: Uart,
-
 }
-
 
 impl ibus_receiver {
     /* Initialize IBUS receiver */
     pub fn new() -> ibus_receiver {
-        
         let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
-         simple_logger::logger(1, true, "UART CREATED".parse().unwrap());
-        uart_def.set_read_mode(40, Duration::new(1,7)).unwrap();
-            simple_logger::logger(1, true, "UART MODE SET".parse().unwrap());
+        simple_logger::logger(1, true, "UART CREATED".parse().unwrap());
+        uart_def.set_read_mode(40, Duration::new(1, 7)).unwrap();
+        simple_logger::logger(1, true, "UART MODE SET".parse().unwrap());
         ibus_receiver { uart_mod: uart_def }
     }
     /* Function for getting data of ibus receiver */
     pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
         // buffer for reading uart before convert into hexidecimal value
-        let mut _value_before:[u16; 6] = [0; 6];
+        let mut _value_before: [u16; 6] = [0; 6];
 
         let mut buffer = [0u8; 32];
         // array for getting a data
@@ -47,8 +42,8 @@ impl ibus_receiver {
 
         // reading a buffer from ibus intefance
         if self.uart_mod.read(&mut buffer).unwrap() > 0 {
-             simple_logger::logger(1, true, "DATA READED".parse().unwrap());
-             simple_logger::logger(1, true, std::str::from_utf8(&buffer).unwrap().to_string());
+            //simple_logger::logger(1, true, "DATA READED".parse().unwrap());
+            //simple_logger::logger(1, true, std::str::from_utf8(&buffer).unwrap().to_string());
             // encode buffer into hex decimal and convert string
             let input_string_in_hex = hex::encode(buffer);
             // contain chars of hex decimal values by using std::vec
@@ -61,8 +56,8 @@ impl ibus_receiver {
             {
                 // each two bytes need convert opposite site form second byte of each channel into first byte of each channel
 
- simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION" .parse().unwrap());
-                simple_logger::logger(1, true, input_string_in_hex.parse().unwrap());
+               // simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION".parse().unwrap());
+               //simple_logger::logger(1, true, input_string_in_hex.parse().unwrap());
                 // support maxiumun 14 number of channels
                 // starting at 3th and 4th bytes of one reading lenght of ibus, but need set opposite of these bytes that get correctly value of each channel
                 // each new channel new number of char
@@ -79,35 +74,28 @@ impl ibus_receiver {
                         input_string_in_char[5 + (4 * x)],
                     ];
 
-
                     // convert string with real hex value
                     let str_value = String::from_iter(ch1_raw_hex);
- simple_logger::logger(1, true, "Hex with replaced value" .parse().unwrap());
+                    simple_logger::logger(1, true, "Hex with replaced value".parse().unwrap());
                     simple_logger::logger(1, true, str_value.parse().unwrap());
                     // convert into u16 from hex string
                     let value: u16 = u16::from_str_radix(str_value.as_str(), 16).unwrap();
 
-
-
                     // write a new value of channel into array
                     data_of_channels[x] = value;
-
                 }
-                 unsafe {
-                        value_before=data_of_channels;
-
-                    }
-            }
-            else {
-            unsafe {
-            data_of_channels=value_before;
-        }
-            
+                unsafe {
+                    value_before = data_of_channels;
+                }
+            } else {
+                unsafe {
+                    data_of_channels = value_before;
+                }
             }
         }
-        self.uart_mod.flush( Both).expect("error");
+        self.uart_mod.flush(Both).expect("error");
         // return into struct of data of channels from usual array
-        simple_logger::logger(1, true, String::from_utf16(&data_of_channels).unwrap());
+        //simple_logger::logger(1, true, String::from_utf16(&data_of_channels).unwrap());
         type_of_data_from_channels {
             ch1: data_of_channels[0],
             ch2: data_of_channels[1],
@@ -116,8 +104,5 @@ impl ibus_receiver {
             ch5: data_of_channels[4],
             ch6: data_of_channels[5],
         }
-
-
-        
     }
 }

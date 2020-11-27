@@ -1,0 +1,10 @@
+/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/arm-unknown-linux-gnueabihf/debug/deps/rand_os-d6caf4457adf4acf.rmeta: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/dummy_log.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/random_device.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/linux_android.rs
+
+/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/arm-unknown-linux-gnueabihf/debug/deps/librand_os-d6caf4457adf4acf.rlib: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/dummy_log.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/random_device.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/linux_android.rs
+
+/home/bestosinworldnot/Downloads/PiElectricsEagles-master/core/nightly/24112020/target/arm-unknown-linux-gnueabihf/debug/deps/rand_os-d6caf4457adf4acf.d: /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/lib.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/dummy_log.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/random_device.rs /home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/linux_android.rs
+
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/lib.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/dummy_log.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/random_device.rs:
+/home/bestosinworldnot/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_os-0.1.3/src/linux_android.rs:
