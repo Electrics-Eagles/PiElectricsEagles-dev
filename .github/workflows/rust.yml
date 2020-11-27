@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: cargo build --verbose
+      run:  cd core && cd nightly && cd 24112020 && cargo build --verbose
     - name: Run tests
-      run: cargo test --verbose
+      run:   cd core && cd nightly && cd 24112020 &&  cargo test --verbose
