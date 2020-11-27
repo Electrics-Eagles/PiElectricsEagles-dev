@@ -39,7 +39,7 @@ Core status :
 
 
 Bug fix status:
-![9%](https://progress-bar.dev/9)
+![40%](https://progress-bar.dev/40)
 
 CLI status:
 ![0%](https://progress-bar.dev/0)
