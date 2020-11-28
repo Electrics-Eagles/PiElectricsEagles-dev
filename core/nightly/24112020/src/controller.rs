@@ -1,4 +1,11 @@
-const PRESCALER: u8 = 83;
+//config found on osciloscope 
+// min 1000 us value 205  
+// max 2000us value 410 
+// prescaller 120 -119 
+// diffeence 119 
+
+
+const PRESCALER: u8 = 120;
 
 use crate::config_parse::mpu_config_parser;
 use linux_embedded_hal::I2cdev;
@@ -18,10 +25,10 @@ impl Controller {
         let dev = I2cdev::new(mpu6050_conifg.port).unwrap();
         let mut pwm_mod: Pca9685<I2cdev> = Pca9685::new(dev, Address::default()).unwrap();
         pwm_mod.set_prescale(PRESCALER).unwrap(); // you need to set a correct prescaler
-        pwm_mod.set_channel_on_off(Channel::C0, 0, 4095).unwrap();
-        pwm_mod.set_channel_on_off(Channel::C1, 0, 4095).unwrap();
-        pwm_mod.set_channel_on_off(Channel::C2, 0, 4095).unwrap();
-        pwm_mod.set_channel_on_off(Channel::C3, 0, 4095).unwrap();
+        pwm_mod.set_channel_on(Channel::C0, 0).unwrap();
+        pwm_mod.set_channel_on(Channel::C1, 0).unwrap();
+        pwm_mod.set_channel_on(Channel::C2, 0).unwrap();
+        pwm_mod.set_channel_on(Channel::C3, 0).unwrap();
         pwm_mod.enable().unwrap();
         Controller { pwm: pwm_mod }
     }
@@ -54,16 +61,16 @@ impl Controller {
     */
 
     pub fn set_throttle_external_pwm(&mut self, ch1: u16, ch2: u16, ch3: u16, ch4: u16) {
-        let value_pwm_ch1 = map(ch1 as i32, 1000, 2000, 0, 4095) as u16;
+        let value_pwm_ch1 = map(ch1 as i32, 205, 410, 0, 4095) as u16;
         self.pwm.set_channel_on(Channel::C0, value_pwm_ch1).unwrap();
 
-        let value_pwm_ch2 = map(ch2 as i32, 1000, 2000, 0, 4095) as u16;
+        let value_pwm_ch2 = map(ch2 as i32, 205, 410, 0, 4095) as u16;
         self.pwm.set_channel_on(Channel::C1, value_pwm_ch2).unwrap();
 
-        let value_pwm_ch3 = map(ch3 as i32, 1000, 2000, 0, 4095) as u16;
+        let value_pwm_ch3 = map(ch3 as i32, 205, 410, 0, 4095) as u16;
         self.pwm.set_channel_on(Channel::C2, value_pwm_ch3).unwrap();
 
-        let value_pwm_ch4 = map(ch4 as i32, 1000, 2000, 0, 4095) as u16;
+        let value_pwm_ch4 = map(ch4 as i32, 205, 410, 0, 4095) as u16;
         self.pwm.set_channel_on(Channel::C3, value_pwm_ch4).unwrap();
     }
 }
