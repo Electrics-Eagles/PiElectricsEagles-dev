@@ -27,7 +27,7 @@ impl Controller {
         pwm_mod.set_channel_on(Channel::C2, 0).unwrap();
         pwm_mod.set_channel_on(Channel::C3, 0).unwrap();
         pwm_mod.enable().unwrap();
-        calibrate_esc ();
+       self. calibrate_esc ();
         Controller { pwm: pwm_mod }
     }
     pub fn set_throttle_external_pwm(&mut self, ch1: u16, ch2: u16, ch3: u16, ch4: u16) {
