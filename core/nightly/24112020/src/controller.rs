@@ -5,6 +5,7 @@
 // diffeence 119
 
 const PRESCALER: u8 = 120;
+use crate::config_parse::config_parser;
 use linux_embedded_hal::I2cdev;
 use pwm_pca9685::{Address, Channel, Pca9685};
 use std::{thread, time};
@@ -19,7 +20,8 @@ pub fn map(x: i64, in_min: i64, in_max: i64, out_min: i64, out_max: i64) -> i64 
 
 impl Controller {
     pub fn new() -> Controller {
-        let dev = I2cdev::new("/dev/i2c-1").unwrap();
+        let mut config = config_parser::new();
+        let dev = I2cdev::new(config.esc_config_parser().port).unwrap();
         let mut pwm_mod: Pca9685<I2cdev> = Pca9685::new(dev, Address::default()).unwrap();
         pwm_mod.set_prescale(PRESCALER).unwrap(); // you need to set a correct prescaler
         pwm_mod.set_channel_on(Channel::C0, 0).unwrap();
@@ -27,7 +29,7 @@ impl Controller {
         pwm_mod.set_channel_on(Channel::C2, 0).unwrap();
         pwm_mod.set_channel_on(Channel::C3, 0).unwrap();
         pwm_mod.enable().unwrap();
-       self. calibrate_esc ();
+        
         Controller { pwm: pwm_mod }
     }
     pub fn set_throttle_external_pwm(&mut self, ch1: u16, ch2: u16, ch3: u16, ch4: u16) {

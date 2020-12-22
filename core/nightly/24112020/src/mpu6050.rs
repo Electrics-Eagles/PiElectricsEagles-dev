@@ -1,4 +1,5 @@
-use crate::config_parse::mpu_config_parser;
+
+use crate::config_parse::config_parser;
 use crate::simple_logger;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
@@ -19,7 +20,8 @@ pub struct Mpu6050_driver {
 }
 impl Mpu6050_driver {
     pub fn new() -> Mpu6050_driver {
-        let mpu6050_conifg = mpu_config_parser();
+        let mut config = config_parser::new();
+        let mpu6050_conifg = config.mpu_config_parser();
         println!("{}", mpu6050_conifg.port);
         simple_logger::logger(1, true, "READ MPU Config".parse().unwrap());
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");

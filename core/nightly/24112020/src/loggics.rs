@@ -11,8 +11,8 @@ use std::{
     time::{self, SystemTime},
 };
 
-use crate::config_parse::auto_level_config;
-use crate::config_parse::get_pids;
+use crate::config_parse::*;
+
 
 use crate::controller::*;
 use crate::ibus::*;
@@ -28,6 +28,7 @@ pub fn main_loop() {
     let mut reciver_driver = ibus_receiver::new();
     let mut mpu6050 = Mpu6050_driver::new();
     let mut controller = Controller::new();
+    let mut config = config_parser::new();
     simple_logger::logger(1, true, "CREATE DRIVER OBJECTS :".parse().unwrap());
 
     /* init*/
@@ -35,11 +36,11 @@ pub fn main_loop() {
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         simple_logger::logger(1, true, "READ DATA FROM RC :".parse().unwrap());
-        let autolevel = auto_level_config();
+        let autolevel = config.auto_level_config();
         simple_logger::logger(1, true, "LIST SETTINGS :".parse().unwrap());
         simple_logger::logger(1, true, autolevel.to_string().parse().unwrap());
 
-        let pid_settings = get_pids();
+        let pid_settings = config.get_pids();
         let mut pid_roll = Pid::new(
             pid_settings.roll.p as f64,
             pid_settings.roll.i as f64,

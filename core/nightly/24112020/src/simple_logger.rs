@@ -28,7 +28,7 @@ pub fn logger_verison() -> &'static str {
 pub fn logger(mode: i32, file: bool, msg: String) {}
 
 fn read_config() -> String {
-    let mut conifg = std::fs::File::open("./src/config/logger.config").unwrap();
+    let mut conifg = std::fs::File::open("/etc/pielectricseagles/logger.config").unwrap();
     let mut config_ = String::new();
     conifg.read_to_string(&mut config_).unwrap();
     print!("The content is: {}", config_);
