@@ -1,2 +1,2 @@
 To build these project, you cargo build in each folder
-(e.g. cd PiElectricsEagles/ClientForRequestPidSetting and cargo run in this directory)
+(e.g. cd PiElectricsEagles/ClientForRequestPidSetting and cargo build in this directory)
