@@ -1,0 +1,10 @@
+You need run cargo via sudo mode, because this software used file path of /etc/pielectricseagles/core.ini.
+After exit server, need clear processor via command sudo kill -9 PID, where PID is pid-number of processor. 
+To finding pid processor, entering command sudo lsof -i :7878
+To avoid error when run server at next time
+
+If you run this software without sudo then file of configuration cannot write and software will terminal with errorness.
+Example of showing ternimal: 
+Path of core config: /etc/pielectricseagles/core.ini
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }', src/main.rs:77:51
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
