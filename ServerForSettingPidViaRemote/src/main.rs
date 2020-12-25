@@ -1,3 +1,6 @@
+/* Server code source for remote setting PID configuration 
+Created by M.Zaslavskis
+25th December 2020 */
 use std::fs::File;
 use std::net::*;
 use std::io::prelude::*;
