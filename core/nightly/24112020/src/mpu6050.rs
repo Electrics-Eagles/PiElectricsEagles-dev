@@ -3,6 +3,10 @@ use crate::config_parse::config_parser;
 use crate::simple_logger;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
+use std::fs::File;
+use std::io::prelude::*;
+
+static bool LOGGER=true;
 
 pub struct GyroMpu6050RawData {
     pub x: i32,
@@ -20,6 +24,7 @@ pub struct Mpu6050_driver {
 }
 impl Mpu6050_driver {
     pub fn new() -> Mpu6050_driver {
+      
         let mut config = config_parser::new();
         let mpu6050_conifg = config.mpu_config_parser();
         println!("{}", mpu6050_conifg.port);
@@ -40,6 +45,7 @@ impl Mpu6050_driver {
     }
 
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
+         
         simple_logger::logger(1, true, "Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
             x: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().x as u8,
@@ -80,4 +86,13 @@ impl Mpu6050_driver {
         );
         return self.value_of_gyro.get_temp().expect("error in fetch temp");
     }
+    
+    
+
+
+fn main() -> std::io::Result<()> {
+
+    file.write_all(b"Hello, world!")?;
+    Ok(())
+}
 }
