@@ -1,7 +1,7 @@
 [package]
-name = "pi"
+name = "pielectricseagles"
 version = "0.1.0"
-authors = ["Aleksandrs Zaslavskis <sahsariga111@gmail.com>"]
+authors = ["Aleksandrs Zaslavskis <sahsariga111@gmail.com> https://github.com/alex5250 ","Mihails Zaslavskis mishariga111@gmail.com https://github.com/misha-dig"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -19,5 +19,17 @@ pid = "2.1.0"
 lazy_static = "1.4.0"
 mut_static = "5.0.0"
 hex = "0.4.2"
-#https://github.com/alex5250/mpu6050
 mpu6050 = "0.1.3"
+
+[package.metadata.deb]
+maintainer = "Alex / Mike Zaslavskis"
+copyright = "2021 Alex / Mike Zaslavskis"
+extended-description = """\
+A simple subcommand for the Cargo package manager for \
+building Debian packages from Rust projects."""
+depends = "python-smbus"
+section = "core"
+priority = "optional"
+maintainer-scripts = "debian/"
+systemd-units = { enable = true }
+separate-debug-symbols = false

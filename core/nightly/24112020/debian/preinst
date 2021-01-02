@@ -1,0 +1,3 @@
+#DEBHELPER# 
+
+rm -rf /etc/pielectriseagles
