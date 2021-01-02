@@ -6,7 +6,7 @@ use mpu6050::*;
 use std::fs::File;
 use std::io::prelude::*;
 
-static bool LOGGER=true;
+
 
 pub struct GyroMpu6050RawData {
     pub x: i32,
