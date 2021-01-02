@@ -90,9 +90,5 @@ impl Mpu6050_driver {
     
 
 
-fn main() -> std::io::Result<()> {
 
-    file.write_all(b"Hello, world!")?;
-    Ok(())
-}
 }
