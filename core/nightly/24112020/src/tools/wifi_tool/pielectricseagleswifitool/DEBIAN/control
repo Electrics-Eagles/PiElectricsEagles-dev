@@ -1,0 +1,8 @@
+Package: pielectricseagleswifitool
+Version: 0.0.1
+Section: misc
+Architecture: all
+Depends: bash, python3
+Maintainer: ElectricsEagles
+Description: Tool for config wifi easy
+
