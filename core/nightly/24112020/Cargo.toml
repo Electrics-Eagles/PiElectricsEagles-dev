@@ -27,7 +27,7 @@ copyright = "2021 Alex / Mike Zaslavskis"
 extended-description = """\
 A simple subcommand for the Cargo package manager for \
 building Debian packages from Rust projects."""
-depends = "python-smbus"
+depends = "$auto"
 section = "core"
 priority = "optional"
 maintainer-scripts = "debian/"
