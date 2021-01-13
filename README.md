@@ -70,3 +70,108 @@ We are using power of squrrels:
 
 
 All soft is V2 APi
+
+
+Well how install all for build:
+1) Install fresh Raspberry Pi zero no gui iso image
+2) IN BOOT DIRECTORY CREATE EMTRY ssh file
+3) connect to ssh 
+---------------------------Do it via ssh on RPI ---------------------
+install deps : 
+```
+sudo apt-get install samba samba-common-bin 
+```
+
+Create folder by :  
+```
+sudo mkdir -m 1777 /share 
+```
+
+Create config file :
+```
+sudo nano /etc/samba/smb.conf
+```
+Edit file:
+```
+[share]  
+Comment = Pi shared folder  
+Path = /share  
+Browseable = yes  
+Writeable = Yes  
+only guest = no  
+create mask = 0777  
+directory mask = 0777  
+```
+---------------------------Do it via ssh on RPI ---------------------
+---------------------------Do it on your local machine--------------
+Update apt packages:
+```
+sudo apt update
+```
+
+Install rustup using curl installer 
+```
+curl https://sh.rustup.rs -sSf | sh
+```
+Install stabile compiler core by:
+```
+rustup default stable
+```
+install build deps :
+```
+sudo apt-get install  gcc-arm-linux-gnueabihf libc6-armhf-cross libc6-dev-armhf-cross
+```
+install build target 
+```
+rustup target add arm-unknown-linux-gnueabihf
+```
+go in folder get it by root
+```
+cd .conifg 
+```
+edit config 
+```
+sudo nano config.toml
+```
+content of file 
+```
+[target.arm-unknown-linux-gnueabihf]
+linker = "$HOME/rpi_tools/arm-bcm2708/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc"
+```
+get toolchain 
+```
+rustup target add arm-unknown-linux-gnueabi
+```
+clone c++ linkers 
+
+```
+git clone https://github.com/raspberrypi/tools $HOME/rpi_tools
+```
+build file 
+```
+RUSTFLAGS="-C linker=$HOME/rpi_tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc" cargo build --target arm-unknown-linux-gnueabihf --tests
+```
+
+build project 
+```
+cargo build --target=arm-unknown-linux-gnueabihf
+```
+
+install deb builder
+```
+cargo install cargo-deb
+```
+build to deb file
+ ```
+ cargo deb --target=arm-unknown-linux-gnueabihf
+ ```
+ ---------------------------Do it on your local machine--------------
+ ---------------------------Do it via ssh on RPI ---------------------
+ Open samba folder and install deb on machine.
+ 
+ ---------------------------Do it via ssh on RPI ---------------------
+
+
+
+
+
