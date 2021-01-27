@@ -13,7 +13,7 @@ use std::{
 
 use crate::config_parse::*;
 
-
+use crate::clk_driver::ClkDriver;
 use crate::controller::*;
 use crate::ibus::*;
 use crate::mpu6050::*;
@@ -29,10 +29,13 @@ pub fn main_loop() {
     let mut mpu6050 = Mpu6050_driver::new();
     let mut controller = Controller::new();
     let mut config = config_parser::new();
+    let mut clk_driver = ClkDriver::new();
+
     simple_logger::logger(1, true, "CREATE DRIVER OBJECTS :".parse().unwrap());
 
     /* init*/
     loop {
+        clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         simple_logger::logger(1, true, "READ DATA FROM RC :".parse().unwrap());
@@ -306,5 +309,6 @@ pub fn main_loop() {
         controller.turn_motor(Channel::C2, esc_3 as u16);
         controller.turn_motor(Channel::C3, esc_4 as u16);
         */
+        clk_driver.set_pin_clk_low();
     }
 }
