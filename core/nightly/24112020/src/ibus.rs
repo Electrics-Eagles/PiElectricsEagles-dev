@@ -1,3 +1,18 @@
+//
+//
+// Alex Zaslavkis (Electrics Eagles) 2021
+//
+// ---------------- CLK Driver --------------------
+//
+// Simple software level that will receiving data from RC-controller via IBUS interface
+//
+// typical usage :
+// use crate::ibus::*;
+// let mut reciver_driver = ibus_receiver::new();
+// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+// let channel_6_value = reciver.ch6;
+//
+// Enjoy
 extern crate hex; // crate for convert from u8 to hex
 use crate::config_parse::config_parser;
 use rppal::uart::Queue::Both;
@@ -9,7 +24,9 @@ use std::vec::Vec;
 use crate::simple_logger;
 
 static mut value_before: [u16; 6] = [1000, 1000, 1000, 1000, 1000, 1000];
-/* structure for getting a data of all neccessary chanell */
+/// It is a struct for getting data from ibus receiver
+/// ibus_receiver class (crate)
+///
 pub struct type_of_data_from_channels {
     pub ch1: u16,
     pub ch2: u16,
@@ -18,13 +35,34 @@ pub struct type_of_data_from_channels {
     pub ch5: u16,
     pub ch6: u16,
 }
-
+/// It is a ibus_receiver object
+/// ibus_receiver class (crate)
+/// *****Already added to loggics file. Be careful. Editing code can break stability of devices.*****
+/// # Examples
+///
+/// ```
+/// let mut reciver_driver = ibus_receiver::new();
+/// ```
+///
 pub struct ibus_receiver {
     uart_mod: Uart,
 }
 
 impl ibus_receiver {
-    /* Initialize IBUS receiver */
+    /// Returns ibus_receiver object
+    ///
+    /// # Arguments
+    ///
+    /// No arguments required
+    ///
+    /// # Examples
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    /// 
+    /// ```
+    /// let mut reciver_driver = ibus_receiver::new();
+    /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+    /// ```
+    ///
     pub fn new() -> ibus_receiver {
         let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
         simple_logger::logger(1, true, "UART CREATED".parse().unwrap());
@@ -32,7 +70,22 @@ impl ibus_receiver {
         simple_logger::logger(1, true, "UART MODE SET".parse().unwrap());
         ibus_receiver { uart_mod: uart_def }
     }
-    /* Function for getting data of ibus receiver */
+     
+    /// Function for getting data of ibus receiver
+    ///
+    /// # Arguments
+    ///
+    /// No arguments required
+    ///
+    /// # Return
+    /// ```type_of_data_from_channels```
+    /// # Examples
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    /// 
+    /// ```
+    /// let mut reciver_driver = ibus_receiver::new();
+    /// ```
+    ///
     pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
         // buffer for reading uart before convert into hexidecimal value
         let mut _value_before: [u16; 6] = [0; 6];
