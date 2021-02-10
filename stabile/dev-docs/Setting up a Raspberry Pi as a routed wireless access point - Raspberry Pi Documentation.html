@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<!-- saved from url=(0087)https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md -->
+<html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+    
+      <link rel="stylesheet" media="screen" href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/fonts-13704cc7.css" data-esi-styles="true">
+      <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect">
+<link as="style" href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/css2" rel="preload">
+<link href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/css2" media="all" onload="this.media=&#39;all&#39;" rel="stylesheet">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;family=Rubik:wght@400;500;700&amp;display=swap" rel="stylesheet" /></noscript>
+
+
+      <script type="text/javascript" async="" src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/ga.js"></script><script src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/fonts-2a57e7b768ee9966c9e3.js" data-esi-script="true"></script>
+    
+    <link rel="stylesheet" href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/legacy.min.css">
+    <link rel="stylesheet" href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/prism.css">
+    <script src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/jquery.min.js"></script>
+    <script src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/prism.js"></script>
+
+    <title>Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation</title>
+    <meta name="description" content="Documentation in this section includes basic guides to configuring your Raspberry Pi.">
+    <link rel="icon" type="image/png" href="https://www.raspberrypi.org/app/themes/mind-control/images/favicon.png">
+
+    <script type="text/javascript">//<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-46270871-1']);
+        _gaq.push(['_trackPageview']);
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+        //]]></script>
+
+    <link rel="canonical" href="https://www.raspberrypi.org/">
+    <link rel="shortlink" href="https://www.raspberrypi.org/">
+</head>
+
+<body class="documentation">
+    
+      <link rel="stylesheet" media="screen" href="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/header-26842b8c.css" data-esi-styles="true">
+      <header class="esi-header" data-esi-js-selector="header" data-nav-open="" id="rp-app-landmark-header">
+  <div class="esi-header__container">
+    <div class="esi-header__home-link">
+      <div class="esi-header__skipper">
+        <ul class="esi-header-skipper">
+    <li class="esi-header-skipper__item">
+      <a class="esi-header-skipper__link" data-event-action="click" data-event-category="Header: Skip links" data-event-label="Skip to main content" href="https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md#rp-app-landmark-main">Skip to main content</a>
+    </li>
+    <li class="esi-header-skipper__item">
+      <a class="esi-header-skipper__link" data-event-action="click" data-event-category="Header: Skip links" data-event-label="Skip to footer" href="https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md#rp-app-landmark-footer">Skip to footer</a>
+    </li>
+    <li class="esi-header-skipper__item">
+      <a class="esi-header-skipper__link" data-event-action="click" data-event-category="Header: Skip links" data-event-label="Accessbility statement and help" href="https://www.raspberrypi.org/accessibility/">Accessbility statement and help</a>
+    </li>
+</ul>
+
+      </div>
+
+      <a class="esi-header-home-link" aria-label="Raspberry Pi Home page" data-event-action="click" data-event-category="Header" data-event-label="Home link" href="https://www.raspberrypi.org/">
+  <svg class="esi-header-home-link__logo" height="75" viewBox="0 0 492.4 619.5" width="35" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#020203" d="M133.3,0c-3.2,0.1-6.6,1.5-10.5,4.5c-9.5-3.6-18.7-4.9-27,2.5c-12.7-1.6-16.9,1.7-20,5.7
+      C73,12.6,54.9,9.8,46.6,22c-20.9-2.4-27.5,12.1-20,25.7c-4.3,6.5-8.7,12.9,1.3,25.3c-3.5,6.9-1.3,14.4,7,23.5
+      c-2.2,9.7,2.1,16.6,9.9,21.9c-1.4,13.3,12.4,21,16.5,23.8c1.6,7.7,4.9,15,20.7,19.1c2.6,11.5,12.1,13.5,21.3,16
+      c-30.4,17.4-56.4,40.3-56.2,96.4l-4.4,7.8c-34.8,20.9-66.1,87.9-17.2,142.4c3.2,17.1,8.6,29.3,13.3,42.9
+      c7.1,54.6,53.8,80.2,66.1,83.2c18,13.5,37.2,26.4,63.2,35.3c24.5,24.9,51,34.4,77.7,34.3c0.4,0,0.8,0,1.2,0
+      c26.7,0,53.2-9.5,77.7-34.3c26-9,45.2-21.8,63.2-35.3c12.3-3,58.9-28.6,66.1-83.2c4.8-13.6,10.1-25.8,13.3-42.9
+      c49-54.5,17.7-121.5-17.2-142.4l-4.5-7.8c0.2-56.1-25.9-79-56.2-96.4c9.2-2.4,18.7-4.4,21.3-16c15.8-4,19.1-11.3,20.7-19.1
+      c4.1-2.8,17.9-10.5,16.5-23.8c7.7-5.3,12-12.2,9.9-21.9c8.3-9.1,10.5-16.6,7-23.5c10-12.4,5.6-18.8,1.3-25.3
+      c7.5-13.6,0.9-28.1-20-25.7c-8.3-12.2-26.4-9.4-29.2-9.4c-3.1-3.9-7.3-7.3-20-5.7c-8.2-7.4-17.5-6.1-27-2.5
+      c-11.3-8.8-18.8-1.7-27.3,0.9C328.6,1,325.4,7,318.7,9.5c-14.9-3.1-19.5,3.7-26.6,10.8l-0.5-0.2c-2.5-1.2-5.3-1.1-7.8,0.1v0
+      c-22.5,13.1-33.7,39.7-37.6,53.3c-4-13.7-15.1-40.3-37.6-53.3l-0.4-0.2c-2.5-1.1-5.4-1-7.8,0.3l-0.1,0.1
+      c-7.2-7.1-11.7-13.9-26.6-10.8c-6.7-2.5-9.8-8.5-23.5-4.1c-5.6-1.7-8.9-5.6-15-5.4L133.3,0z"></path>
+    <g fill="#6ABF4B">
+      <path d="M88.9,57.7c59.7,30.3,94.4,54.8,113.4,75.7c-9.7,38.4-60.5,40.2-79.1,39.1c3.8-1.7,7-3.8,8.1-7
+        c-4.7-3.3-21.2-0.3-32.7-6.7c4.4-0.9,6.5-1.8,8.6-5c-10.9-3.4-22.6-6.4-29.5-12c3.7,0,7.2,0.8,12.1-2.5C80,134,69.6,129.9,61.5,122
+        c5-0.1,10.5,0,12.1-1.9c-8.9-5.5-16.5-11.5-22.7-18.1c7.1,0.8,10,0.1,11.8-1.1c-6.8-6.8-15.3-12.6-19.4-21c5.2,1.8,10,2.5,13.5-0.2
+        c-2.3-5.1-12.1-8.1-17.8-20c5.5,0.5,11.4,1.2,12.5,0c-2.6-10.3-7-16.1-11.3-22.1c11.8-0.2,29.7,0,28.9-0.9l-7.3-7.4
+        c11.5-3.1,23.3,0.5,31.9,3.1c3.8-3-0.1-6.8-4.8-10.6c9.8,1.3,18.7,3.5,26.7,6.6c4.3-3.8-2.8-7.6-6.2-11.4
+        c15.2,2.8,21.6,6.8,28,10.8c4.6-4.4,0.3-8.1-2.9-11.9c11.4,4.2,17.3,9.5,23.5,14.9c2.1-2.8,5.3-4.8,1.4-11.6
+        c8.1,4.6,14.2,10,18.7,16.1c5-3.1,3-7.5,3-11.4c8.4,6.8,13.8,13.9,20.3,21c1.3-0.9,2.5-4.2,3.5-9.2c20.1,19.2,48.5,67.6,7.3,86.8
+        C177.3,93.9,135.4,73.2,88.9,57.7L88.9,57.7z"></path>
+      <path d="M405.1,57.7c-59.7,30.3-94.4,54.8-113.4,75.7c9.7,38.4,60.5,40.2,79.1,39.1c-3.8-1.7-7-3.8-8.1-7
+        c4.7-3.3,21.2-0.3,32.7-6.7c-4.4-0.9-6.5-1.8-8.6-5c10.9-3.4,22.6-6.4,29.5-12c-3.7,0-7.2,0.8-12.1-2.5c9.8-5.2,20.2-9.3,28.3-17.2
+        c-5-0.1-10.5,0-12.1-1.9c8.9-5.5,16.5-11.5,22.7-18.1c-7.1,0.8-10,0.1-11.8-1.1c6.8-6.8,15.3-12.6,19.4-21
+        c-5.2,1.8-10,2.5-13.5-0.2c2.3-5.1,12.1-8.1,17.8-20c-5.5,0.5-11.4,1.2-12.5,0c2.6-10.3,7-16.1,11.3-22.1
+        c-11.8-0.2-29.7,0-28.9-0.9l7.3-7.4c-11.5-3.1-23.4,0.5-31.9,3.1c-3.8-3,0.1-6.8,4.8-10.6c-9.8,1.3-18.7,3.5-26.7,6.6
+        c-4.3-3.8,2.8-7.6,6.2-11.4c-15.2,2.8-21.6,6.8-28,10.8c-4.6-4.4-0.3-8.1,2.9-11.9c-11.4,4.2-17.3,9.5-23.5,14.9
+        c-2.1-2.8-5.3-4.8-1.4-11.6c-8.1,4.6-14.2,10-18.7,16.1c-5-3.1-3-7.5-3-11.4c-8.4,6.8-13.8,13.9-20.3,21c-1.3-0.9-2.5-4.2-3.5-9.2
+        c-20.1,19.2-48.5,67.6-7.3,86.8C316.8,93.9,358.7,73.2,405.1,57.7L405.1,57.7z"></path>
+    </g>
+    <g fill="#C31C4A">
+      <path d="M319.2,449.1c0.2,35.9-31.6,65.1-71.1,65.3c-39.5,0.2-71.7-28.7-71.9-64.6c0-0.2,0-0.5,0-0.7 c-0.2-35.9,31.6-65.1,71.1-65.3c39.5-0.2,71.7,28.7,71.9,64.6C319.2,448.6,319.2,448.8,319.2,449.1z"></path>
+      <path d="M207.7,263.5c29.6,19.1,35,62.5,11.9,96.8c-23,34.3-65.7,46.7-95.4,27.6l0,0c-29.6-19.1-35-62.5-11.9-96.8 C135.4,256.8,178.1,244.4,207.7,263.5L207.7,263.5z"></path>
+      <path d="M287.7,260.1c-29.6,19.1-35,62.5-11.9,96.8c23,34.3,65.7,46.7,95.4,27.6l0,0c29.6-19.1,35-62.5,11.9-96.8 C360,253.3,317.3,241,287.7,260.1L287.7,260.1z"></path>
+      <path d="M61.5,295c32-8.4,10.8,130.3-15.2,119C17.6,391.3,8.4,324.8,61.5,295z"></path>
+      <path d="M431.1,293.3c-32-8.4-10.8,130.3,15.2,119C475,389.5,484.2,323.1,431.1,293.3L431.1,293.3z"></path>
+      <path d="M323.8,189.7c55.2-9.2,101.1,23.1,99.3,82.1C421.3,294.4,303.5,193.1,323.8,189.7z"></path>
+      <path d="M171.3,188c-55.2-9.2-101.1,23.1-99.3,82.1C73.9,292.7,191.7,191.3,171.3,188z"></path>
+      <path d="M247.4,174.2c-32.9-0.8-64.6,24.1-64.6,38.5c-0.1,17.6,26,35.6,64.9,36c39.6,0.3,64.9-14.4,65.1-32.5 C312.8,195.7,276.6,173.9,247.4,174.2L247.4,174.2z"></path>
+      <path d="M249.9,534.5c28.7-1.2,67.3,9.1,67.3,22.8c0.5,13.3-35,43.4-69.2,42.9c-35.5,1.5-70.3-28.7-69.9-39.1 C177.6,545.8,221.4,533.8,249.9,534.5L249.9,534.5z"></path>
+      <path d="M143.6,453.2c20.4,24.3,29.8,66.9,12.7,79.5c-16.1,9.6-55.4,5.6-83.2-33.8c-18.8-33.1-16.4-66.8-3.2-76.7 C89.7,410.3,120.1,426.3,143.6,453.2L143.6,453.2z"></path>
+      <path d="M349.5,445.5c-22.1,25.5-34.4,72.1-18.3,87.1c15.4,11.6,56.9,10,87.5-31.8c22.2-28.1,14.8-75,2.1-87.5 C401.9,398.9,374.8,417.3,349.5,445.5L349.5,445.5z"></path>
+    </g>
+  </svg>
+</a>
+    </div>
+
+    <div class="esi-header__toggle">
+      <button aria-label="Open Navigation" aria-pressed="false" class="esi-header-toggle" data-esi-js-selector="toggle" type="button">
+  <span class="esi-header-toggle__line"></span>
+  <span class="esi-header-toggle__line"></span>
+  <span class="esi-header-toggle__line"></span>
+</button>
+
+    </div>
+
+    <div class="esi-header__nav">
+      <nav aria-label="Navigation" class="esi-header-nav" data-esi-js-selector="nav" data-active-panel="">
+  <ul class="esi-header-nav__list">
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="hardware">
+        <a class="esi-header-nav-link esi-header-nav-link--hardware" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Hardware" data-section="hardware" href="https://www.raspberrypi.org/products/">Hardware</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="hardware" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--hardware">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          Low-cost, high-performance Raspberry&nbsp;Pi computers and accessories
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Hardware panel - button" data-event-label="Buy Raspberry Pi 4" href="https://www.raspberrypi.org/products/raspberry-pi-4-model-b/">Buy Raspberry&nbsp;Pi 4</a>
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Hardware panel - button" data-event-label="Buy Raspberry Pi 400" href="https://www.raspberrypi.org/products/raspberry-pi-400/">Buy Raspberry&nbsp;Pi 400</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Hardware panel - link" data-event-label="All products" href="https://www.raspberrypi.org/products/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                All products
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Hardware panel - link" data-event-label="For industry" href="https://www.raspberrypi.org/for-industry/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                For industry
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Hardware panel - link" data-event-label="Documentation" href="https://www.raspberrypi.org/documentation/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Documentation
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Hardware panel - link" data-event-label="Forums" href="https://www.raspberrypi.org/forums/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Forums
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="software">
+        <a class="esi-header-nav-link esi-header-nav-link--software" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Software" data-section="software" href="https://www.raspberrypi.org/software/">Software</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="software" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--software">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          Everything you need to get started with your Raspberry&nbsp;Pi computer
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Software panel - button" data-event-label="Our software" href="https://www.raspberrypi.org/software/">Our software</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Software panel - link" data-event-label="Raspberry Pi OS" href="https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Raspberry&nbsp;Pi OS
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Software panel - link" data-event-label="Raspberry Pi Desktop" href="https://www.raspberrypi.org/downloads/raspberry-pi-desktop/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Raspberry&nbsp;Pi Desktop
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Software panel - link" data-event-label="Help" href="https://www.raspberrypi.org/help/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Help
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Software panel - link" data-event-label="Forums" href="https://www.raspberrypi.org/forums/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Forums
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="publications">
+        <a class="esi-header-nav-link esi-header-nav-link--publications" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Books &amp; magazines" data-section="publications" href="https://www.raspberrypi.org/books-magazines/">Books &amp; magazines</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="publications" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--publications">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          Books and magazines from Raspberry&nbsp;Pi Press
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Books &amp; magazines panel - button" data-event-label="Explore our titles" href="https://www.raspberrypi.org/books-magazines/">Explore our titles</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Books &amp; magazines panel - link" data-event-label="The MagPi" href="https://magpi.raspberrypi.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                The MagPi
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Books &amp; magazines panel - link" data-event-label="HackSpace" href="https://hackspace.raspberrypi.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                HackSpace
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Books &amp; magazines panel - link" data-event-label="Wireframe" href="https://wireframe.raspberrypi.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Wireframe
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Books &amp; magazines panel - link" data-event-label="Custom PC" href="https://custompc.raspberrypi.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Custom PC
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="learn">
+        <a class="esi-header-nav-link esi-header-nav-link--learn" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Learn" data-section="learn" href="https://www.raspberrypi.org/learn/">Learn</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="learn" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--learn">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          Free resources for young people to learn to code and become digital makers
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Learn panel - button" data-event-label="Learn at home" href="https://www.raspberrypi.org/learn/">Learn at home</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Learn panel - link" data-event-label="Guided coding projects" href="https://projects.raspberrypi.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Guided coding projects
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Learn panel - link" data-event-label="Learn at a Code Club" href="https://codeclub.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Learn at a Code Club
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Learn panel - link" data-event-label="Learn at a CoderDojo" href="https://coderdojo.com/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Learn at a CoderDojo
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="teach">
+        <a class="esi-header-nav-link esi-header-nav-link--teach" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Teach" data-section="teach" href="https://www.raspberrypi.org/teach/">Teach</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="teach" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--teach">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          Free training, resources, and guidance to help you teach computing with confidence
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: Teach panel - button" data-event-label="Support for teachers" href="https://www.raspberrypi.org/teach/">Support for teachers</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Teach panel - link" data-event-label="Teach Computing" href="https://teachcomputing.org/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Teach Computing
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Teach panel - link" data-event-label="Start a Code Club" href="https://codeclub.org/en/start-a-code-club/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Start a Code Club
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: Teach panel - link" data-event-label="Online training courses" href="https://www.raspberrypi.org/training/online/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Online training courses
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+      <li class="esi-header-nav__item esi-header-nav__item--mobile-only" data-esi-js-selector="nav-item" data-section="forums">
+        <a class="esi-header-nav-link esi-header-nav-link--forums" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="Forums" data-section="forums" href="https://www.raspberrypi.org/forums/">Forums</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="forums" data-esi-js-selector="nav-panel" role="navigation">
+          
+        </div>
+      </li>
+      <li class="esi-header-nav__item" data-esi-js-selector="nav-item" data-section="about">
+        <a class="esi-header-nav-link esi-header-nav-link--about" data-esi-js-selector="nav-link" data-event-action="click" data-event-category="Header: Navigation" data-event-label="About us" data-section="about" href="https://www.raspberrypi.org/about/">About us</a>
+
+
+        <div aria-expanded="false" aria-hidden="true" class="esi-header-nav__panel" data-section="about" data-esi-js-selector="nav-panel" role="navigation">
+          <div class="esi-header-nav-panel">
+  <div class="esi-header-nav-panel__container esi-header-nav-panel__container--about">
+    <div class="esi-header-nav-panel__inner">
+      <div class="esi-header-nav-panel__primary-cta">
+        <p class="esi-header-nav-panel__summary">
+          We work to put the power of computing and digital making into the hands of people all over the world
+        </p>
+
+        <div class="esi-header-nav-panel__buttons">
+            <a class="sc-rp-button esi-header-nav-panel__button" data-event-action="click" data-event-category="Header: About us panel - button" data-event-label="About us" href="https://www.raspberrypi.org/about/">About us</a>
+        </div>
+      </div>
+
+      <ul class="esi-header-nav-panel__list">
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: About us panel - link" data-event-label="Donate" href="https://www.raspberrypi.org/donate/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Donate
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: About us panel - link" data-event-label="Support us" href="https://www.raspberrypi.org/support-us/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Support us
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: About us panel - link" data-event-label="Our supporters" href="https://www.raspberrypi.org/about/supporters/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Our supporters
+              </span>
+</a>          </li>
+          <li class="esi-header-nav-panel__item">
+            <a class="sc-rp-link esi-header-nav-panel__link" data-event-action="click" data-event-category="Header: About us panel - link" data-event-label="Blog" href="https://www.raspberrypi.org/blog/">
+              <svg class="esi-header-nav-panel__icon" fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5L8.5 9L2 15.5" stroke="#004881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <span class="esi-header-nav-panel__label">
+                Blog
+              </span>
+</a>          </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</header>
+
+
+      <script src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/header-d86e91bd63506fcf105c.js" data-esi-script="true"></script>
+    
+    <div class="container">
+        <main class="main" id="rp-app-landmark-main">
+
+<nav class="breadcrumbs">
+    <a href="https://www.raspberrypi.org/documentation">documentation</a> &gt; <a href="https://www.raspberrypi.org/documentation/configuration">configuration</a> &gt; <a href="https://www.raspberrypi.org/documentation/configuration/wireless">wireless</a> &gt; access-point-routed</nav>
+
+<article class="entry-content">
+    <h1>Setting up a Raspberry Pi as a routed wireless access point</h1>
+<p>A Raspberry Pi within an Ethernet network can be used as a wireless access point, creating a secondary network. The resulting new wireless network is entirely managed by the Raspberry Pi.</p>
+<p>If you wish to extend an existing Ethernet network to wireless clients, consider instead setting up a <a href="https://www.raspberrypi.org/documentation/configuration/wireless/access-point-bridged.md">bridged access point.</a></p>
+<pre><code>                                         +- RPi -------+
+                                     +---+ 10.10.0.2   |          +- Laptop ----+
+                                     |   |     WLAN AP +-)))  (((-+ WLAN Client |
+                                     |   | 192.168.4.1 |          | 192.168.4.2 |
+                                     |   +-------------+          +-------------+
+                 +- Router ----+     |
+                 | Firewall    |     |   +- PC#2 ------+
+(Internet)---WAN-+ DHCP server +-LAN-+---+ 10.10.0.3   |
+                 |   10.10.0.1 |     |   +-------------+
+                 +-------------+     |
+                                     |   +- PC#1 ------+
+                                     +---+ 10.10.0.4   |
+                                         +-------------+</code></pre>
+<p>A routed wireless access point can be created using the inbuilt wireless features of the Raspberry Pi 4, Raspberry Pi 3 or Raspberry Pi Zero W, or by using a suitable USB wireless dongle that supports access point mode.
+It is possible that some USB dongles may need slight changes to their settings. If you are having trouble with a USB wireless dongle, please check the <a href="https://www.raspberrypi.org/forums/">forums</a>.</p>
+<p>This documentation was tested on a Raspberry Pi 3B running a fresh installation of Raspberry Pi OS Buster.</p>
+<p><a name="intro"></a></p>
+<h2>Before you start</h2>
+<ul>
+<li>Ensure you have administrative access to your Raspberry Pi. The network setup will be modified as part of the installation: local access, with screen and keyboard connected to your Raspberry Pi, is recommended.</li>
+<li>Connect your Raspberry Pi to the Ethernet network and boot the Raspberry Pi OS.</li>
+<li>Ensure the Raspberry Pi OS on your Raspberry Pi is <a href="https://www.raspberrypi.org/documentation/raspbian/updating.md">up-to-date</a> and reboot if packages were installed in the process.</li>
+<li>Take note of the IP configuration of the Ethernet network the Raspberry Pi is connected to:
+<ul>
+<li>In this document, we assume IP network <code>10.10.0.0/24</code> is configured on the Ethernet LAN, and the Raspberry Pi is going to manage IP network <code>192.168.4.0/24</code> for wireless clients.</li>
+<li>Please select another IP network for wireless, e.g. <code>192.168.10.0/24</code>, if IP network <code>192.168.4.0/24</code> is already in use by your Ethernet LAN.</li>
+</ul></li>
+<li>Have a wireless client (laptop, smartphone, ...) ready to test your new access point.</li>
+</ul>
+<p><a name="software-install"></a></p>
+<h2>Install the access point and network management software</h2>
+<p>In order to work as an access point, the Raspberry Pi needs to have the <code>hostapd</code> access point software package installed:</p>
+<pre><code>sudo apt install hostapd</code></pre>
+<p>Enable the wireless access point service and set it to start when your Raspberry Pi boots:</p>
+<pre><code>sudo systemctl unmask hostapd
+sudo systemctl enable hostapd</code></pre>
+<p>In order to provide network management services (DNS, DHCP) to wireless clients, the Raspberry Pi needs to have the <code>dnsmasq</code> software package installed:</p>
+<pre><code>sudo apt install dnsmasq</code></pre>
+<p>Finally, install <code>netfilter-persistent</code> and its plugin <code>iptables-persistent</code>. This utilty helps by saving firewall rules and restoring them when the Raspberry Pi boots:</p>
+<pre><code>sudo DEBIAN_FRONTEND=noninteractive apt install -y netfilter-persistent iptables-persistent</code></pre>
+<p>Software installation is complete. We will configure the software packages later on.</p>
+<p><a name="routing"></a></p>
+<h2>Set up the network router</h2>
+<p>The Raspberry Pi will run and manage a standalone wireless network. It will also route between the wireless and Ethernet networks, providing internet access to wireless clients. If you prefer, you can choose to skip the routing by skipping the section "Enable routing and IP masquerading" below, and run the wireless network in complete isolation.</p>
+<h3>Define the wireless interface IP configuration</h3>
+<p>The Raspberry Pi runs a DHCP server for the wireless network; this requires static IP configuration for the wireless interface (<code>wlan0</code>) in the Raspberry Pi.
+The Raspberry Pi also acts as the router on the wireless network, and as is customary, we will give it the first IP address in the network: <code>192.168.4.1</code>.</p>
+<p>To configure the static IP address, edit the configuration file for <code>dhcpcd</code> with:</p>
+<pre><code>sudo nano /etc/dhcpcd.conf</code></pre>
+<p>Go to the end of the file and add the following:</p>
+<pre><code>interface wlan0
+    static ip_address=192.168.4.1/24
+    nohook wpa_supplicant</code></pre>
+<h3>Enable routing and IP masquerading</h3>
+<p>This section configures the Raspberry Pi to let wireless clients access computers on the main (Ethernet) network, and from there the internet.
+<strong>NOTE:</strong> If you wish to block wireless clients from accessing the Ethernet network and the internet, skip this section.</p>
+<p>To enable routing, i.e. to allow traffic to flow from one network to the other in the Raspberry Pi, create a file using the following command, with the contents below:</p>
+<pre><code>sudo nano /etc/sysctl.d/routed-ap.conf</code></pre>
+<p>File contents:</p>
+<pre><code># https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md
+# Enable IPv4 routing
+net.ipv4.ip_forward=1</code></pre>
+<p>Enabling routing will allow hosts from network <code>192.168.4.0/24</code> to reach the LAN and the main router towards the internet. In order to allow traffic between clients on this foreign wireless network and the internet without changing the configuration of the main router, the Raspberry Pi can substitute the IP address of wireless clients with its own IP address on the LAN using a "masquerade" firewall rule.</p>
+<ul>
+<li>The main router will see all outgoing traffic from wireless clients as coming from the Raspberry Pi, allowing communication with the internet.</li>
+<li>The Raspberry Pi will receive all incoming traffic, substitute the IP addresses back, and forward traffic to the original wireless client.</li>
+</ul>
+<p>This process is configured by adding a single firewall rule in the Raspberry Pi:</p>
+<pre><code>sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></pre>
+<p>Now save the current firewall rules for IPv4 (including the rule above) and IPv6 to be loaded at boot by the <code>netfilter-persistent</code> service:</p>
+<pre><code>sudo netfilter-persistent save</code></pre>
+<p>Filtering rules are saved to the directory <code>/etc/iptables/</code>. If in the future you change the configuration of your firewall, make sure to save the configuration before rebooting.</p>
+<h3>Configure the DHCP and DNS services for the wireless network</h3>
+<p>The DHCP and DNS services are provided by <code>dnsmasq</code>. The default configuration file serves as a template for all possible configuration options, whereas we only need a few. It is easier to start from an empty file.</p>
+<p>Rename the default configuration file and edit a new one:</p>
+<pre><code>sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+sudo nano /etc/dnsmasq.conf</code></pre>
+<p>Add the following to the file and save it:</p>
+<pre><code>interface=wlan0 # Listening interface
+dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+                # Pool of IP addresses served via DHCP
+domain=wlan     # Local wireless DNS domain
+address=/gw.wlan/192.168.4.1
+                # Alias for this router</code></pre>
+<p>The Raspberry Pi will deliver IP addresses between <code>192.168.4.2</code> and <code>192.168.4.20</code>, with a lease time of 24 hours, to wireless DHCP clients. You should be able to reach the Raspberry Pi under the name <code>gw.wlan</code> from wireless clients.</p>
+<p>There are many more options for <code>dnsmasq</code>; see the default configuration file (<code>/etc/dnsmasq.conf</code>) or the <a href="http://www.thekelleys.org.uk/dnsmasq/doc.html">online documentation</a> for details.</p>
+<p><a name="wifi-cc-rfkill"></a></p>
+<h2>Ensure wireless operation</h2>
+<p>Countries around the world regulate the use of telecommunication radio frequency bands to ensure interference-free operation.
+The Linux OS helps users <a href="https://wireless.wiki.kernel.org/en/developers/regulatory/statement">comply</a> with these rules by allowing applications to be configured with a two-letter "WiFi country code", e.g. <code>US</code> for a computer used in the United States.</p>
+<p>In the Raspberry Pi OS, 5 GHz wireless networking is disabled until a WiFi country code has been configured by the user, usually as part of the initial installation process (see wireless configuration pages in this <a href="https://www.raspberrypi.org/documentation/configuration/wireless/README.md">section</a> for details.)</p>
+<p>To ensure WiFi radio is not blocked on your Raspberry Pi, execute the following command:</p>
+<pre><code>sudo rfkill unblock wlan</code></pre>
+<p>This setting will be automatically restored at boot time. We will define an appropriate country code in the access point software configuration, next.</p>
+<p><a name="ap-config"></a></p>
+<h2>Configure the access point software</h2>
+<p>Create the <code>hostapd</code> configuration file, located at <code>/etc/hostapd/hostapd.conf</code>, to add the various parameters for your new wireless network.</p>
+<pre><code>sudo nano /etc/hostapd/hostapd.conf</code></pre>
+<p>Add the information below to the configuration file. This configuration assumes we are using channel 7, with a network name of <code>NameOfNetwork</code>, and a password <code>AardvarkBadgerHedgehog</code>. Note that the name and password should <strong>not</strong> have quotes around them. The passphrase should be between 8 and 64 characters in length.</p>
+<pre><code>country_code=GB
+interface=wlan0
+ssid=NameOfNetwork
+hw_mode=g
+channel=7
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=AardvarkBadgerHedgehog
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP</code></pre>
+<p>Note the line <code>country_code=GB</code>: it configures the computer to use the correct wireless frequencies in the United Kingdom. <strong>Adapt this line</strong> and specify the two-letter ISO code of your country. See <a href="https://en.wikipedia.org/wiki/ISO_3166-1">Wikipedia</a> for a list of two-letter ISO 3166-1 country codes.</p>
+<p>To use the 5 GHz band, you can change the operations mode from <code>hw_mode=g</code> to <code>hw_mode=a</code>. Possible values for <code>hw_mode</code> are:</p>
+<ul>
+<li>a = IEEE 802.11a (5 GHz) (Raspberry Pi 3B+ onwards)</li>
+<li>b = IEEE 802.11b (2.4 GHz)</li>
+<li>g = IEEE 802.11g (2.4 GHz)</li>
+</ul>
+<p>Note that when changing the <code>hw_mode</code>, you may need to also change the <code>channel</code> - see <a href="https://en.wikipedia.org/wiki/List_of_WLAN_channels">Wikipedia</a> for a list of allowed combinations.</p>
+<p><a name="conclusion"></a></p>
+<h2>Run your new wireless access point</h2>
+<p>Now restart your Raspberry Pi and verify that the wireless access point becomes automatically available.</p>
+<pre><code>sudo systemctl reboot</code></pre>
+<p>Once your Raspberry Pi has restarted, search for wireless networks with your wireless client. The network SSID you specified in file <code>/etc/hostapd/hostapd.conf</code> should now be present, and it should be accessible with the specified password.</p>
+<p>If SSH is enabled on the Raspberry Pi, it should be possible to connect to it from your wireless client as follows, assuming the <code>pi</code> account is present: <code>ssh pi@192.168.4.1</code> or <code>ssh pi@gw.wlan</code></p>
+<p>If your wireless client has access to your Raspberry Pi (and the internet, if you set up routing), congratulations on setting up your new access point!</p>
+<p>If you encounter difficulties, contact the <a href="https://www.raspberrypi.org/forums/">forums</a> for assistance. Please refer to this page in your message.</p></article>
+
+                <footer class="licence">
+                    <aside class="octocat">
+                        <a href="https://github.com/raspberrypi/documentation/blob/master/configuration/wireless/access-point-routed.md"><img src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/octocat.jpg"></a>
+                    </aside>
+                    <aside class="links">
+                        <a href="https://github.com/raspberrypi/documentation/blob/master/configuration/wireless/access-point-routed.md" class="github">View/Edit this page on GitHub</a><br>
+                        <a href="https://www.raspberrypi.org/creative-commons/">Read our usage and contributions policy</a><br>
+                        <a href="https://www.raspberrypi.org/creative-commons/" class="cc"><img src="./Setting up a Raspberry Pi as a routed wireless access point - Raspberry Pi Documentation_files/88x31.png" alt="Creative Commons Licence"></a>
+                    </aside>
+                </footer>
+
+                <div style="clear: both;"></div>
+
+            </main>
+
+        <div style="clear: both;"></div>
+    </div>
+
+    <footer class="o-footer" id="rp-app-landmark-footer">
+        <div class="o-footer__slice">
+            <div class="o-container o-footer__container">
+                <div class="o-footer__nav">
+                    <div class="c-footer-nav">
+                        <span class="c-footer-nav__title">About Us</span>
+
+                        <ul class="c-footer-nav__list">
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/about">About us</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/about/meet-the-team">Our team</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/about/governance">Governance</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/safeguarding">Safeguarding</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/research-and-insights">Research</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://raspberrypi.workable.com/">Jobs</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/contact">Contact us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="o-footer__nav">
+                    <div class="c-footer-nav">
+                        <span class="c-footer-nav__title">Support</span>
+
+                        <ul class="c-footer-nav__list">
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/help">Help</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/documentation">Documentation</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://projects.raspberrypi.org/">Projects</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/training">Training</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/software">Software</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/forums">Forums</a>
+                            </li>
+                            <li class="c-footer-nav__item">
+                                <a class="c-footer-nav__link" href="https://www.raspberrypi.org/help/faqs">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="o-footer__newsletter">
+                    <form action="https://raspberrypi.hosted.phplist.com/lists/?p=subscribe&amp;id=1" class="c-footer-newsletter" method="POST">
+                        <span class="c-footer-newsletter__legend">
+                            Sign up to our newsletter
+                        </span>
+                        <input class="c-footer-newsletter__input" name="email" placeholder="Your email here" required="" type="email">
+                        <input type="hidden" name="htmlemail" value="1">
+                        <input type="hidden" name="list[3]" value="signup">
+                        <input type="hidden" name="listname[3]" value="Raspberry Pi Weekly">
+                        <input class="c-footer-newsletter__input--verification-code" type="text" name="VerificationCodeX" value="" size="20">
+                        <button class="c-footer-newsletter__button" name="subscribe">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+
+                <div class="o-footer__info">
+                    <ul class="c-footer-social">
+                        <li class="c-footer-social__item">
+                            <a class="c-footer-social__link c-footer-social__link--facebook" href="https://www.facebook.com/raspberrypi">
+                                <span class="u-visually-hidden">Like Raspberry Pi on Facebook</span>
+                            </a>
+                        </li>
+                        <li class="c-footer-social__item">
+                            <a class="c-footer-social__link c-footer-social__link--twitter" href="https://twitter.com/Raspberry_Pi">
+                                <span class="u-visually-hidden">Follow Raspberry Pi on Twitter</span>
+                            </a>
+                        </li>
+                        <li class="c-footer-social__item">
+                            <a class="c-footer-social__link c-footer-social__link--instagram" href="https://www.instagram.com/raspberrypi/">
+                                <span class="u-visually-hidden">Check out what we’re having for lunch on Instagram</span>
+                            </a>
+                        </li>
+                        <li class="c-footer-social__item">
+                            <a class="c-footer-social__link c-footer-social__link--youtube" href="https://youtube.com/raspberrypi">
+                                <span class="u-visually-hidden">Subscribe to the Raspberry Pi YouTube channel</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <p class="c-footer-charity">
+                        Raspberry Pi Foundation<br>
+                        UK Registered Charity 1129409
+                    </p>
+
+                    <p class="c-footer-additional">
+                        <a class="c-footer-additional__link" href="https://www.raspberrypi.org/privacy">Privacy</a>
+                        <a class="c-footer-additional__link" href="https://www.raspberrypi.org/cookies">Cookies</a>
+                        <a class="c-footer-additional__link" href="https://www.raspberrypi.org/trademark-rules">Trademark rules and brand guidelines</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('[data-event-category]').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                const data = event.target.dataset
+
+                if (
+                    !data ||
+                    typeof data.eventCategory === 'undefined' ||
+                    typeof data.eventLabel === 'undefined'
+                ) {
+                    return
+                }
+
+                __gaTracker('send', 'event',
+                    data.eventCategory,
+                    data.eventAction,
+                    data.eventLabel
+                )
+            })
+        })
+    </script>
+
+
+
+</body></html>
