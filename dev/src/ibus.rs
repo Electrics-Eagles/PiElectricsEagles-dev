@@ -2,7 +2,7 @@
 //
 // Alex Zaslavkis (Electrics Eagles) 2021
 //
-// ---------------- CLK Driver --------------------
+// ---------------- IBUS Driver --------------------
 //
 // Simple software level that will receiving data from RC-controller via IBUS interface
 //
