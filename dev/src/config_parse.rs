@@ -57,7 +57,7 @@ pub struct SbusConfig {
     pub port: String,
 }
 /// It is MPU6050 gyroscope configuration struct
-pub struct Mpu6050Conifg {
+pub struct Mpu6050Config {
     /// Name port of connecting MPU6050 via I2C interface (String value)
     pub port: String,
     /// Amount of sample data (u8 value)
