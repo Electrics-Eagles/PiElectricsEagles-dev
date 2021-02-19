@@ -1,11 +1,11 @@
 //
 //
-// Alex Zaslavkis (Electrics Eagles) 2021
+// Misha Zaslavkis (Electrics Eagles) 2021
 //
-// ---------------- IBUS Driver --------------------
+// ---------------- I-BUS Driver --------------------
 //
 // Simple software level that will receiving data from RC-controller via IBUS interface
-//
+// 
 // typical usage :
 // use crate::ibus::*;
 // let mut reciver_driver = ibus_receiver::new();
@@ -13,6 +13,7 @@
 // let channel_6_value = reciver.ch6;
 //
 // Enjoy
+
 extern crate hex; // crate for convert from u8 to hex
 use crate::config_parse::config_parser;
 use rppal::uart::Queue::Both;
@@ -22,10 +23,16 @@ use std::time::Duration;
 use std::vec::Vec;
 
 use crate::simple_logger;
-
+/// value for default value of channels when IBUS didn't get signal transmistion
 static mut value_before: [u16; 6] = [1000, 1000, 1000, 1000, 1000, 1000];
 /// It is a struct for getting data from ibus receiver
 /// ibus_receiver class (crate)
+/// ch1: u16 - value of channel 1 joystick 
+/// ch2: u16 - value of channel 2 joystick 
+/// ch3: u16 - value of channel 3 joystick 
+/// ch4: u16 - value of channel 4 joystick 
+/// ch5: u16 - value of channel 5 joystick 
+/// ch6: u16 - value of channel 6 joystick 
 ///
 pub struct type_of_data_from_channels {
     pub ch1: u16,
@@ -37,11 +44,20 @@ pub struct type_of_data_from_channels {
 }
 /// It is a ibus_receiver object
 /// ibus_receiver class (crate)
+
+///
+/// Made by : Misha Zaslavkis (Electrics Eagles) 2021 
+/// 
+/// 
+/// Get data about direction of each joysticks, when you control RC-transsmit
+/// 
 /// *****Already added to loggics file. Be careful. Editing code can break stability of devices.*****
 /// # Examples
 ///
 /// ```
-/// let mut reciver_driver = ibus_receiver::new();
+/// use crate::ibus::*;
+/// let mut reciver_driver = ibus_receiver::new(); // Initialize class of ibus
+/// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver(); // Gets data of channels
 /// ```
 ///
 pub struct ibus_receiver {
@@ -59,8 +75,8 @@ impl ibus_receiver {
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     /// 
     /// ```
+    /// use crate::ibus::*;
     /// let mut reciver_driver = ibus_receiver::new();
-    /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
     /// ```
     ///
     pub fn new() -> ibus_receiver {
@@ -79,11 +95,14 @@ impl ibus_receiver {
     ///
     /// # Return
     /// ```type_of_data_from_channels```
+    /// 
     /// # Examples
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     /// 
     /// ```
+    /// use crate::ibus::*;
     /// let mut reciver_driver = ibus_receiver::new();
+    /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
     /// ```
     ///
     pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
