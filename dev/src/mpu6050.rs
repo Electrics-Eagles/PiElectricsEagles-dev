@@ -47,7 +47,10 @@ pub struct AccMpu6050RawData {
 /// # Examples
 ///
 /// ```
-/// let mut mpu6050 = Mpu6050_driver::new();
+/// let mut mpu6050 = Mpu6050_driver::new(); // create object of Mpu6050_driver
+/// let acc_value = mpu6050.get_acc_values(1); // get values of acceleration
+/// let gyro_values = mpu6050.get_gyro_values(1); // get values of gyro
+/// let mut temperature:f32 = mpu6050.get_temp(); // getting temperature of MPU6050 module
 /// ```
 ///
 pub struct Mpu6050_driver {
@@ -161,7 +164,7 @@ impl Mpu6050_driver {
         return data;
     }
 
-    /// Get value of temperature in MPU6050
+    /// Get value of temperature of sensor in MPU6050
     /// # Arguments
     ///
     /// No arguments required
