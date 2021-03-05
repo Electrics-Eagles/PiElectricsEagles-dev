@@ -16,7 +16,7 @@ mod ibus;
 mod loggics;
 mod mpu6050;
 mod simple_logger;
-
+mod clk_driver;
 fn version_display() {
     let mut config = config_parser::new();
     

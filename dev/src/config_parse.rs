@@ -253,12 +253,12 @@ impl config_parser {
     /// let mpu6050_conifg = config.mpu_config_parser(); // getting object value of configuartion for MPU6050 sensor
     /// ```
     /// 
-    pub fn mpu_config_parser(&mut self) -> Mpu6050Conifg {
+    pub fn mpu_config_parser(&mut self) -> Mpu6050Config {
         let conf = Ini::load_from_file(file_path).unwrap();
         let mpu_config = conf.section(Some("mpu6050")).unwrap();
         let sample = self.parse_u8((mpu_config.get("sample")).unwrap()).unwrap();
         let port = (mpu_config.get("port")).unwrap();
-        let mpu6050_config = Mpu6050Conifg {
+        let mpu6050_config = Mpu6050Config {
             port: port.parse().unwrap(),
             sample_amount: sample,
         };
