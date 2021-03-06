@@ -8,11 +8,11 @@
 //
 // typical usage :
 //
-// 	new(); // create struct of Mpu6050_driver 
+// 	new(); // create struct of Mpu6050_driver
 //  get_acc_values(&mut self, steps: u8); // get data of acceleration all axis from MPU6050
 //  get_gyro_values(&mut self, steps: u8); // get data of gyro all axis from MPU6050
 //  get_temp(&mut self); // get data of temperature in MPU6050
-//  driver_mpu6050_version(); // Show version driver for MPU6050 
+//  driver_mpu6050_version(); // Show version driver for MPU6050
 //
 //
 // Enjoy
@@ -22,6 +22,7 @@ use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
 use std::fs::File;
 use std::io::prelude::*;
+use simple_logger::*;
 /// Struct of raw data all axis
 /// x: i32 - value of x-axis
 /// y: i32 - value of y-axis
@@ -71,11 +72,9 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn new() -> Mpu6050_driver {
-      
         let mut config = config_parser::new();
         let mpu6050_conifg = config.mpu_config_parser();
-        println!("{}", mpu6050_conifg.port);
-        simple_logger::logger(1, true, "READ MPU Config".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO,"READ MPU Config".parse().unwrap());
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
         let delay = Delay;
         let mut mpu = Mpu6050::new(i2c, delay);
@@ -94,7 +93,7 @@ impl Mpu6050_driver {
     ///
     /// # Return
     /// ```&'static str```
-    /// 
+    ///
     /// # Examples
     /// *Already added to loggics file. Be careful. Editing code can break stability of devices.*
     ///
@@ -110,7 +109,7 @@ impl Mpu6050_driver {
     ///
     /// # Return
     /// ```AccMpu6050RawData```
-    /// 
+    ///
     /// # Examples
     /// *Already added to loggics file. Be careful. Editing code can break stability of devices.*
     ///
@@ -120,17 +119,16 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
-         
-        simple_logger::logger(1, true, "Read acc values".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO,"Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
             x: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().x as u8,
             y: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().y as u8,
             z: self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().z as u8,
         };
-        simple_logger::logger(1, true, "ACC VALUE:".parse().unwrap());
-        simple_logger::logger(1, true, data.x.to_string().parse().unwrap());
-        simple_logger::logger(1, true, data.y.to_string().parse().unwrap());
-        simple_logger::logger(1, true, data.z.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "ACC VALUE:".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.y.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.z.to_string().parse().unwrap());
         return data;
     }
 
@@ -141,7 +139,7 @@ impl Mpu6050_driver {
     ///
     /// # Return
     /// ```GyroMpu6050RawData```
-    /// 
+    ///
     /// # Examples
     /// *Already added to loggics file. Be careful. Editing code can break stability of devices.*
     ///
@@ -151,16 +149,16 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
-        simple_logger::logger(1, true, "Read gyro values".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "Read gyro values".parse().unwrap());
         let data = GyroMpu6050RawData {
             x: self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().x as i32,
             y: self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().y as i32,
             z: self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().z as i32,
         };
-        simple_logger::logger(1, true, "GYRO VALUE:".parse().unwrap());
-        simple_logger::logger(1, true, data.x.to_string().parse().unwrap());
-        simple_logger::logger(1, true, data.y.to_string().parse().unwrap());
-        simple_logger::logger(1, true, data.z.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.y.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, data.z.to_string().parse().unwrap());
         return data;
     }
 
@@ -170,9 +168,9 @@ impl Mpu6050_driver {
     /// No arguments required
     ///
     /// # Return
-    /// Value of temperature in celusis degree 
+    /// Value of temperature in celusis degree
     /// ```f32```
-    /// 
+    ///
     /// # Examples
     /// *Already added to loggics file. Be careful. Editing code can break stability of devices.*
     ///
@@ -182,11 +180,9 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn get_temp(&mut self) -> f32 {
-        simple_logger::logger(1, true, "Read temp values".parse().unwrap());
-        simple_logger::logger(1, true, "GYRO VALUE:".parse().unwrap());
-        simple_logger::logger(
-            1,
-            true,
+        simple_logger::write_log(LevelOfLog::INFO, "Read temp values".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO,
             self.value_of_gyro
                 .get_temp()
                 .expect("error in fetch temp")
@@ -196,9 +192,4 @@ impl Mpu6050_driver {
         );
         return self.value_of_gyro.get_temp().expect("error in fetch temp");
     }
-    
-    
-
-
-
 }

@@ -5,7 +5,7 @@
 // ---------------- I-BUS Driver --------------------
 //
 // Simple software level that will receiving data from RC-controller via IBUS interface
-// 
+//
 // typical usage :
 // use crate::ibus::*;
 // let mut reciver_driver = ibus_receiver::new();
@@ -23,16 +23,17 @@ use std::time::Duration;
 use std::vec::Vec;
 
 use crate::simple_logger;
+use simple_logger::*;
 /// value for default value of channels when IBUS didn't get signal transmistion
 static mut value_before: [u16; 6] = [1000, 1000, 1000, 1000, 1000, 1000];
 /// It is a struct for getting data from ibus receiver
 /// ibus_receiver class (crate)
-/// ch1: u16 - value of channel 1 joystick 
-/// ch2: u16 - value of channel 2 joystick 
-/// ch3: u16 - value of channel 3 joystick 
-/// ch4: u16 - value of channel 4 joystick 
-/// ch5: u16 - value of channel 5 joystick 
-/// ch6: u16 - value of channel 6 joystick 
+/// ch1: u16 - value of channel 1 joystick
+/// ch2: u16 - value of channel 2 joystick
+/// ch3: u16 - value of channel 3 joystick
+/// ch4: u16 - value of channel 4 joystick
+/// ch5: u16 - value of channel 5 joystick
+/// ch6: u16 - value of channel 6 joystick
 ///
 pub struct type_of_data_from_channels {
     pub ch1: u16,
@@ -46,11 +47,11 @@ pub struct type_of_data_from_channels {
 /// ibus_receiver class (crate)
 
 ///
-/// Made by : Misha Zaslavkis (Electrics Eagles) 2021 
-/// 
-/// 
+/// Made by : Misha Zaslavkis (Electrics Eagles) 2021
+///
+///
 /// Get data about direction of each joysticks, when you control RC-transsmit
-/// 
+///
 /// *****Already added to loggics file. Be careful. Editing code can break stability of devices.*****
 /// # Examples
 ///
@@ -73,7 +74,7 @@ impl ibus_receiver {
     ///
     /// # Examples
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
-    /// 
+    ///
     /// ```
     /// use crate::ibus::*;
     /// let mut reciver_driver = ibus_receiver::new();
@@ -81,12 +82,12 @@ impl ibus_receiver {
     ///
     pub fn new() -> ibus_receiver {
         let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
-        simple_logger::logger(1, true, "UART CREATED".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "UART CREATED".parse().unwrap());
         uart_def.set_read_mode(40, Duration::new(1, 7)).unwrap();
-        simple_logger::logger(1, true, "UART MODE SET".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "UART MODE SET".parse().unwrap());
         ibus_receiver { uart_mod: uart_def }
     }
-     
+
     /// Function for getting data of ibus receiver
     ///
     /// # Arguments
@@ -95,10 +96,10 @@ impl ibus_receiver {
     ///
     /// # Return
     /// ```type_of_data_from_channels```
-    /// 
+    ///
     /// # Examples
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
-    /// 
+    ///
     /// ```
     /// use crate::ibus::*;
     /// let mut reciver_driver = ibus_receiver::new();
@@ -149,8 +150,8 @@ impl ibus_receiver {
 
                     // convert string with real hex value
                     let str_value = String::from_iter(ch1_raw_hex);
-                    simple_logger::logger(1, true, "Hex with replaced value".parse().unwrap());
-                    simple_logger::logger(1, true, str_value.parse().unwrap());
+                    simple_logger::write_log(LevelOfLog::INFO,"Hex with replaced value".parse().unwrap());
+                    simple_logger::write_log(LevelOfLog::INFO, str_value.parse().unwrap());
                     // convert into u16 from hex string
                     let value: u16 = u16::from_str_radix(str_value.as_str(), 16).unwrap();
 

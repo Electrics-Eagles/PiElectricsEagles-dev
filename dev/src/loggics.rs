@@ -18,7 +18,7 @@ use crate::controller::*;
 use crate::ibus::*;
 use crate::mpu6050::*;
 use crate::simple_logger;
-
+use simple_logger::*;
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
@@ -31,17 +31,17 @@ pub fn main_loop() {
     let mut config = config_parser::new();
     let mut clk_driver = ClkDriver::new();
 
-    simple_logger::logger(1, true, "CREATE DRIVER OBJECTS :".parse().unwrap());
+    simple_logger::write_log(LevelOfLog::INFO, "CREATE DRIVER OBJECTS :".parse().unwrap());
 
     /* init*/
     loop {
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        simple_logger::logger(1, true, "READ DATA FROM RC :".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "READ DATA FROM RC :".parse().unwrap());
         let autolevel = config.auto_level_config();
-        simple_logger::logger(1, true, "LIST SETTINGS :".parse().unwrap());
-        simple_logger::logger(1, true, autolevel.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "LIST SETTINGS :".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, autolevel.to_string().parse().unwrap());
 
         let pid_settings = config.get_pids();
         let mut pid_roll = Pid::new(
@@ -82,14 +82,12 @@ pub fn main_loop() {
         let acc_total_vector_no_square = (acc_x.pow(2) + acc_y.pow(2) + acc_z.pow(2)) as f64;
         let acc_total_vector: f64 = acc_total_vector_no_square.sqrt();
 
-        simple_logger::logger(1, true, "acc_total_vector_no_square".to_string());
-        simple_logger::logger(
-            1,
-            true,
+        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector_no_square".to_string());
+        simple_logger::write_log(LevelOfLog::INFO,
             acc_total_vector_no_square.to_string().parse().unwrap(),
         );
-        simple_logger::logger(1, true, "acc_total_vector".to_string());
-        simple_logger::logger(1, true, acc_total_vector.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
         let mut angle_pitch_acc: f64 = 0.0;
         let mut angle_roll_acc: f64 = 0.0;
         let mut angle_pitch: f64 = 0.0;
@@ -104,46 +102,46 @@ pub fn main_loop() {
         let mut esc_3;
         let mut esc_4;
 
-        simple_logger::logger(1, true, "start".to_string());
-        simple_logger::logger(1, true, start.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
         angle_pitch += convert(acc_x) * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
         angle_roll += convert(acc_z) * 0.0000611;
 
-        simple_logger::logger(1, true, "acc_z".to_string());
-        simple_logger::logger(1, true, acc_z.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "acc_z".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, acc_z.to_string().parse().unwrap());
 
-        simple_logger::logger(1, true, "acc_x".to_string());
-        simple_logger::logger(1, true, acc_x.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "acc_x".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, acc_x.to_string().parse().unwrap());
 
         if convert(acc_y).abs() < acc_total_vector {
             angle_pitch_acc = (convert(acc_y) / acc_total_vector).asin() * 57.296;
         }
 
-        simple_logger::logger(1, true, "angle_pitch_acc".to_string());
-        simple_logger::logger(1, true, angle_pitch_acc.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
         if convert(acc_x).abs() < acc_total_vector {
             angle_roll_acc = (convert(acc_x) / acc_total_vector).asin() * -57.296;
         }
 
-        simple_logger::logger(1, true, "angle_roll_acc".to_string());
-        simple_logger::logger(1, true, angle_roll_acc.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
         angle_pitch_acc -= 0.0;
         angle_roll_acc -= 0.0;
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
 
-        simple_logger::logger(1, true, "angle_pitch".to_string());
-        simple_logger::logger(1, true, angle_pitch.to_string().parse().unwrap());
-        simple_logger::logger(1, true, "angle_roll_acc".to_string());
-        simple_logger::logger(1, true, angle_roll_acc.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_pitch".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
         pitch_level_correction = angle_pitch * 15 as f64; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 15 as f64; //Calculate the roll angle correction
-        simple_logger::logger(1, true, "angle_pitch".to_string());
-        simple_logger::logger(1, true, angle_pitch.to_string().parse().unwrap());
-        simple_logger::logger(1, true, "angle_roll".to_string());
-        simple_logger::logger(1, true, angle_roll.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_pitch".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "angle_roll".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_roll.to_string().parse().unwrap());
         if autolevel == 0 {
             //If the quadcopter is not in auto-level mode
             pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
@@ -152,8 +150,8 @@ pub fn main_loop() {
 
         loops = loops + 1;
 
-        simple_logger::logger(1, true, "loops".to_string());
-        simple_logger::logger(1, true, loops.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "loops".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, loops.to_string().parse().unwrap());
 
         if reciver.ch6 > 1900 {
             /*
@@ -166,11 +164,11 @@ pub fn main_loop() {
             angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
             angle_roll = angle_roll_acc;
 
-            simple_logger::logger(1, true, "angle_pitch_acc".to_string());
-            simple_logger::logger(1, true, angle_pitch_acc.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
 
-            simple_logger::logger(1, true, "angle_roll_acc".to_string());
-            simple_logger::logger(1, true, angle_roll_acc.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
 
             print!("{}", "Unlocked 1");
         }
@@ -190,8 +188,8 @@ pub fn main_loop() {
 
         pid_roll.setpoint -= roll_level_correction; //Subtract the angle correction from the standardized receiver roll input value.
         pid_roll.setpoint /= 3.0;
-        simple_logger::logger(1, true, "pid_roll.setpoint".to_string());
-        simple_logger::logger(1, true, pid_roll.setpoint.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "pid_roll.setpoint".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, pid_roll.setpoint.to_string().parse().unwrap());
         pid_pitch.setpoint = 0.0;
         //We need a little dead band of 16us for better results.
         if reciver.ch2 > 1508 {
@@ -202,8 +200,8 @@ pub fn main_loop() {
 
         pid_pitch.setpoint -= pitch_level_correction; //Subtract the angle correction from the standardized receiver pitch input value.
         pid_pitch.setpoint /= 3.0;
-        simple_logger::logger(1, true, "pid_pitch.setpoint".to_string());
-        simple_logger::logger(1, true, pid_pitch.setpoint.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "pid_pitch.setpoint".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, pid_pitch.setpoint.to_string().parse().unwrap());
         pid_yaw.setpoint = 0.0;
         //We need a little dead band of 16us for better results.
         if reciver.ch3 > 1050 {
@@ -218,8 +216,8 @@ pub fn main_loop() {
             .next_control_output(gyro_values.x as f64 - pid_roll.setpoint)
             .output;
 
-        simple_logger::logger(1, true, "pid_output_roll".to_string());
-        simple_logger::logger(1, true, pid_output_roll.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "pid_output_roll".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, pid_output_roll.to_string().parse().unwrap());
         let pid_output_pitch = pid_pitch
             .next_control_output(gyro_values.y as f64 - pid_pitch.setpoint)
             .output;
@@ -227,14 +225,14 @@ pub fn main_loop() {
             .next_control_output(gyro_values.z as f64 - pid_yaw.setpoint)
             .output;
 
-        simple_logger::logger(1, true, "pid_output_pitch".to_string());
-        simple_logger::logger(1, true, pid_output_pitch.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "pid_output_pitch".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, pid_output_pitch.to_string().parse().unwrap());
 
-        simple_logger::logger(1, true, "pid_output_yaw".to_string());
-        simple_logger::logger(1, true, pid_output_yaw.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "pid_output_yaw".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, pid_output_yaw.to_string().parse().unwrap());
         throllite = reciver.ch3;
-        simple_logger::logger(1, true, "throllite".to_string());
-        simple_logger::logger(1, true, throllite.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "throllite".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, throllite.to_string().parse().unwrap());
         if start == 2 {
             if throllite > 1800 {
                 throllite = 1800;
@@ -243,14 +241,14 @@ pub fn main_loop() {
             esc_2 = throllite as f64 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
             esc_3 = throllite as f64 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
             esc_4 = throllite as f64 - pid_output_pitch - pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 4 (front-left - CW)
-            simple_logger::logger(1, true, "esc_1".to_string());
-            simple_logger::logger(1, true, esc_1.to_string().parse().unwrap());
-            simple_logger::logger(1, true, "esc_2".to_string());
-            simple_logger::logger(1, true, esc_2.to_string().parse().unwrap());
-            simple_logger::logger(1, true, "esc_3".to_string());
-            simple_logger::logger(1, true, esc_3.to_string().parse().unwrap());
-            simple_logger::logger(1, true, "esc_4".to_string());
-            simple_logger::logger(1, true, esc_4.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "esc_1".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, esc_1.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "esc_2".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, esc_2.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "esc_3".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, esc_3.to_string().parse().unwrap());
+            simple_logger::write_log(LevelOfLog::INFO, "esc_4".to_string());
+            simple_logger::write_log(LevelOfLog::INFO, esc_4.to_string().parse().unwrap());
 
             if esc_1 < 1100.0 {
                 esc_1 = 1100.0;
@@ -284,14 +282,14 @@ pub fn main_loop() {
             esc_4 = 1000.0; //If start is not 2 keep a 1000us pulse for ess-4.
         }
 
-        simple_logger::logger(1, true, "esc_1".to_string());
-        simple_logger::logger(1, true, esc_1.to_string().parse().unwrap());
-        simple_logger::logger(1, true, "esc_2".to_string());
-        simple_logger::logger(1, true, esc_2.to_string().parse().unwrap());
-        simple_logger::logger(1, true, "esc_3".to_string());
-        simple_logger::logger(1, true, esc_3.to_string().parse().unwrap());
-        simple_logger::logger(1, true, "esc_4".to_string());
-        simple_logger::logger(1, true, esc_4.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "esc_1".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, esc_1.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "esc_2".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, esc_2.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "esc_3".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, esc_3.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "esc_4".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, esc_4.to_string().parse().unwrap());
         controller.set_throttle_external_pwm(
             esc_1 as u16,
             esc_2 as u16,

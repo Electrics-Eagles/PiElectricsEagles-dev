@@ -1,4 +1,4 @@
-FILE_LOCATION="/home/mainusersystem/Downloads/PiElectricsEagles-master/dev/target/arm-unknown-linux-musleabi/debug/pielectricseagles"
+FILE_LOCATION="/home/programmer/GitHub/PiElectricsEagles/dev/target/arm-unknown-linux-musleabi/debug/pielectricseagles"
 DESTINATION_LOCATION="/mnt/pimylifeupshare/drone_code"
 BUILD_COMMAND="./build.sh"
 SSH_USERNAME="root"
