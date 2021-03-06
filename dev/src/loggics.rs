@@ -53,7 +53,7 @@ pub fn main_loop() {
             0.0,
             0.0,
         );
-        print!("{}", reciver.ch6);
+        simple_logger::write_log(LevelOfLog::INFO, format!("{}", reciver.ch6));
         let mut pid_pitch = Pid::new(
             pid_settings.pitch.p as f64,
             pid_settings.pitch.i as f64,
@@ -170,12 +170,12 @@ pub fn main_loop() {
             simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
             simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
 
-            print!("{}", "Unlocked 1");
+            simple_logger::write_log(LevelOfLog::INFO,format!("{}", "Unlocked 1"));
         }
 
         if start == 2 && reciver.ch6 < 1050 {
             start = 0;
-            print!("{}", "Blocked 3");
+            simple_logger::write_log(LevelOfLog::INFO,format!("{}", "Blocked 3"));
         }
 
         pid_roll.setpoint = 0.0;
@@ -297,9 +297,9 @@ pub fn main_loop() {
             esc_4 as u16,
         );
 
-        print!("{} \n", esc_1);
+        simple_logger::write_log(LevelOfLog::INFO,format!("{} \n", esc_1));
         let ten_millis = time::Duration::from_millis(100);
-        println!("{}", now.elapsed().expect("err").as_millis());
+        simple_logger::write_log(LevelOfLog::INFO,format!("{}", now.elapsed().expect("err").as_millis()));
         /*
         set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
         controller.turn_motor(Channel::C0, esc_1 as u16);
