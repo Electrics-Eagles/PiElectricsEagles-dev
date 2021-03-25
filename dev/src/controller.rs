@@ -171,7 +171,7 @@ impl Controller {
         self.pwm
             .set_channel_on_off(Channel::C0, 0, pwm_duty)
             .unwrap();
-        self.pwm.enable();
+        self.pwm.enable().unwrap();
     }
     /// Calibration all esc motors
     ///

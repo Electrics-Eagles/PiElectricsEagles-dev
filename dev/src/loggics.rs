@@ -1,10 +1,11 @@
 const START_MOTOS_VALUE: u16 = 10;
-
+const VAL_PER_LOOP: f64 =0.0000611; //calc 1/250/65.5
 use crate::mpu6050::Mpu6050_driver;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
 extern crate pid;
 use pid::Pid;
+use std::time::Instant;
 use pwm_pca9685::{Address, Channel, Pca9685};
 use std::{
     thread,
@@ -19,6 +20,9 @@ use crate::ibus::*;
 use crate::mpu6050::*;
 use crate::simple_logger;
 use simple_logger::*;
+use rppal::uart::Queue::Both;
+
+
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
@@ -30,14 +34,28 @@ pub fn main_loop() {
     let mut controller = Controller::new();
     let mut config = config_parser::new();
     let mut clk_driver = ClkDriver::new();
+    let mut angle_pitch_acc: f64 = 0.0;
+    let mut angle_roll_acc: f64 = 0.0;
+    let mut angle_pitch: f64 = 0.0;
+    let mut angle_roll: f64 = 0.0;
+    let mut pitch_level_correction;
+    let mut roll_level_correction;
+    let mut start: i32 = 0;
+    let gyro_values = mpu6050.get_gyro_values(1);
+    let mut throllite;
+    let mut esc_1;
+    let mut esc_2;
+    let mut esc_3;
+    let mut esc_4;
 
     simple_logger::write_log(LevelOfLog::INFO, "CREATE DRIVER OBJECTS :".parse().unwrap());
-
-    /* init*/
+    println!("{}","no calibration");
     loop {
+        let start_ = Instant::now();
+
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
-        let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+        let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver().data;
         simple_logger::write_log(LevelOfLog::INFO, "READ DATA FROM RC :".parse().unwrap());
         let autolevel = config.auto_level_config();
         simple_logger::write_log(LevelOfLog::INFO, "LIST SETTINGS :".parse().unwrap());
@@ -50,7 +68,7 @@ pub fn main_loop() {
             pid_settings.roll.d as f64,
             pid_settings.roll.max as f64,
             pid_settings.roll.max as f64,
-            0.0,
+            pid_settings.roll.max as f64,
             0.0,
         );
         simple_logger::write_log(LevelOfLog::INFO, format!("{}", reciver.ch6));
@@ -60,7 +78,7 @@ pub fn main_loop() {
             pid_settings.pitch.d as f64,
             pid_settings.pitch.max as f64,
             pid_settings.pitch.max as f64,
-            0.0,
+            pid_settings.pitch.max as f64,
             0.0,
         );
         let mut pid_yaw = Pid::new(
@@ -69,7 +87,7 @@ pub fn main_loop() {
             pid_settings.yaw.d as f64,
             pid_settings.yaw.max as f64,
             pid_settings.yaw.max as f64,
-            0.0,
+            pid_settings.yaw.max as f64,
             0.0,
         );
 
@@ -79,7 +97,7 @@ pub fn main_loop() {
         let acc_y = acc_value.y;
         let acc_z = acc_value.z;
 
-        let acc_total_vector_no_square = (acc_x.pow(2) + acc_y.pow(2) + acc_z.pow(2)) as f64;
+        let acc_total_vector_no_square = (acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64;
         let acc_total_vector: f64 = acc_total_vector_no_square.sqrt();
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector_no_square".to_string());
@@ -88,25 +106,12 @@ pub fn main_loop() {
         );
         simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
-        let mut angle_pitch_acc: f64 = 0.0;
-        let mut angle_roll_acc: f64 = 0.0;
-        let mut angle_pitch: f64 = 0.0;
-        let mut angle_roll: f64 = 0.0;
-        let mut pitch_level_correction;
-        let mut roll_level_correction;
-        let mut start: i32 = 0;
-        let gyro_values = mpu6050.get_gyro_values(1);
-        let mut throllite;
-        let mut esc_1;
-        let mut esc_2;
-        let mut esc_3;
-        let mut esc_4;
 
         simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
         simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
-        angle_pitch += convert(acc_x) * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += convert(acc_z) * 0.0000611;
+        angle_pitch += acc_x * VAL_PER_LOOP; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += acc_z * VAL_PER_LOOP;
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_z".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_z.to_string().parse().unwrap());
@@ -114,14 +119,20 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "acc_x".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_x.to_string().parse().unwrap());
 
-        if convert(acc_y).abs() < acc_total_vector {
-            angle_pitch_acc = (convert(acc_y) / acc_total_vector).asin() * 57.296;
+
+        angle_pitch -= angle_roll * (gyro_values.z *  0.000001066).sin();                  //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z  * 0.000001066).sin();                  //If the IMU has yawed transfer the pitch angle to the roll angel.
+        angle_roll += angle_pitch * (gyro_values.z  * 0.000001066).sin();                  //If the IMU has yawed transfer the pitch angle to the roll angel.
+
+
+        if (acc_y).abs() < acc_total_vector {
+            angle_pitch_acc = ((acc_y) / acc_total_vector).asin() * 57.296;
         }
 
         simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
-        if convert(acc_x).abs() < acc_total_vector {
-            angle_roll_acc = (convert(acc_x) / acc_total_vector).asin() * -57.296;
+        if (acc_x).abs() < acc_total_vector {
+            angle_roll_acc = ((acc_x) / acc_total_vector).asin() * -57.296;
         }
 
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
@@ -142,12 +153,17 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_roll.to_string().parse().unwrap());
+        /*
+
         if autolevel == 0 {
             //If the quadcopter is not in auto-level mode
             pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
             roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         }
 
+         */
+        pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
+        roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         loops = loops + 1;
 
         simple_logger::write_log(LevelOfLog::INFO, "loops".to_string());
@@ -298,15 +314,18 @@ pub fn main_loop() {
         );
 
         simple_logger::write_log(LevelOfLog::INFO,format!("{} \n", esc_1));
-        let ten_millis = time::Duration::from_millis(100);
-        simple_logger::write_log(LevelOfLog::INFO,format!("{}", now.elapsed().expect("err").as_millis()));
+
         /*
         set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
         controller.turn_motor(Channel::C0, esc_1 as u16);
         controller.turn_motor(Channel::C1,  esc_2 as u16);
         controller.turn_motor(Channel::C2, esc_3 as u16);
         controller.turn_motor(Channel::C3, esc_4 as u16);
-        */
+*/
+
         clk_driver.set_pin_clk_low();
+        let  mut elapsed = start_.elapsed().as_millis().to_string();
+        simple_logger::write_log(LevelOfLog::INFO,format!("{}", "Time taken:"));
+        simple_logger::write_log(LevelOfLog::INFO,format!("{}",  elapsed));
     }
 }

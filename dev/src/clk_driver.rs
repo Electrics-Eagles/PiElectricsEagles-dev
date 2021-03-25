@@ -30,7 +30,7 @@ use rppal::gpio::{Gpio, OutputPin};
 
 /// This constant is a port where is a CLK pin connected.
 ///
-const CLK_GPIO: u8 = 23; // CLK Pin constant
+const CLK_GPIO: u8 = 27; // CLK Pin constant
 
 /// It is a ClkDriver object
 /// ClkDriver class (crate)
