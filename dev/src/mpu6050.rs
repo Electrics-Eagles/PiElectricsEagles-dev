@@ -16,8 +16,7 @@
 //
 //
 // Enjoy
-
-const rads_to_degs:f32= 57.29578;
+const rad_s_to_deg_s:f32=180.0/3.14;
 const g_to_raw:f32=4096.0;
 use crate::config_parse::config_parser;
 use crate::simple_logger;
@@ -26,8 +25,6 @@ use mpu6050::*;
 use std::fs::File;
 use std::io::prelude::*;
 use simple_logger::*;
-use mpu6050::device::{AccelRange, GyroRange, ACCEL_HPF};
-use std::{time, thread};
 
 /// Struct of raw data all axis
 /// x: i32 - value of x-axis
@@ -61,7 +58,7 @@ pub struct AccMpu6050RawData {
 /// ```
 ///
 pub struct Mpu6050_driver {
-    value_of_gyro: Mpu6050<I2cdev>,
+    value_of_gyro: Mpu6050<I2cdev, Delay>,
 }
 impl Mpu6050_driver {
     /// Returns Mpu6050_driver object
@@ -82,26 +79,15 @@ impl Mpu6050_driver {
         let mpu6050_conifg = config.mpu_config_parser();
         simple_logger::write_log(LevelOfLog::INFO,"READ MPU Config".parse().unwrap());
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
-        let mut delay = Delay;
-        let mut mpu = Mpu6050::new_with_sens(i2c,AccelRange::G8,GyroRange::D500);
-        mpu.init(&mut delay).unwrap();
-
-        /*
-        mpu.soft_calib(Steps(mpu6050_conifg.sample_amount))
+        let delay = Delay;
+        let mut mpu = Mpu6050::new_with_sens(i2c, delay,AccelRange::G8,GyroRange::DEG500);
+        mpu.init().unwrap();
+        mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
-        mpu.calc_variance(Steps(mpu6050_conifg.sample_amount))
+        mpu.calc_variance(Steps(200))
             .expect("calc variance error");
 
-         */
-        mpu.set_accel_range(AccelRange::G8).unwrap();
-        mpu.set_gyro_range(GyroRange::D500).unwrap();
 
-        mpu.set_accel_hpf(ACCEL_HPF::_0P63).unwrap();
-        //i2c.write(0x1a,&[0x03]).unwrap();
-        let ten_millis = time::Duration::from_millis(1000);
-        let now = time::Instant::now();
-
-        thread::sleep(ten_millis);
         Mpu6050_driver { value_of_gyro: mpu }
     }
 
@@ -140,9 +126,9 @@ impl Mpu6050_driver {
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO,"Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
-            x: (self.value_of_gyro.get_acc().unwrap().x* rads_to_degs )as f64,
-            y: (self.value_of_gyro.get_acc().unwrap().y  * rads_to_degs) as f64,
-            z: (self.value_of_gyro.get_acc().unwrap().z * rads_to_degs) as f64,
+            x: (self.value_of_gyro.get_acc().unwrap().x * rad_s_to_deg_s) as f64,
+            y: (self.value_of_gyro.get_acc().unwrap().y * rad_s_to_deg_s) as f64,
+            z: (self.value_of_gyro.get_acc().unwrap().z * rad_s_to_deg_s) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "ACC VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
@@ -170,9 +156,9 @@ impl Mpu6050_driver {
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO, "Read gyro values".parse().unwrap());
         let data = GyroMpu6050RawData {
-            x: (self.value_of_gyro.get_gyro().unwrap().x * g_to_raw ) as f64,
-            y: (self.value_of_gyro.get_gyro().unwrap().y * g_to_raw ) as f64,
-            z: (self.value_of_gyro.get_gyro().unwrap().z * g_to_raw ) as f64,
+            x: (self.value_of_gyro.get_gyro().unwrap().x * g_to_raw) as f64,
+            y: (self.value_of_gyro.get_gyro().unwrap().y * g_to_raw) as f64,
+            z: (self.value_of_gyro.get_gyro().unwrap().z * g_to_raw) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());

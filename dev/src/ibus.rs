@@ -62,14 +62,9 @@ pub struct type_of_data_from_channels {
 /// ```
 ///
 pub struct ibus_receiver {
-    pub(crate) uart_mod: Uart,
+    uart_mod: Uart,
 }
 
-
-pub struct return_val<'a> {
-    pub data:type_of_data_from_channels,
-    pub ibus_object:   &'a mut ibus_receiver
-}
 impl ibus_receiver {
     /// Returns ibus_receiver object
     ///
@@ -88,7 +83,7 @@ impl ibus_receiver {
     pub fn new() -> ibus_receiver {
         let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
         simple_logger::write_log(LevelOfLog::INFO, "UART CREATED".parse().unwrap());
-        uart_def.set_read_mode(40, Duration::from_millis(1000)).unwrap();
+        uart_def.set_read_mode(40, Duration::new(1, 7)).unwrap();
         simple_logger::write_log(LevelOfLog::INFO, "UART MODE SET".parse().unwrap());
         ibus_receiver { uart_mod: uart_def }
     }
@@ -111,7 +106,7 @@ impl ibus_receiver {
     /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
     /// ```
     ///
-    pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> return_val {
+    pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
         // buffer for reading uart before convert into hexidecimal value
         let mut _value_before: [u16; 6] = [0; 6];
 
@@ -162,7 +157,6 @@ impl ibus_receiver {
 
                     // write a new value of channel into array
                     data_of_channels[x] = value;
-
                 }
                 unsafe {
                     value_before = data_of_channels;
@@ -172,24 +166,17 @@ impl ibus_receiver {
                     data_of_channels = value_before;
                 }
             }
-            self.uart_mod.flush(Both).unwrap();
         }
-        //
+        self.uart_mod.flush(Both).expect("error");
         // return into struct of data of channels from usual array
         //simple_logger::logger(1, true, String::from_utf16(&data_of_channels).unwrap());
-        let signals=type_of_data_from_channels {
+        type_of_data_from_channels {
             ch1: data_of_channels[0],
             ch2: data_of_channels[1],
             ch3: data_of_channels[2],
             ch4: data_of_channels[3],
             ch5: data_of_channels[4],
             ch6: data_of_channels[5],
-
-
-        };
-        return return_val{
-            data: signals,
-            ibus_object: self ,
         }
     }
 }

@@ -1,11 +1,10 @@
 const START_MOTOS_VALUE: u16 = 10;
-const VAL_PER_LOOP: f64 =0.0000611; //calc 1/250/65.5
+
 use crate::mpu6050::Mpu6050_driver;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
 extern crate pid;
 use pid::Pid;
-use std::time::Instant;
 use pwm_pca9685::{Address, Channel, Pca9685};
 use std::{
     thread,
@@ -20,9 +19,6 @@ use crate::ibus::*;
 use crate::mpu6050::*;
 use crate::simple_logger;
 use simple_logger::*;
-use rppal::uart::Queue::Both;
-
-
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
@@ -49,13 +45,12 @@ pub fn main_loop() {
     let mut esc_4;
 
     simple_logger::write_log(LevelOfLog::INFO, "CREATE DRIVER OBJECTS :".parse().unwrap());
-    println!("{}","no calibration");
-    loop {
-        let start_ = Instant::now();
 
+    /* init*/
+    loop {
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
-        let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver().data;
+        let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         simple_logger::write_log(LevelOfLog::INFO, "READ DATA FROM RC :".parse().unwrap());
         let autolevel = config.auto_level_config();
         simple_logger::write_log(LevelOfLog::INFO, "LIST SETTINGS :".parse().unwrap());
@@ -107,23 +102,22 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
 
+
         simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
         simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
-        angle_pitch += acc_x * VAL_PER_LOOP; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += acc_z * VAL_PER_LOOP;
+        //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
+        angle_pitch -= angle_roll * (gyro_values.z * 0.000001066).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z * 0.000001066).sin();
+
+        angle_pitch += (acc_x) * 0.000545; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (acc_z) * 0.000545;
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_z".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_z.to_string().parse().unwrap());
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_x".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_x.to_string().parse().unwrap());
-
-
-        angle_pitch -= angle_roll * (gyro_values.z *  0.000001066).sin();                  //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z  * 0.000001066).sin();                  //If the IMU has yawed transfer the pitch angle to the roll angel.
-        angle_roll += angle_pitch * (gyro_values.z  * 0.000001066).sin();                  //If the IMU has yawed transfer the pitch angle to the roll angel.
-
 
         if (acc_y).abs() < acc_total_vector {
             angle_pitch_acc = ((acc_y) / acc_total_vector).asin() * 57.296;
@@ -153,17 +147,15 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_roll.to_string().parse().unwrap());
-        /*
-
         if autolevel == 0 {
             //If the quadcopter is not in auto-level mode
             pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
             roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         }
 
-         */
         pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
         roll_level_correction = 0.0; //Set the roll angle correcion to zero.
+
         loops = loops + 1;
 
         simple_logger::write_log(LevelOfLog::INFO, "loops".to_string());
@@ -313,19 +305,16 @@ pub fn main_loop() {
             esc_4 as u16,
         );
 
-        simple_logger::write_log(LevelOfLog::INFO,format!("{} \n", esc_1));
-
+        simple_logger::write_log(LevelOfLog::INFO,format!("{} \n", "Time spent:"));
+        let ten_millis = time::Duration::from_millis(100);
+        simple_logger::write_log(LevelOfLog::INFO,format!("{}", now.elapsed().expect("err").as_millis()));
         /*
         set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);
         controller.turn_motor(Channel::C0, esc_1 as u16);
         controller.turn_motor(Channel::C1,  esc_2 as u16);
         controller.turn_motor(Channel::C2, esc_3 as u16);
         controller.turn_motor(Channel::C3, esc_4 as u16);
-*/
-
+        */
         clk_driver.set_pin_clk_low();
-        let  mut elapsed = start_.elapsed().as_millis().to_string();
-        simple_logger::write_log(LevelOfLog::INFO,format!("{}", "Time taken:"));
-        simple_logger::write_log(LevelOfLog::INFO,format!("{}",  elapsed));
     }
 }
