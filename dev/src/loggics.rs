@@ -22,6 +22,33 @@ use simple_logger::*;
 fn convert(v: u8) -> f64 {
     return v as f64;
 }
+fn set_bounds(mut esc_1:f64, mut esc_2:f64, mut esc_3:f64, mut esc_4:f64){
+    if esc_1 < 1100.0 {
+        esc_1 = 1100.0;
+    } //Keep the motors running.
+    if esc_2 < 1100.0 {
+        esc_2 = 1100.0;
+    } //Keep the motors running.
+    if esc_3 < 1100.0 {
+        esc_3 = 1100.0;
+    } //Keep the motors running.
+    if esc_4 < 1100.0 {
+        esc_4 = 1100.0;
+    } //Keep the motors running.
+
+    if esc_1 > 2000.0 {
+        esc_1 = 2000.0;
+    } //Limit the esc-1 pulse to 2000us.
+    if esc_2 > 2000.0 {
+        esc_2 = 2000.0;
+    } //Limit the esc-2 pulse to 2000us.
+    if esc_3 > 2000.0 {
+        esc_3 = 2000.0;
+    } //Limit the esc-3 pulse to 2000us.
+    if esc_4 > 2000.0 {
+        esc_4 = 2000.0;
+    }
+}
 
 pub fn main_loop() {
     let mut loops = 0;
@@ -37,54 +64,61 @@ pub fn main_loop() {
     let mut pitch_level_correction;
     let mut roll_level_correction;
     let mut start: i32 = 0;
-    let gyro_values = mpu6050.get_gyro_values(1);
-    let mut throllite;
-    let mut esc_1;
-    let mut esc_2;
-    let mut esc_3;
-    let mut esc_4;
 
+    let mut throllite;
+    let mut esc_1=1000.0;
+    let mut esc_2=1000.0;
+    let mut esc_3=1000.0;
+    let mut esc_4=1000.0;
+    let autolevel = config.auto_level_config();
     simple_logger::write_log(LevelOfLog::INFO, "CREATE DRIVER OBJECTS :".parse().unwrap());
+
+    let pid_settings = config.get_pids();
+    let mut pid_roll = Pid::new(
+        pid_settings.roll.p as f64,
+        pid_settings.roll.i as f64,
+        pid_settings.roll.d as f64,
+        pid_settings.roll.max as f64,
+        pid_settings.roll.max as f64,
+        pid_settings.roll.max as f64,
+        0.0,
+    );
+
+    let mut pid_pitch = Pid::new(
+        pid_settings.pitch.p as f64,
+        pid_settings.pitch.i as f64,
+        pid_settings.pitch.d as f64,
+        pid_settings.pitch.max as f64,
+        pid_settings.pitch.max as f64,
+        pid_settings.pitch.max as f64,
+        0.0,
+    );
+    let mut pid_yaw = Pid::new(
+        pid_settings.yaw.p as f64,
+        pid_settings.yaw.i as f64,
+        pid_settings.yaw.d as f64,
+        pid_settings.yaw.max as f64,
+        pid_settings.yaw.max as f64,
+        pid_settings.yaw.max as f64,
+        0.0,
+    );
 
     /* init*/
     loop {
+        let gyro_values = mpu6050.get_gyro_values(1);
+        simple_logger::write_log(LevelOfLog::INFO, "GYRO DATA:".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, gyro_values.x.to_string());
+        simple_logger::write_log(LevelOfLog::INFO, gyro_values.y.to_string());
+        simple_logger::write_log(LevelOfLog::INFO, gyro_values.z.to_string());
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
+
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         simple_logger::write_log(LevelOfLog::INFO, "READ DATA FROM RC :".parse().unwrap());
-        let autolevel = config.auto_level_config();
+        set_bounds(esc_1,esc_2,esc_3,esc_4);
         simple_logger::write_log(LevelOfLog::INFO, "LIST SETTINGS :".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, autolevel.to_string().parse().unwrap());
 
-        let pid_settings = config.get_pids();
-        let mut pid_roll = Pid::new(
-            pid_settings.roll.p as f64,
-            pid_settings.roll.i as f64,
-            pid_settings.roll.d as f64,
-            pid_settings.roll.max as f64,
-            pid_settings.roll.max as f64,
-            pid_settings.roll.max as f64,
-            0.0,
-        );
-        simple_logger::write_log(LevelOfLog::INFO, format!("{}", reciver.ch6));
-        let mut pid_pitch = Pid::new(
-            pid_settings.pitch.p as f64,
-            pid_settings.pitch.i as f64,
-            pid_settings.pitch.d as f64,
-            pid_settings.pitch.max as f64,
-            pid_settings.pitch.max as f64,
-            pid_settings.pitch.max as f64,
-            0.0,
-        );
-        let mut pid_yaw = Pid::new(
-            pid_settings.yaw.p as f64,
-            pid_settings.yaw.i as f64,
-            pid_settings.yaw.d as f64,
-            pid_settings.yaw.max as f64,
-            pid_settings.yaw.max as f64,
-            pid_settings.yaw.max as f64,
-            0.0,
-        );
 
         let acc_value = mpu6050.get_acc_values(1);
 
@@ -92,32 +126,40 @@ pub fn main_loop() {
         let acc_y = acc_value.y;
         let acc_z = acc_value.z;
 
-        let acc_total_vector_no_square = (acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64;
-        let acc_total_vector: f64 = acc_total_vector_no_square.sqrt();
 
-        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector_no_square".to_string());
-        simple_logger::write_log(LevelOfLog::INFO,
-            acc_total_vector_no_square.to_string().parse().unwrap(),
-        );
-        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
-        simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
+
+
+
 
 
         simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
         simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
+        angle_pitch += (gyro_values.x) * 0.000545; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.y) * 0.000545;
+
         //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
         angle_pitch -= angle_roll * (gyro_values.z * 0.000001066).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
         angle_roll += angle_pitch * (gyro_values.z * 0.000001066).sin();
 
-        angle_pitch += (acc_x) * 0.000545; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (acc_z) * 0.000545;
+        let acc_total_vector_no_square = (acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64;
+        let acc_total_vector: f64 = acc_total_vector_no_square.sqrt();
+
+        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector_no_square".to_string());
+        simple_logger::write_log(LevelOfLog::INFO,
+                                 acc_total_vector_no_square.to_string().parse().unwrap(),
+        );
+        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_z".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_z.to_string().parse().unwrap());
 
         simple_logger::write_log(LevelOfLog::INFO, "acc_x".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_x.to_string().parse().unwrap());
+
+        simple_logger::write_log(LevelOfLog::INFO, "acc_y".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, acc_y.to_string().parse().unwrap());
 
         if (acc_y).abs() < acc_total_vector {
             angle_pitch_acc = ((acc_y) / acc_total_vector).asin() * 57.296;
@@ -224,8 +266,8 @@ pub fn main_loop() {
             .next_control_output(gyro_values.x as f64 - pid_roll.setpoint)
             .output;
 
-            simple_logger::write_log(LevelOfLog::INFO, "pid_output_roll".to_string());
-            simple_logger::write_log(LevelOfLog::INFO, pid_output_roll.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "pid_output_roll".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, pid_output_roll.to_string().parse().unwrap());
         let pid_output_pitch = pid_pitch
             .next_control_output(gyro_values.y as f64 - pid_pitch.setpoint)
             .output;
@@ -233,11 +275,11 @@ pub fn main_loop() {
             .next_control_output(gyro_values.z as f64 - pid_yaw.setpoint)
             .output;
 
-            simple_logger::write_log(LevelOfLog::INFO, "pid_output_pitch".to_string());
-            simple_logger::write_log(LevelOfLog::INFO, pid_output_pitch.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "pid_output_pitch".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, pid_output_pitch.to_string().parse().unwrap());
 
-            simple_logger::write_log(LevelOfLog::INFO, "pid_output_yaw".to_string());
-            simple_logger::write_log(LevelOfLog::INFO, pid_output_yaw.to_string().parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "pid_output_yaw".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, pid_output_yaw.to_string().parse().unwrap());
         throllite = reciver.ch3;
         simple_logger::write_log(LevelOfLog::INFO, "throllite".to_string());
         simple_logger::write_log(LevelOfLog::INFO, throllite.to_string().parse().unwrap());
@@ -298,6 +340,7 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, esc_3.to_string().parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "esc_4".to_string());
         simple_logger::write_log(LevelOfLog::INFO, esc_4.to_string().parse().unwrap());
+        set_bounds(esc_1,esc_2,esc_3,esc_4);
         controller.set_throttle_external_pwm(
             esc_1 as u16,
             esc_2 as u16,
