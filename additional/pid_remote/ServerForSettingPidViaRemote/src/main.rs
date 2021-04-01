@@ -7,7 +7,7 @@ use std::io::prelude::*;
 
 fn main() {
     /* Path of configuartion file */
-    let mut path_pid_config = String::from("/etc/pielectricseagles/core.ini");
+    let mut path_pid_config = String::from("/etc/pielectricseagles/config.ini");
     /* Print path of config-file via console */
     println!("Path of core config: {}", path_pid_config);
     /* Array for find related values of pid when check */
