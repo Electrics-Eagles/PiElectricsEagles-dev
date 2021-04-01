@@ -19,9 +19,6 @@ use crate::ibus::*;
 use crate::mpu6050::*;
 use crate::simple_logger;
 use simple_logger::*;
-fn convert(v: u8) -> f64 {
-    return v as f64;
-}
 fn set_bounds(mut esc_1:f64, mut esc_2:f64, mut esc_3:f64, mut esc_4:f64){
     if esc_1 < 1100.0 {
         esc_1 = 1100.0;
@@ -135,20 +132,18 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
         simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
-        angle_pitch += (gyro_values.x) * 0.000545; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.y) * 0.000545;
+        angle_pitch += (gyro_values.x) * 0.03448; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.y) * 0.03448;
 
         //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * (gyro_values.z * 0.000001066).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.000001066).sin();
+        angle_pitch -= angle_roll * (gyro_values.z * 0.000601615).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z * 0.000601615).sin();
 
-        let acc_total_vector_no_square = (acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64;
-        let acc_total_vector: f64 = acc_total_vector_no_square.sqrt();
+        let acc_total_vector = ((acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64).sqrt();
 
-        simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector_no_square".to_string());
-        simple_logger::write_log(LevelOfLog::INFO,
-                                 acc_total_vector_no_square.to_string().parse().unwrap(),
-        );
+
+
+
         simple_logger::write_log(LevelOfLog::INFO, "acc_total_vector".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_total_vector.to_string().parse().unwrap());
 
@@ -161,20 +156,21 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "acc_y".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_y.to_string().parse().unwrap());
 
-        if (acc_y).abs() < acc_total_vector {
-            angle_pitch_acc = ((acc_y) / acc_total_vector).asin() * 57.296;
+        if acc_y.abs() < acc_total_vector {
+            angle_pitch_acc = (acc_y / acc_total_vector).asin() * 57.296;
         }
 
         simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
-        if (acc_x).abs() < acc_total_vector {
-            angle_roll_acc = ((acc_x) / acc_total_vector).asin() * -57.296;
+        if acc_x.abs() < acc_total_vector {
+            angle_roll_acc = (acc_x / acc_total_vector).asin() * -57.296;
         }
 
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
-        angle_pitch_acc -= 0.0;
-        angle_roll_acc -= 0.0;
+        //x -= y; // equivalent to the expression x = x - y;
+        angle_pitch_acc=angle_pitch_acc - 0.0;
+        angle_roll_acc=angle_roll_acc - 0.0;
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
@@ -183,17 +179,20 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
-        pitch_level_correction = angle_pitch * 15 as f64; //Calculate the pitch angle correction
-        roll_level_correction = angle_roll * 15 as f64; //Calculate the roll angle correction
+        pitch_level_correction = (angle_pitch * 15.0) as f64; //Calculate the pitch angle correction
+        roll_level_correction = ( angle_roll * 15.0 ) as f64; //Calculate the roll angle correction
         simple_logger::write_log(LevelOfLog::INFO, "angle_pitch".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_pitch.to_string().parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "angle_roll".to_string());
         simple_logger::write_log(LevelOfLog::INFO, angle_roll.to_string().parse().unwrap());
+        /*
         if autolevel == 0 {
             //If the quadcopter is not in auto-level mode
             pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
             roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         }
+
+         */
 
         pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
         roll_level_correction = 0.0; //Set the roll angle correcion to zero.
@@ -210,16 +209,19 @@ pub fn main_loop() {
             controller.turn_motor(Channel::C2, 1000);
             controller.turn_motor(Channel::C3, 1000);
             */
+
+
             start = 2;
             angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
             angle_roll = angle_roll_acc;
-
+            gyro_angles_set=true;
+            pid_roll.reset_integral_term();
+            pid_pitch.reset_integral_term();
+            pid_yaw.reset_integral_term();
             simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
             simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
-
             simple_logger::write_log(LevelOfLog::INFO, "angle_roll_acc".to_string());
             simple_logger::write_log(LevelOfLog::INFO, angle_roll_acc.to_string().parse().unwrap());
-
             simple_logger::write_log(LevelOfLog::INFO,format!("{}", "Unlocked 1"));
         }
 
@@ -236,8 +238,10 @@ pub fn main_loop() {
             pid_roll.setpoint = reciver.ch1 as f64 - 1492.0;
         }
 
-        pid_roll.setpoint -= roll_level_correction; //Subtract the angle correction from the standardized receiver roll input value.
-        pid_roll.setpoint /= 3.0;
+        pid_roll.setpoint = pid_roll.setpoint-roll_level_correction; //Subtract the angle correction from the standardized receiver roll input value.
+        //x = x / y;
+
+        pid_roll.setpoint =  pid_roll.setpoint / 3.0;
         simple_logger::write_log(LevelOfLog::INFO, "pid_roll.setpoint".to_string());
         simple_logger::write_log(LevelOfLog::INFO, pid_roll.setpoint.to_string().parse().unwrap());
         pid_pitch.setpoint = 0.0;
@@ -248,8 +252,8 @@ pub fn main_loop() {
             pid_pitch.setpoint = reciver.ch2 as f64 - 1492.0;
         }
 
-        pid_pitch.setpoint -= pitch_level_correction; //Subtract the angle correction from the standardized receiver pitch input value.
-        pid_pitch.setpoint /= 3.0;
+        pid_pitch.setpoint = pid_pitch.setpoint-pitch_level_correction; //Subtract the angle correction from the standardized receiver pitch input value.
+        pid_pitch.setpoint =  pid_pitch.setpoint / 3.0;
         simple_logger::write_log(LevelOfLog::INFO, "pid_pitch.setpoint".to_string());
         simple_logger::write_log(LevelOfLog::INFO, pid_pitch.setpoint.to_string().parse().unwrap());
         pid_yaw.setpoint = 0.0;
@@ -349,7 +353,6 @@ pub fn main_loop() {
         );
 
         simple_logger::write_log(LevelOfLog::INFO,format!("{} \n", "Time spent:"));
-        let ten_millis = time::Duration::from_millis(100);
         simple_logger::write_log(LevelOfLog::INFO,format!("{}", now.elapsed().expect("err").as_millis()));
         /*
         set_throttle_external_pwm(esc_1 as u16, esc_2 as u16, esc_3 as u16, esc_4 as u16);

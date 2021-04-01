@@ -126,9 +126,9 @@ impl Mpu6050_driver {
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO,"Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
-            x: (self.value_of_gyro.get_acc().unwrap().x * rad_s_to_deg_s) as f64,
-            y: (self.value_of_gyro.get_acc().unwrap().y * rad_s_to_deg_s) as f64,
-            z: (self.value_of_gyro.get_acc().unwrap().z * rad_s_to_deg_s) as f64,
+            x: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().x * rad_s_to_deg_s) as f64,
+            y: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().y * rad_s_to_deg_s) as f64,
+            z: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().z * rad_s_to_deg_s) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "ACC VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
@@ -156,9 +156,9 @@ impl Mpu6050_driver {
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO, "Read gyro values".parse().unwrap());
         let data = GyroMpu6050RawData {
-            x: (self.value_of_gyro.get_gyro().unwrap().x * g_to_raw) as f64,
-            y: (self.value_of_gyro.get_gyro().unwrap().y * g_to_raw) as f64,
-            z: (self.value_of_gyro.get_gyro().unwrap().z * g_to_raw) as f64,
+            x: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().x * g_to_raw) as f64,
+            y: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().y * g_to_raw) as f64,
+            z: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().z * g_to_raw) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
