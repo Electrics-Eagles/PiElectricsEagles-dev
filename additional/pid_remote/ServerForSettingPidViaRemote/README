@@ -5,6 +5,6 @@ To avoid error when run server at next time
 
 If you run this software without sudo then file of configuration cannot write and software will terminal with errorness.
 Example of showing ternimal: 
-Path of core config: /etc/pielectricseagles/core.ini
+Path of core config: /etc/pielectricseagles/config.ini
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }', src/main.rs:77:51
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
