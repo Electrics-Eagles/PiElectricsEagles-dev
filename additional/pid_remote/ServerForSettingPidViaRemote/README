@@ -1,4 +1,4 @@
-You need run cargo via sudo mode, because this software used file path of /etc/pielectricseagles/core.ini.
+You need run cargo via sudo mode, because this software used file path of /etc/pielectricseagles/config.ini.
 After exit server, need clear processor via command sudo kill -9 PID, where PID is pid-number of processor. 
 To finding pid processor, entering command sudo lsof -i :7878
 To avoid error when run server at next time
