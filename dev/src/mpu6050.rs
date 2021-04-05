@@ -81,12 +81,13 @@ impl Mpu6050_driver {
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
         let delay = Delay;
         let mut mpu = Mpu6050::new_with_sens(i2c, delay,AccelRange::G8,GyroRange::DEG500);
+
         mpu.init().unwrap();
         mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
         mpu.calc_variance(Steps(200))
             .expect("calc variance error");
-
+        mpu.write_u8(0x1a,0x03);
 
         Mpu6050_driver { value_of_gyro: mpu }
     }
@@ -126,9 +127,9 @@ impl Mpu6050_driver {
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO,"Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
-            x: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().x * rad_s_to_deg_s) as f64,
-            y: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().y * rad_s_to_deg_s) as f64,
-            z: (self.value_of_gyro.get_acc_avg(Steps(steps)).unwrap().z * rad_s_to_deg_s) as f64,
+            x: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().x * rad_s_to_deg_s) as f64,
+            y: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().y * rad_s_to_deg_s) as f64,
+            z: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().z * rad_s_to_deg_s) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "ACC VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());
@@ -156,9 +157,9 @@ impl Mpu6050_driver {
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
         simple_logger::write_log(LevelOfLog::INFO, "Read gyro values".parse().unwrap());
         let data = GyroMpu6050RawData {
-            x: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().x * g_to_raw) as f64,
-            y: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().y * g_to_raw) as f64,
-            z: (self.value_of_gyro.get_gyro_avg(Steps(steps)).unwrap().z * g_to_raw) as f64,
+            x: (self.value_of_gyro.get_gyro_avg(Steps(200)).unwrap().x * g_to_raw) as f64,
+            y: (self.value_of_gyro.get_gyro_avg(Steps(200)).unwrap().y * g_to_raw) as f64,
+            z: (self.value_of_gyro.get_gyro_avg(Steps(200)).unwrap().z * g_to_raw) as f64,
         };
         simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, data.x.to_string().parse().unwrap());

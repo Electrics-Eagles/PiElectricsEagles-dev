@@ -112,7 +112,7 @@ pub fn main_loop() {
 
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         simple_logger::write_log(LevelOfLog::INFO, "READ DATA FROM RC :".parse().unwrap());
-        set_bounds(esc_1,esc_2,esc_3,esc_4);
+        //set_bounds(esc_1,esc_2,esc_3,esc_4);
         simple_logger::write_log(LevelOfLog::INFO, "LIST SETTINGS :".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, autolevel.to_string().parse().unwrap());
 
@@ -132,14 +132,29 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "start".to_string());
         simple_logger::write_log(LevelOfLog::INFO, start.to_string().parse().unwrap());
 
-        angle_pitch += (gyro_values.x) * 0.03448; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.y) * 0.03448;
+
+        /*
+
+          //Gyro angle calculations
+  //0.0000611 = 1 / (250Hz / 65.5)
+  angle_pitch += gyro_pitch * 0.0000611;                                    //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+  angle_roll += gyro_roll * 0.0000611;                                      //Calculate the traveled roll angle and add this to the angle_roll variable.
+
+  //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
+  angle_pitch -= angle_roll * sin(gyro_yaw * 0.000001066);                  //If the IMU has yawed transfer the roll angle to the pitch angel.
+  angle_roll += angle_pitch * sin(gyro_yaw * 0.000001066);                  //If the IMU has yawed transfer the pitch angle to the roll angel.
+
+         */
+
+        angle_pitch += (gyro_values.y) *  0.004580152671755725; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.x) *  0.004580152671755725;
 
         //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * (gyro_values.z * 0.000601615).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.000601615).sin();
+        angle_pitch -= angle_roll * (gyro_values.y *  0.0000799387443661525).sin();                //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.x *  0.0000799387443661525).sin();
 
-        let acc_total_vector = ((acc_x.powf(2.0) + acc_y.powf(2.0) + acc_z.powf(2.0)) as f64).sqrt();
+        // acc_total_vector = sqrt((acc_x*acc_x)+(acc_y*acc_y)+(acc_z*acc_z));
+        let acc_total_vector = ((acc_x*acc_x) + (acc_y*acc_y)+ (acc_z*acc_z) as f64).sqrt();
 
 
 
@@ -156,12 +171,24 @@ pub fn main_loop() {
         simple_logger::write_log(LevelOfLog::INFO, "acc_y".to_string());
         simple_logger::write_log(LevelOfLog::INFO, acc_y.to_string().parse().unwrap());
 
+        simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
+        simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
+
+
+        /*
+
+          if(abs(acc_y) < acc_total_vector){                                        //Prevent the asin function to produce a NaN
+    angle_pitch_acc = asin((float)acc_y/acc_total_vector)* 57.296;          //Calculate the pitch angle.
+  }
+  if(abs(acc_x) < acc_total_vector){                                        //Prevent the asin function to produce a NaN
+    angle_roll_acc = asin((float)acc_x/acc_total_vector)* -57.296;          //Calculate the roll angle.
+  }
+         */
         if acc_y.abs() < acc_total_vector {
             angle_pitch_acc = (acc_y / acc_total_vector).asin() * 57.296;
         }
 
-        simple_logger::write_log(LevelOfLog::INFO, "angle_pitch_acc".to_string());
-        simple_logger::write_log(LevelOfLog::INFO, angle_pitch_acc.to_string().parse().unwrap());
+
         if acc_x.abs() < acc_total_vector {
             angle_roll_acc = (acc_x / acc_total_vector).asin() * -57.296;
         }
@@ -214,7 +241,7 @@ pub fn main_loop() {
             start = 2;
             angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
             angle_roll = angle_roll_acc;
-            gyro_angles_set=true;
+            //gyro_angles_set=true;
             pid_roll.reset_integral_term();
             pid_pitch.reset_integral_term();
             pid_yaw.reset_integral_term();
@@ -266,17 +293,18 @@ pub fn main_loop() {
                 pid_yaw.setpoint = (reciver.ch4 as f64 - 1492.0) / 3.0 as f64;
             }
         }
+
         let pid_output_roll = pid_roll
-            .next_control_output(gyro_values.x as f64 - pid_roll.setpoint)
+            .next_control_output((roll_level_correction-pid_roll.setpoint) as f64)
             .output;
 
         simple_logger::write_log(LevelOfLog::INFO, "pid_output_roll".to_string());
         simple_logger::write_log(LevelOfLog::INFO, pid_output_roll.to_string().parse().unwrap());
         let pid_output_pitch = pid_pitch
-            .next_control_output(gyro_values.y as f64 - pid_pitch.setpoint)
+            .next_control_output((pitch_level_correction-pid_pitch.setpoint) as f64 )
             .output;
         let pid_output_yaw = pid_yaw
-            .next_control_output(gyro_values.z as f64 - pid_yaw.setpoint)
+            .next_control_output(pid_yaw.setpoint)
             .output;
 
         simple_logger::write_log(LevelOfLog::INFO, "pid_output_pitch".to_string());
