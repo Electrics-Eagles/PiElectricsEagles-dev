@@ -130,10 +130,9 @@ impl ibus_receiver {
                     && input_string_in_char[2] == '4'
                     && input_string_in_char[3] == '0'
                 {
-                    
-                      if self.uart_mod.input_len().unwrap() > 0 {
-                self.uart_mod.flush(Queue::Input).expect("error");
-            }
+                    if self.uart_mod.input_len().unwrap() > 0 {
+                        self.uart_mod.flush(Queue::Input).expect("error");
+                    }
                     // each two bytes need convert opposite site form second byte of each channel into first byte of each channel
 
                     // simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION".parse().unwrap());

@@ -16,15 +16,15 @@
 //
 //
 // Enjoy
-const rad_s_to_deg_s:f32=180.0/3.14;
-const g_to_raw:f32=4096.0;
+const rad_s_to_deg_s: f32 = 180.0 / 3.14;
+const g_to_raw: f32 = 4096.0;
 use crate::config_parse::config_parser;
 use crate::simple_logger;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
+use simple_logger::*;
 use std::fs::File;
 use std::io::prelude::*;
-use simple_logger::*;
 
 /// Struct of raw data all axis
 /// x: i32 - value of x-axis
@@ -77,17 +77,16 @@ impl Mpu6050_driver {
     pub fn new() -> Mpu6050_driver {
         let mut config = config_parser::new();
         let mpu6050_conifg = config.mpu_config_parser();
-        simple_logger::write_log(LevelOfLog::INFO,"READ MPU Config".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "READ MPU Config".parse().unwrap());
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
         let delay = Delay;
-        let mut mpu = Mpu6050::new_with_sens(i2c, delay,AccelRange::G8,GyroRange::DEG500);
+        let mut mpu = Mpu6050::new_with_sens(i2c, delay, AccelRange::G8, GyroRange::DEG500);
 
         mpu.init().unwrap();
         mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
-        mpu.calc_variance(Steps(200))
-            .expect("calc variance error");
-        mpu.write_u8(0x1a,0x03);
+        mpu.calc_variance(Steps(200)).expect("calc variance error");
+        mpu.write_u8(0x1a, 0x03);
 
         Mpu6050_driver { value_of_gyro: mpu }
     }
@@ -125,7 +124,7 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
-        simple_logger::write_log(LevelOfLog::INFO,"Read acc values".parse().unwrap());
+        simple_logger::write_log(LevelOfLog::INFO, "Read acc values".parse().unwrap());
         let data = AccMpu6050RawData {
             x: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().x * rad_s_to_deg_s) as f64,
             y: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().y * rad_s_to_deg_s) as f64,
@@ -188,7 +187,8 @@ impl Mpu6050_driver {
     pub fn get_temp(&mut self) -> f32 {
         simple_logger::write_log(LevelOfLog::INFO, "Read temp values".parse().unwrap());
         simple_logger::write_log(LevelOfLog::INFO, "GYRO VALUE:".parse().unwrap());
-        simple_logger::write_log(LevelOfLog::INFO,
+        simple_logger::write_log(
+            LevelOfLog::INFO,
             self.value_of_gyro
                 .get_temp()
                 .expect("error in fetch temp")

@@ -19,7 +19,10 @@ fn version_display() {
 
     simple_logger::write_log(LevelOfLog::INFO, "VERISONS OF MODULES ".parse().unwrap());
     simple_logger::write_log(LevelOfLog::INFO, logger_verison().parse().unwrap());
-    simple_logger::write_log(LevelOfLog::INFO, config.config_parser_version().parse().unwrap());
+    simple_logger::write_log(
+        LevelOfLog::INFO,
+        config.config_parser_version().parse().unwrap(),
+    );
     // simple_logger::logger(1, FILE_LOG, sbus_verison().parse().unwrap());
 }
 
