@@ -1,8 +1,0 @@
-[Unit]
-Description=Pi Electrics Core bin file
-
-[Service]
-ExecStart=/usr/bin/pielectricseagles
-
-[Install]
-WantedBy=multi-user.target

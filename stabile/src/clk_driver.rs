@@ -22,7 +22,6 @@
 //
 // Enjoy
 
-
 use std::error::Error;
 use std::thread;
 use std::time::Duration;
