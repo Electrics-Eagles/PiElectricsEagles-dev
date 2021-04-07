@@ -28,7 +28,7 @@ Code Style:
 |10 | Git                      | 2 and higher                               | code editing upload   |
 |11| any comfortable ide for you| any                                       | coding                |
 
-Good links
+Good links:
 
 https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf
 
@@ -38,17 +38,16 @@ Core status :
 
 
 Bug fix status:
-![9%](https://progress-bar.dev/9)
+![90%](https://progress-bar.dev/90)
 
 CLI status:
 ![0%](https://progress-bar.dev/0)
 
-VS Stdio Code Plugin:
-![5%](https://progress-bar.dev/5)
+
 
 
 MPU6050 Driver:
-![99%](https://progress-bar.dev/91)
+![100%](https://progress-bar.dev/100)
 
 iBUS:
 ![100%](https://progress-bar.dev/35)
@@ -61,7 +60,7 @@ Logger
 ![100%](https://progress-bar.dev/100)
 
 Config_Parser
-![81%](https://progress-bar.dev/100)
+![100%](https://progress-bar.dev/100)
 
 
 We are using power of squrrels:
