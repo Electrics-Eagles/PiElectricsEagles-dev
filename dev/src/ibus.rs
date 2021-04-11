@@ -131,7 +131,7 @@ impl ibus_receiver {
                     && input_string_in_char[3] == '0'
                 {
                     if self.uart_mod.input_len().unwrap() > 0 {
-                        self.uart_mod.flush(Queue::Input).expect("error");
+                        self.uart_mod.flush(rppal::uart::Queue::Input).expect("error");
                     }
                     // each two bytes need convert opposite site form second byte of each channel into first byte of each channel
 
