@@ -80,7 +80,7 @@ impl ibus_receiver {
     /// ```
     ///
     pub fn new() -> ibus_receiver {
-        let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
+        let mut uart_def: Uart = Uart::with_path("/dev/ttyUSB0",115_200, Parity::None, 8, 1).unwrap();
         //simple_logger::write_log(LevelOfLog::INFO, "UART CREATED".parse().unwrap());
         uart_def.set_read_mode(32, Duration::new(1, 7)).unwrap();
         //simple_logger::write_log(LevelOfLog::INFO, "UART MODE SET".parse().unwrap());
