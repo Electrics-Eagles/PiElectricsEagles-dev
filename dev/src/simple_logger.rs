@@ -49,7 +49,7 @@ pub fn init_log() {
     config_log.set_time_format(String::from("%F %T")); // select format of date and time
                                                        // Initialize of modes of log
     CombinedLogger::init(vec![
-        TermLogger::new(LevelFilter::max(), config_log.build(), TerminalMode::Mixed).unwrap(), // Terminal log
+        //TermLogger::new(LevelFilter::max(), config_log.build(), TerminalMode::Mixed).unwrap(), // Terminal log
         WriteLogger::new(
             LevelFilter::max(),
             config_log.build(),
