@@ -1,3 +1,5 @@
+use std::fs::File;
+use std::io::prelude::*;
 const LOG_PATH: &str = "/var/log/pi_drone.log";
 
 pub struct Logger {
@@ -108,5 +110,6 @@ impl Logger {
     pub fn save_file(&mut self)
     {
         self.file_.write_all(self.stream_buf.as_bytes());
+        self.stream_buf.clear(); 
     }
 }
