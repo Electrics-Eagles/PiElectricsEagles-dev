@@ -5,7 +5,7 @@ extern crate mut_static;
 use crate::config_parse::config_parser;
 use loggics::main_loop;
 
-use crate::simple_logger::*;
+use crate::logger::*;
 
 mod clk_driver;
 mod config_parse;
