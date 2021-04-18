@@ -70,9 +70,11 @@ pub fn main_loop() {
         0.0,
     );
 
+    
     /* init*/
+    let mut logger = Logger::new();
     loop {
-        let logger = Logger::new();
+        
         let gyro_values = mpu6050.get_gyro_values(1);
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
@@ -217,7 +219,5 @@ pub fn main_loop() {
         );
 
         clk_driver.set_pin_clk_low();
-
-        let logging_data = logger::LoggingStruct {};
     }
 }
