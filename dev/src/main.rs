@@ -14,11 +14,7 @@ mod ibus;
 mod logger;
 mod loggics;
 mod mpu6050;
-fn version_display() {
-    let mut config = config_parser::new();
-}
 
 fn main() {
-    version_display(); // call function that display software verison
     main_loop();
 }
