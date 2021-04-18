@@ -21,6 +21,7 @@ use crate::mpu6050::*;
 
 pub fn main_loop() {
     let mut loops = 0;
+    let mut logger = Logger::new();
     let mut reciver_driver = ibus_receiver::new();
     let mut mpu6050 = Mpu6050_driver::new();
     let mut controller = Controller::new();
@@ -72,7 +73,6 @@ pub fn main_loop() {
 
     
     /* init*/
-    let mut logger = Logger::new();
     loop {
         
         let gyro_values = mpu6050.get_gyro_values(1);
@@ -219,5 +219,35 @@ pub fn main_loop() {
         );
 
         clk_driver.set_pin_clk_low();
+        let logging_data: LoggingStruct = LoggingStruct {
+            acc_z: acc_value.x,
+            acc_y: acc_value.y,
+            acc_x: acc_value.z,
+            gyro_x: gyro_values.x,
+            gyro_y: gyro_values.y,
+            gyro_z: gyro_values.z,
+            reciver_ch1: reciver.ch1,
+            reciver_ch2: reciver.ch2,
+            reciver_ch3: reciver.ch3,
+            reciver_ch4: reciver.ch4,
+            reciver_ch5: reciver.ch5,
+            reciver_ch6: reciver.ch6,
+            pitch_level_correction: pitch_level_correction,
+            roll_level_correction: roll_level_correction,
+            angle_pitch_acc: angle_pitch_acc,
+            angle_roll_acc: angle_roll_acc,
+            pid_roll_setpoint: pid_roll.setpoint,
+            pid_pitch_setpoint: pid_pitch.setpoint,
+            pid_yaw_setpoint: pid_yaw.setpoint,
+            pid_output_roll: pid_output_roll,
+            pid_output_pitch: pid_output_pitch,
+            esc_1: esc_1,
+            esc_2: esc_2,
+            esc_3: esc_3,
+            esc_4: esc_4,
+            time_spent: now.elapsed().unwrap().as_secs() as u128,
+        };
+        logger.write_to_log(0, &logging_data);
+        logger.save_file();
     }
 }
