@@ -245,7 +245,7 @@ pub fn main_loop() {
             esc_2: esc_2,
             esc_3: esc_3,
             esc_4: esc_4,
-            time_spent: now.elapsed().unwrap().as_secs() as u128,
+            time_spent: now.elapsed().unwrap().as_millis() as u128,
         };
         logger.write_to_log(0, &logging_data);
         logger.save_file();
