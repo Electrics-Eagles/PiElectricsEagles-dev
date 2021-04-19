@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::prelude::*;
-const LOG_PATH: &str = "/var/log/pi_drone.log";
+const LOG_PATH: &str = "/var/pi_drone.log";
 
 pub struct Logger {
     file_: File,
