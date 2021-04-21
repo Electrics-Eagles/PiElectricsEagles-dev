@@ -122,9 +122,9 @@ impl Mpu6050_driver {
     ///
     pub fn get_acc_values(&mut self, steps: u8) -> AccMpu6050RawData {
         let data = AccMpu6050RawData {
-            x: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().x * rad_s_to_deg_s) as f64,
-            y: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().y * rad_s_to_deg_s) as f64,
-            z: (self.value_of_gyro.get_acc_avg(Steps(200)).unwrap().z * rad_s_to_deg_s) as f64,
+            x: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().x * rad_s_to_deg_s) as f64,
+            y: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().y * rad_s_to_deg_s) as f64,
+            z: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().z * rad_s_to_deg_s) as f64,
         };
         return data;
     }
@@ -147,9 +147,9 @@ impl Mpu6050_driver {
     ///
     pub fn get_gyro_values(&mut self, steps: u8) -> GyroMpu6050RawData {
         let data = GyroMpu6050RawData {
-            x: (self.value_of_gyro.get_gyro_avg(Steps(2)).unwrap().x * g_to_raw) as f64,
-            y: (self.value_of_gyro.get_gyro_avg(Steps(2)).unwrap().y * g_to_raw) as f64,
-            z: (self.value_of_gyro.get_gyro_avg(Steps(2)).unwrap().z * g_to_raw) as f64,
+            x: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().x * g_to_raw) as f64,
+            y: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().y * g_to_raw) as f64,
+            z: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().z * g_to_raw) as f64,
         };
         return data;
     }
