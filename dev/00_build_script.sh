@@ -1,5 +1,3 @@
-#/usr/bin
-
 echo PiElectricsEagles code build script V0.01 Alpha
 
 
@@ -105,4 +103,12 @@ cross build --target arm-unknown-linux-musleabi
 echo " jooohhoo all done  copy your bin file "
 
 
-  prompt_confirm "Are you want to exit?" || exit 0
+
+
+#    .---------- constant part!
+#    vvvv vvvv-- the code from above
+RED='\033[0;32m'
+NC='\033[1;30' # No Color
+printf "With love to classic .....${RED}  \n \n  S.T.A.L.K.E.R ${NC} n"
+  
+#prompt_confirm "Are you want to exit?" || exit 0
