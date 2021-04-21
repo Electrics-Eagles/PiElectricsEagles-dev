@@ -1,3 +1,5 @@
+#/usr/bin
+
 echo PiElectricsEagles code build script V0.01 Alpha
 
 
