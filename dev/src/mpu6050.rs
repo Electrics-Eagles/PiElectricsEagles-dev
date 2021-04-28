@@ -83,7 +83,7 @@ impl Mpu6050_driver {
         mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
         mpu.calc_variance(Steps(200)).expect("calc variance error");
-        mpu.write_u8(0x1a, 0x03);
+        mpu.write_u8(0x1a, 0x03).unwrap(); // turing lsf
 
         Mpu6050_driver { value_of_gyro: mpu }
     }
