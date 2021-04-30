@@ -75,18 +75,18 @@ pub fn main_loop() {
     /* init*/
     loop {
         
-        let gyro_values = mpu6050.get_gyro_values(1);
+        let gyro_values = mpu6050.get_gyro_values();
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        let acc_value = mpu6050.get_acc_values(1);
-
-        angle_pitch += (gyro_values.y) * 0.004580152671755725; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.x) * 0.004580152671755725;
+        let acc_value = mpu6050.get_acc_values();
+        //1/10=
+        angle_pitch += (gyro_values.y) * 0.00015267; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.x) * 0.00015267;
 
         //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * (gyro_values.z * 0.0000799387443661525).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.0000799387443661525).sin();
+        angle_pitch -= angle_roll * (gyro_values.z * 0.0000026632436).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z * 0.0000026632436).sin();
 
         let acc_total_vector = ((acc_value.x * acc_value.x)
             + (acc_value.y * acc_value.y)
@@ -116,14 +116,19 @@ pub fn main_loop() {
             pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
             roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         }
+
+        pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
+        roll_level_correction = 0.0; //Set the roll angle correcion to zero.
         loops = loops + 1;
         if reciver.ch6 > 1900 {
             start = 2;
-            angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
-            angle_roll = angle_roll_acc;
-            pid_roll.reset_integral_term();
-            pid_pitch.reset_integral_term();
-            pid_yaw.reset_integral_term();
+            if start==1 {
+                angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
+                angle_roll = angle_roll_acc;
+                pid_roll.reset_integral_term();
+                pid_pitch.reset_integral_term();
+                pid_yaw.reset_integral_term();
+            }
         }
 
         if start == 2 && reciver.ch6 < 1050 {
@@ -232,19 +237,19 @@ pub fn main_loop() {
             reciver_ch4: reciver.ch4,
             reciver_ch5: reciver.ch5,
             reciver_ch6: reciver.ch6,
-            pitch_level_correction: pitch_level_correction,
-            roll_level_correction: roll_level_correction,
-            angle_pitch_acc: angle_pitch_acc,
-            angle_roll_acc: angle_roll_acc,
+            pitch_level_correction,
+            roll_level_correction,
+            angle_pitch_acc,
+            angle_roll_acc,
             pid_roll_setpoint: pid_roll.setpoint,
             pid_pitch_setpoint: pid_pitch.setpoint,
             pid_yaw_setpoint: pid_yaw.setpoint,
-            pid_output_roll: pid_output_roll,
-            pid_output_pitch: pid_output_pitch,
-            esc_1: esc_1,
-            esc_2: esc_2,
-            esc_3: esc_3,
-            esc_4: esc_4,
+            pid_output_roll,
+            pid_output_pitch,
+            esc_1,
+            esc_2,
+            esc_3,
+            esc_4,
             time_spent: now.elapsed().unwrap().as_millis() as u128,
         };
         logger.write_to_log(0, &logging_data);
