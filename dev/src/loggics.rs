@@ -71,22 +71,21 @@ pub fn main_loop() {
         0.0,
     );
 
-    
     /* init*/
     loop {
-        
         let gyro_values = mpu6050.get_gyro_values();
         clk_driver.set_pin_clk_high();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         let acc_value = mpu6050.get_acc_values();
         //1/10=
-        angle_pitch += (gyro_values.y) * 0.00015267; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.x) * 0.00015267;
+
+        angle_pitch += (gyro_values.y) * 0.0015267175572519084; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.x) * 0.0015267175572519084;
 
         //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * (gyro_values.z * 0.0000026632436).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.0000026632436).sin();
+        angle_pitch -= angle_roll * (gyro_values.z * 0.00002664624812205083).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z * 0.00002664624812205083).sin();
 
         let acc_total_vector = ((acc_value.x * acc_value.x)
             + (acc_value.y * acc_value.y)
@@ -122,7 +121,7 @@ pub fn main_loop() {
         loops = loops + 1;
         if reciver.ch6 > 1900 {
             start = 2;
-            if start==1 {
+            if start == 1 {
                 angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
                 angle_roll = angle_roll_acc;
                 pid_roll.reset_integral_term();

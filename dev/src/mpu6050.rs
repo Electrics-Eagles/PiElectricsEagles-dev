@@ -83,7 +83,7 @@ impl Mpu6050_driver {
         mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
         mpu.calc_variance(Steps(200)).expect("calc variance error");
-       // mpu.write_u8(0x1a, 0x03).unwrap(); // turing lsf
+        // mpu.write_u8(0x1a, 0x03).unwrap(); // turing lsf
 
         Mpu6050_driver { value_of_gyro: mpu }
     }
@@ -122,9 +122,9 @@ impl Mpu6050_driver {
     ///
     pub fn get_acc_values(&mut self) -> AccMpu6050RawData {
         let data = AccMpu6050RawData {
-            x: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().x * rad_s_to_deg_s) as f64,
-            y: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().y * rad_s_to_deg_s) as f64,
-            z: (self.value_of_gyro.get_acc_avg(Steps(1)).unwrap().z * rad_s_to_deg_s) as f64,
+            x: (self.value_of_gyro.get_acc().unwrap().x * rad_s_to_deg_s) as f64,
+            y: (self.value_of_gyro.get_acc().unwrap().y * rad_s_to_deg_s) as f64,
+            z: (self.value_of_gyro.get_acc().unwrap().z * rad_s_to_deg_s) as f64,
         };
         return data;
     }
@@ -147,9 +147,9 @@ impl Mpu6050_driver {
     ///
     pub fn get_gyro_values(&mut self) -> GyroMpu6050RawData {
         let data = GyroMpu6050RawData {
-            x: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().x * g_to_raw) as f64,
-            y: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().y * g_to_raw) as f64,
-            z: (self.value_of_gyro.get_gyro_avg(Steps(1)).unwrap().z * g_to_raw) as f64,
+            x: (self.value_of_gyro.get_acc().unwrap().x * g_to_raw) as f64,
+            y: (self.value_of_gyro.get_acc().unwrap().y * g_to_raw) as f64,
+            z: (self.value_of_gyro.get_acc().unwrap().z * g_to_raw) as f64,
         };
         return data;
     }
