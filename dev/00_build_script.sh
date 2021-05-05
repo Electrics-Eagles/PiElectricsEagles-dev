@@ -89,7 +89,7 @@ fi
 
 echo "moving to build"
 
-#git clone https://github.com/Electrics-Eagles/PiElectricsEagles
+git clone https://github.com/Electrics-Eagles/PiElectricsEagles
 
 echo "moving to folder "
 
