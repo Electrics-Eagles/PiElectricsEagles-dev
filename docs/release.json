@@ -1,4 +1,11 @@
 [
+    {
+      "id": "5dsf2q",
+      "date": "17/05/2021",
+      "link": "https://github.com/Electrics-Eagles/PiElectricsEagles/releases/download/v17-05-2021/pielectricseagles",
+      "rating": "4/10",
+      "comments": "unstable version",
+   },
    {
       "id": "3efdasdf",
       "date": "12/04/2021",
@@ -18,3 +25,5 @@
       "achp": "5ewasdf12/04/202"
    }
 ]
+
+
