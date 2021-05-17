@@ -23,6 +23,8 @@ use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
 use std::fs::File;
 use std::io::prelude::*;
+use core::time;
+use std::thread;
 
 /// Struct of raw data all axis
 /// x: i32 - value of x-axis
@@ -73,18 +75,22 @@ impl Mpu6050_driver {
     /// ```
     ///
     pub fn new() -> Mpu6050_driver {
+        let delay_ = time::Duration::from_millis(500);
         let mut config = config_parser::new();
         let mpu6050_conifg = config.mpu_config_parser();
         let i2c = I2cdev::new(mpu6050_conifg.port).expect("alert no port found");
         let delay = Delay;
         let mut mpu = Mpu6050::new_with_sens(i2c, delay, AccelRange::G8, GyroRange::DEG500);
-
+        thread::sleep(delay_);
         mpu.init().unwrap();
+        thread::sleep(delay_);
+        mpu.write_u8(0x1a, 0x06).unwrap();
+        thread::sleep(delay_);
         mpu.soft_calib(Steps(200))
             .expect("software calibrate fallut");
-        mpu.calc_variance(Steps(200)).expect("calc variance error");
-        // mpu.write_u8(0x1a, 0x03).unwrap(); // turing lsf
 
+        mpu.calc_variance(Steps(200)).expect("calc variance error");
+        println!("{}","i am ready");
         Mpu6050_driver { value_of_gyro: mpu }
     }
 

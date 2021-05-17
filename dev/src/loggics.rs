@@ -81,13 +81,13 @@ pub  fn main_loop() {
         let mut acc_value = mpu6050.get_acc_values();
 
         // Gyroscope filtration
-        gyro_values.y=low_pass_filter(gyro_values.y,0.001,0.2);
-        gyro_values.x=low_pass_filter(gyro_values.x,0.001,0.2);
-        gyro_values.z=low_pass_filter(gyro_values.z,0.001,0.2);
+        gyro_values.y=low_pass_filter(gyro_values.y,0.01,0.9);
+        gyro_values.x=low_pass_filter(gyro_values.x,0.01,0.9);
+        gyro_values.z=low_pass_filter(gyro_values.z,0.01,0.9);
         //Accelerometer filtration
-        acc_value.x=low_pass_filter(acc_value.x,0.001,0.2);
-        acc_value.y=low_pass_filter(acc_value.y,0.001,0.2);
-        acc_value.z=low_pass_filter(acc_value.z,0.001,0.2);
+        acc_value.x=low_pass_filter(acc_value.x,0.01,0.9);
+        acc_value.y=low_pass_filter(acc_value.y,0.01,0.9);
+        acc_value.z=low_pass_filter(acc_value.z,0.01,0.9);
 
 
         angle_pitch += (gyro_values.y) * 0.0000611;   //Calculate the traveled pitch angle and add this to the angle_pitch variable.
@@ -118,11 +118,10 @@ pub  fn main_loop() {
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
 
-        pitch_level_correction = (angle_pitch * 15.0) as f64; //Calculate the pitch angle correction
-        roll_level_correction = (angle_roll * 15.0) as f64; //Calculate the roll angle correction
+        pitch_level_correction = 0.0; //Calculate the pitch angle correction
+        roll_level_correction = 0.0; //Calculate the roll angle correction
 
-        pitch_level_correction = 0.0; //Set the pitch angle correction to zero.
-        roll_level_correction = 0.0; //Set the roll angle correcion to zero.
+
 
         loops = loops + 1;
 
