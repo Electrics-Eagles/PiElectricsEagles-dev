@@ -32,6 +32,7 @@ pub struct LoggingStruct {
     pub esc_2: f64,
     pub esc_3: f64,
     pub esc_4: f64,
+    pub temp:f64,
     pub time_spent: u128,
 }
 impl Logger {
@@ -106,7 +107,10 @@ impl Logger {
         self.stream_buf
             .push_str(&log.roll_level_correction.to_string());
         self.stream_buf.push_str("::");
+
         self.stream_buf.push_str(&log.time_spent.to_string());
+        self.stream_buf.push_str("::");
+        self.stream_buf.push_str(&log.temp.to_string());
         self.stream_buf.push_str("\n");
     }
     pub fn save_file(&mut self) {
@@ -114,3 +118,4 @@ impl Logger {
         self.stream_buf.clear();
     }
 }
+

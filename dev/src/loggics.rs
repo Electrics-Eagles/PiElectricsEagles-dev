@@ -1,5 +1,4 @@
 const START_MOTOS_VALUE: u16 = 10;
-
 use crate::mpu6050::Mpu6050_driver;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::Mpu6050;
@@ -10,9 +9,7 @@ use std::{
     thread,
     time::{self, SystemTime},
 };
-
 use crate::config_parse::*;
-
 use crate::clk_driver::ClkDriver;
 use crate::controller::*;
 use crate::ibus::*;
@@ -73,9 +70,10 @@ pub  fn main_loop() {
     );
 
     /* init*/
+    clk_driver.set_pin_clk_high();
     loop {
         let mut gyro_values = mpu6050.get_gyro_values();
-        clk_driver.set_pin_clk_high();
+
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         let mut acc_value = mpu6050.get_acc_values();
@@ -122,10 +120,18 @@ pub  fn main_loop() {
         roll_level_correction = 0.0; //Calculate the roll angle correction
 
 
+        if autolevel==0 {
+            pitch_level_correction = 0.0; //Calculate the pitch angle correction
+            roll_level_correction = 0.0; //Calculate the roll angle correction
+        }
+
+
 
         loops = loops + 1;
 
-        if reciver.ch5 > 1900  {start =1;}
+        if reciver.ch6> 1900  {
+            start =1;
+        }
         if reciver.ch6 > 1900 {
 
             if start == 1 {
@@ -232,10 +238,8 @@ pub  fn main_loop() {
             esc_4 as u16,
         );
 
-        clk_driver.set_pin_clk_low();
 
         let time_spend=now.elapsed().unwrap().as_millis() as u128;
-        let time_spend_seconds=now.elapsed().unwrap().as_secs_f64();
         let logging_data: LoggingStruct = LoggingStruct {
             acc_z: acc_value.x,
             acc_y: acc_value.y,
@@ -262,9 +266,11 @@ pub  fn main_loop() {
             esc_2,
             esc_3,
             esc_4,
+            temp: mpu6050.get_temp() as f64,
             time_spent: time_spend,
         };
         logger.write_to_log(0, &logging_data);
         logger.save_file();
     }
 }
+
