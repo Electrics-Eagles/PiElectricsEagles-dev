@@ -19,7 +19,7 @@
 
 const rad_s_to_deg_s: f32 = 180.0 / 3.14;
 const g_to_raw: f32 = 4096.0;
-const ms2_to_g:f64=1/9.81;
+const ms2_to_g:f32=1.0/9.81;
 
 
 use crate::config_parse::config_parser;
