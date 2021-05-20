@@ -10,11 +10,11 @@ use crate::logger::*;
 mod clk_driver;
 mod config_parse;
 mod controller;
+mod filter;
 mod ibus;
 mod logger;
 mod loggics;
 mod mpu6050;
-mod filter;
 
 fn main() {
     main_loop();

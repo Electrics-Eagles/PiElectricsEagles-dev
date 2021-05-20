@@ -32,7 +32,7 @@ pub struct LoggingStruct {
     pub esc_2: f64,
     pub esc_3: f64,
     pub esc_4: f64,
-    pub temp:f64,
+    pub temp: f64,
     pub time_spent: u128,
 }
 impl Logger {
@@ -118,4 +118,3 @@ impl Logger {
         self.stream_buf.clear();
     }
 }
-

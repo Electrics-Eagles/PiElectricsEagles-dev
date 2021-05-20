@@ -19,22 +19,21 @@
 
 const rad_s_to_deg_s: f32 = 180.0 / 3.14;
 const g_to_raw: f32 = 4096.0;
-const ms2_to_g:f32=1.0/9.81;
-
+const ms2_to_g: f32 = 1.0 / 9.81;
 
 use crate::config_parse::config_parser;
+use core::time;
 use linux_embedded_hal::{Delay, I2cdev};
 use mpu6050::*;
 use std::fs::File;
 use std::io::prelude::*;
-use core::time;
 use std::thread;
 
 /// Struct of raw data all axis
 /// x: i32 - value of x-axis
 /// y: i32 - value of y-axis
 /// z: i32 - value of z-axis
-pub struct GyroMpu6050RawData {
+pub struct GyroMpu6050Data {
     pub x: f64,
     pub y: f64,
     pub z: f64,
@@ -132,9 +131,9 @@ impl Mpu6050_driver {
     ///
     pub fn get_acc_values(&mut self) -> AccMpu6050RawData {
         let data = AccMpu6050RawData {
-            x: (ms2_to_g*self.value_of_gyro.get_acc().unwrap().x * g_to_raw) as f64,
-            y: (ms2_to_g*self.value_of_gyro.get_acc().unwrap().y * g_to_raw) as f64,
-            z: (ms2_to_g*self.value_of_gyro.get_acc().unwrap().z * g_to_raw) as f64,
+            x: (ms2_to_g * self.value_of_gyro.get_acc().unwrap().x * g_to_raw) as f64,
+            y: (ms2_to_g * self.value_of_gyro.get_acc().unwrap().y * g_to_raw) as f64,
+            z: (ms2_to_g * self.value_of_gyro.get_acc().unwrap().z * g_to_raw) as f64,
         };
         return data;
     }
@@ -145,7 +144,7 @@ impl Mpu6050_driver {
     /// steps
     ///
     /// # Return
-    /// ```GyroMpu6050RawData```
+    /// ```GyroMpu6050Data```
     ///
     /// # Examples
     /// *Already added to loggics file. Be careful. Editing code can break stability of devices.*
@@ -155,8 +154,8 @@ impl Mpu6050_driver {
     /// let gyro_values = mpu6050.get_gyro_values(1);
     /// ```
     ///
-    pub fn get_gyro_values(&mut self) -> GyroMpu6050RawData {
-        let data = GyroMpu6050RawData {
+    pub fn get_gyro_values(&mut self) -> GyroMpu6050Data {
+        let data = GyroMpu6050Data {
             x: (self.value_of_gyro.get_gyro().unwrap().x * rad_s_to_deg_s) as f64,
             y: (self.value_of_gyro.get_gyro().unwrap().y * rad_s_to_deg_s) as f64,
             z: (self.value_of_gyro.get_gyro().unwrap().z * rad_s_to_deg_s) as f64,
@@ -185,4 +184,3 @@ impl Mpu6050_driver {
         return self.value_of_gyro.get_temp().expect("error in fetch temp");
     }
 }
-
