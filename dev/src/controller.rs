@@ -88,7 +88,6 @@ impl Controller {
         pwm_mod.set_channel_on(Channel::C2, 0).unwrap();
         pwm_mod.set_channel_on(Channel::C3, 0).unwrap();
         pwm_mod.enable().unwrap();
-
         Controller { pwm: pwm_mod }
     }
     /// Launch esc motors by selected pwm duty on each motor

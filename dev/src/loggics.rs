@@ -16,6 +16,7 @@ use std::{
     time::{self, SystemTime},
 };
 
+
 pub fn main_loop() {
     let mut loops = 0;
     let mut logger = Logger::new();
@@ -73,6 +74,7 @@ pub fn main_loop() {
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         let mut acc_value = mpu6050.get_acc_values();
+        let mut angles=mpu6050.get_acc_angles();
         // Gyroscope filtration
         gyro_values.y = low_pass_filter(gyro_values.y, 0.011, 0.9);
         gyro_values.x = low_pass_filter(gyro_values.x, 0.011, 0.9);
@@ -86,36 +88,28 @@ pub fn main_loop() {
         //1/90.90/65.5
         //0.00016795
 
-        /*
-                {:patch_me:}
-                angle_pitch += (gyro_values.y) * 0.00016795;   //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-                angle_roll += (gyro_values.x) * 0.00016795;
-                //0.000001066 = 0.0000611 * (3.142() / 180degr) The Arduino sin function is in radians
-               angle_pitch -= angle_roll * (gyro_values.z * 0.00000293166).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
-               angle_roll += angle_pitch * (gyro_values.z * 0.00000293166).sin();
-        {:patch_me:}
-                 */
 
-        angle_pitch += (gyro_values.y) * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.x) * 0.0000611;
-        //0.000001066 = 0.0000611 * (3.142 / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * (gyro_values.z * 0.000001066).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.000001066).sin();
+        angle_pitch += (gyro_values.y) * 0.00016795; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (gyro_values.x) * 0.00016795;
 
-        let acc_total_vector = ((acc_value.x * acc_value.x)
-            + (acc_value.y * acc_value.y)
-            + (acc_value.z * acc_value.z) as f64)
-            .sqrt();
+        angle_pitch -= angle_roll * (gyro_values.z * 0.00000293166).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (gyro_values.z * 0.00000293166).sin();
 
-        if acc_value.y.abs() < acc_total_vector {
-            angle_pitch_acc = (acc_value.y / acc_total_vector).asin() * 57.296;
-        }
-        if acc_value.x.abs() < acc_total_vector {
-            angle_roll_acc = (acc_value.x / acc_total_vector).asin() * -57.296;
+
+      if angle_pitch_acc.is_nan() {
+          angle_pitch_acc=0.0;
+      }
+
+        if angle_roll_acc.is_nan() {
+            angle_roll_acc=0.0;
         }
 
-        angle_pitch_acc -= 0.0;
-        angle_roll_acc -= 0.0;
+
+        angle_pitch_acc = angles.pitch;
+        angle_roll_acc=angles.roll;
+
+
+
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
@@ -123,36 +117,28 @@ pub fn main_loop() {
         pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
 
-        if autolevel == 0 {
-            pitch_level_correction = 0.0; //Calculate the pitch angle correction
-            roll_level_correction = 0.0; //Calculate the roll angle correction
-        }
-
         loops += 1;
+        //For starting the motors: throttle low and yaw left (step 1).
+        if reciver.ch3 < 1050 && reciver.ch4 < 1050 {
+        start = 1}
+        //When yaw stick is back in the center position start the motors (step 2).
+        if start == 1 && reciver.ch3 < 1050 && reciver.ch4 > 1450 {
+            start = 2;
 
-        if reciver.ch5 > 1900 {
-            start = 1;
-        }
-        if reciver.ch6 > 1900 {
-            if start == 1 {
-                start = 2;
-                angle_pitch = angle_pitch_acc; //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
-                angle_roll = angle_roll_acc;
-                pid_roll.reset_integral_term();
-                pid_pitch.reset_integral_term();
-                pid_yaw.reset_integral_term();
-                /*
-                pid_roll.setpoint=0.0;
-                pid_yaw.setpoint=0.0;
-                pid_pitch.setpoint=0.0
+            angle_pitch = angle_pitch_acc;                                          //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
+            angle_roll = angle_roll_acc;                                            //Set the gyro roll angle equal to the accelerometer roll angle when the quadcopter is started.
+                                                           //Set the IMU started flag.
 
-                 */
-            }
+            pid_pitch.reset_integral_term();
+            pid_roll.reset_integral_term();
+            pid_yaw.reset_integral_term();
+
+
         }
 
-        if start == 2 && reciver.ch6 < 1050 {
-            start = 0;
-        }
+
+        if start == 2 && reciver.ch3 < 1050 && reciver.ch4 > 1950 {start = 0;}
+
 
         pid_roll.setpoint = 0.0;
         //We need a little dead band of 16us for better results.
@@ -161,9 +147,10 @@ pub fn main_loop() {
         } else if reciver.ch1 < 1492 {
             pid_roll.setpoint = reciver.ch1 as f64 - 1492.0;
         }
-
         pid_roll.setpoint -= roll_level_correction; //Subtract the angle correction from the standardized receiver roll input value
         pid_roll.setpoint = pid_roll.setpoint / 3.0;
+
+
         pid_pitch.setpoint = 0.0;
         //We need a little dead band of 16us for better results.
         if reciver.ch2 > 1508 {
@@ -174,7 +161,6 @@ pub fn main_loop() {
 
         pid_pitch.setpoint -= pitch_level_correction; //Subtract the angle correction from the standardized receiver pitch input value.
         pid_pitch.setpoint /= 3.0;
-
         pid_yaw.setpoint = 0.0;
         //We need a little dead band of 16us for better results.
         if reciver.ch3 > 1050 {
@@ -185,18 +171,6 @@ pub fn main_loop() {
                 pid_yaw.setpoint = ((reciver.ch4 as f64 - 1492.0) / 3.0) as f64;
             }
         }
-        /*
-        {:patch_me:}
-        let pid_output_roll = pid_roll
-            .next_control_output((gyro_values.x-pid_roll.setpoint) as f64)
-            .output;
-
-        let pid_output_pitch = pid_pitch
-            .next_control_output((gyro_values.y-pid_pitch.setpoint) as f64)
-            .output;
-        let pid_output_yaw = pid_yaw.next_control_output(gyro_values.z-pid_yaw.setpoint).output;
-        {:patch_me:}
-        */
 
         let pid_output_roll = pid_roll
             .next_control_output((gyro_values.x - pid_roll.setpoint) as f64)
@@ -290,5 +264,7 @@ pub fn main_loop() {
         };
         logger.write_to_log(0, &logging_data);
         logger.save_file();
+
     }
+
 }
