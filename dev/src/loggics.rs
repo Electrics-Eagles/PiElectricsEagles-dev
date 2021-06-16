@@ -1,6 +1,4 @@
-use crate::mpu6050::Mpu6050_driver;
 use linux_embedded_hal::{Delay, I2cdev};
-use mpu6050::Mpu6050;
 extern crate pid;
 use crate::clk_driver::ClkDriver;
 use crate::config_parse::*;
@@ -8,7 +6,6 @@ use crate::controller::*;
 use crate::filter::*;
 use crate::ibus::*;
 use crate::logger::*;
-use crate::mpu6050::*;
 use pid::Pid;
 use pwm_pca9685::{Address, Channel, Pca9685};
 use std::{
@@ -16,12 +13,13 @@ use std::{
     time::{self, SystemTime},
 };
 
+use std::borrow::Borrow;
+use crate::l3dgh20::L3GD20H_Driver;
 
 pub fn main_loop() {
     let mut loops = 0;
     let mut logger = Logger::new();
     let mut reciver_driver = ibus_receiver::new();
-    let mut mpu6050 = Mpu6050_driver::new();
     let mut controller = Controller::new();
     let mut config = config_parser::new();
     let mut clk_driver = ClkDriver::new();
@@ -69,25 +67,14 @@ pub fn main_loop() {
     );
     /* init*/
     clk_driver.set_pin_clk_high();
+    let mut l3dgh20_driver =L3GD20H_Driver::new();
+
     loop {
-        let mut gyro_values = mpu6050.get_gyro_values();
+        let mut angles=l3dgh20_driver.values();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        let mut acc_value = mpu6050.get_acc_values();
-        let mut angles=mpu6050.get_acc_angles();
-        // Gyroscope filtration
-        gyro_values.y = low_pass_filter(gyro_values.y, 0.011, 0.9);
-        gyro_values.x = low_pass_filter(gyro_values.x, 0.011, 0.9);
-        gyro_values.z = low_pass_filter(gyro_values.z, 0.011, 0.9);
-        //Accelerometer filtration
-        acc_value.x = low_pass_filter(acc_value.x, 0.011, 0.9);
-        acc_value.y = low_pass_filter(acc_value.y, 0.011, 0.9);
-        acc_value.z = low_pass_filter(acc_value.z, 0.011, 0.9);
-        //1/250/65.5
-        //90.90 hz
-        //1/90.90/65.5
-        //0.00016795
 
+/*
 
         angle_pitch += (gyro_values.y) * 0.00016795; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
         angle_roll += (gyro_values.x) * 0.00016795;
@@ -95,19 +82,14 @@ pub fn main_loop() {
         angle_pitch -= angle_roll * (gyro_values.z * 0.00000293166).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
         angle_roll += angle_pitch * (gyro_values.z * 0.00000293166).sin();
 
-
-      if angle_pitch_acc.is_nan() {
-          angle_pitch_acc=0.0;
-      }
-
-        if angle_roll_acc.is_nan() {
-            angle_roll_acc=0.0;
-        }
+*/
 
 
-        angle_pitch_acc = angles.pitch;
-        angle_roll_acc=angles.roll;
 
+        angle_pitch= angles.y as f64;
+        angle_roll= angles.x as f64;
+        angle_pitch_acc=0.0;
+        angle_roll_acc=0.0;
 
 
 
@@ -173,14 +155,14 @@ pub fn main_loop() {
         }
 
         let pid_output_roll = pid_roll
-            .next_control_output((gyro_values.x - pid_roll.setpoint) as f64)
+            .next_control_output((angles.x as f64  - pid_roll.setpoint) as f64)
             .output;
 
         let pid_output_pitch = pid_pitch
-            .next_control_output((gyro_values.y - pid_pitch.setpoint) as f64)
+            .next_control_output((angles.y as f64 - pid_pitch.setpoint) as f64)
             .output;
         let pid_output_yaw = pid_yaw
-            .next_control_output(gyro_values.z - pid_yaw.setpoint)
+            .next_control_output((angles.z as f64  - pid_yaw.setpoint) as f64)
             .output;
 
         throllite = reciver.ch3;
@@ -234,12 +216,12 @@ pub fn main_loop() {
 
         let time_spend = now.elapsed().unwrap().as_millis() as u128;
         let logging_data: LoggingStruct = LoggingStruct {
-            acc_z: acc_value.x,
-            acc_y: acc_value.y,
-            acc_x: acc_value.z,
-            gyro_x: gyro_values.x,
-            gyro_y: gyro_values.y,
-            gyro_z: gyro_values.z,
+            acc_z: 0.0,
+            acc_y: 0.0,
+            acc_x: 0.0,
+            gyro_x: angles.x as f64,
+            gyro_y: angles.y as f64,
+            gyro_z: angles.z as f64,
             reciver_ch1: reciver.ch1,
             reciver_ch2: reciver.ch2,
             reciver_ch3: reciver.ch3,
@@ -259,7 +241,7 @@ pub fn main_loop() {
             esc_2,
             esc_3,
             esc_4,
-            temp: mpu6050.get_temp() as f64,
+            temp: 0.0 as f64,
             time_spent: time_spend,
         };
         logger.write_to_log(0, &logging_data);

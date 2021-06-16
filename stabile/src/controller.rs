@@ -88,7 +88,6 @@ impl Controller {
         pwm_mod.set_channel_on(Channel::C2, 0).unwrap();
         pwm_mod.set_channel_on(Channel::C3, 0).unwrap();
         pwm_mod.enable().unwrap();
-
         Controller { pwm: pwm_mod }
     }
     /// Launch esc motors by selected pwm duty on each motor
@@ -122,7 +121,6 @@ impl Controller {
     ///
     pub fn set_throttle_external_pwm(&mut self, ch1: u16, ch2: u16, ch3: u16, ch4: u16) {
         let value_pwm_ch1 = map(ch1 as i64, 0, 20000, 0, 4095) as u16;
-        println!("From :{}, OUT: {}", value_pwm_ch1, ch1);
         self.pwm
             .set_channel_on_off(Channel::C0, 0, value_pwm_ch1)
             .unwrap();

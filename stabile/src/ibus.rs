@@ -80,10 +80,9 @@ impl ibus_receiver {
     /// ```
     ///
     pub fn new() -> ibus_receiver {
-        let mut uart_def: Uart = Uart::new(115_200, Parity::None, 8, 1).unwrap();
-        //simple_logger::write_log(LevelOfLog::INFO, "UART CREATED".parse().unwrap());
-        uart_def.set_read_mode(32, Duration::new(1, 7)).unwrap();
-        //simple_logger::write_log(LevelOfLog::INFO, "UART MODE SET".parse().unwrap());
+        let mut uart_def: Uart =
+            Uart::with_path("/dev/ttyUSB0", 115_200, Parity::None, 8, 1).unwrap();
+        uart_def.set_read_mode(32, Duration::new(0, 7)).unwrap();
         ibus_receiver { uart_mod: uart_def }
     }
 
@@ -115,11 +114,8 @@ impl ibus_receiver {
 
         // reading a buffer from ibus intefance
         if self.uart_mod.read(&mut buffer).unwrap() > 0 {
-            //simple_logger::logger(1, true, "DATA READED".parse().unwrap());
-            //simple_logger::logger(1, true, std::str::from_utf8(&buffer).unwrap().to_string());
             // encode buffer into hex decimal and convert string
             let input_string_in_hex = hex::encode(buffer);
-            //println!("{}", input_string_in_hex);
             // contain chars of hex decimal values by using std::vec
             let input_string_in_char: Vec<char> = input_string_in_hex.chars().collect();
 
@@ -131,12 +127,11 @@ impl ibus_receiver {
                     && input_string_in_char[3] == '0'
                 {
                     if self.uart_mod.input_len().unwrap() > 0 {
-                        self.uart_mod.flush(Queue::Input).expect("error");
+                        self.uart_mod
+                            .flush(rppal::uart::Queue::Input)
+                            .expect("error");
                     }
                     // each two bytes need convert opposite site form second byte of each channel into first byte of each channel
-
-                    // simple_logger::logger(1, true, "DATA READED AFTER HEX CONVERTION".parse().unwrap());
-                    //simple_logger::logger(1, true, input_string_in_hex.parse().unwrap());
                     // support maxiumun 14 number of channels
                     // starting at 3th and 4th bytes of one reading lenght of ibus, but need set opposite of these bytes that get correctly value of each channel
                     // each new channel new number of char
@@ -155,8 +150,6 @@ impl ibus_receiver {
 
                         // convert string with real hex value
                         let str_value = String::from_iter(ch1_raw_hex);
-                        //simple_logger::write_log(LevelOfLog::INFO,"Hex with replaced value".parse().unwrap());
-                        //simple_logger::write_log(LevelOfLog::INFO, str_value.parse().unwrap());
                         // convert into u16 from hex string
                         let value: u16 = u16::from_str_radix(str_value.as_str(), 16).unwrap();
 
@@ -182,7 +175,6 @@ impl ibus_receiver {
             .flush(rppal::uart::Queue::Input)
             .expect("error");
         // return into struct of data of channels from usual array
-        //simple_logger::logger(1, true, String::from_utf16(&data_of_channels).unwrap());
         type_of_data_from_channels {
             ch1: data_of_channels[0],
             ch2: data_of_channels[1],

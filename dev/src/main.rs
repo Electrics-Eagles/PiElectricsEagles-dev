@@ -14,7 +14,7 @@ mod filter;
 mod ibus;
 mod logger;
 mod loggics;
-mod mpu6050;
+mod l3dgh20;
 
 fn main() {
     main_loop();
