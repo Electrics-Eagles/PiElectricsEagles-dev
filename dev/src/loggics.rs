@@ -73,17 +73,11 @@ pub fn main_loop() {
         let mut angles=l3dgh20_driver.values();
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+        angle_pitch += ( angles.y as f64 ) * 0.00016795; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += (angles.x as f64 ) * 0.00016795;
 
-/*
-
-        angle_pitch += (gyro_values.y) * 0.00016795; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += (gyro_values.x) * 0.00016795;
-
-        angle_pitch -= angle_roll * (gyro_values.z * 0.00000293166).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * (gyro_values.z * 0.00000293166).sin();
-
-*/
-
+        angle_pitch -= angle_roll * (angles.z as f64* 0.00000293166).sin(); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * (angles.z  as f64 * 0.00000293166).sin();
 
 
         angle_pitch= angles.y as f64;
@@ -96,8 +90,8 @@ pub fn main_loop() {
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
 
-        pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
-        roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
+        pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
+        roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
 
         loops += 1;
         //For starting the motors: throttle low and yaw left (step 1).
