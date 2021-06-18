@@ -20,13 +20,11 @@ Code Style:
 | 2 | PiDebug                  | V2                                         | Debuging code via ssh |
 | 3 | rust /cargo              | 1.46.0 higher                              | Build code            |
 | 4 | Python                   | 3.6 and higher                             | Use python tools      |
-| 5 | Dia                      | dia 0.97+git                               | Plot alogritms        |
-| 6 | Firefox / Chrome / Opera | higher that 2018 year of release           | Web apps , google     |
-| 7 | Whatsapp                 | Lastest                                    | Comunication          |
-| 8 | Discord                  | not older that 2019 year of release        | Comunication          |
-| 9 | any github gui software  | any                                        | code editing upload   |
-|10 | Git                      | 2 and higher                               | code editing upload   |
-|11| any comfortable ide for you| any                                       | coding                |
+| 5 | Firefox / Chrome / Opera | higher that 2018 year of release           | Web apps , google     |
+| 6 | Whatsapp                 | Lastest                                    | Comunication          |
+| 7 | Discord                  | not older that 2019 year of release        | Comunication          |
+| 8 | Git                      | 2 and higher                               | code editing upload   |
+|9| Idea| Latest                                       | coding                |
 
 Good links:
 
