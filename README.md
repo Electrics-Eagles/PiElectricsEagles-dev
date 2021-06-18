@@ -15,16 +15,6 @@ Code Style:
 
 **SOURCE CODE ONLY**
 
-| 1 | Software                          Version|                                Usage
-|---|--------------------------|--------------------------------------------|-----------------------|
-| 2 | PiDebug                  | V2                                         | Debuging code via ssh |
-| 3 | rust /cargo              | 1.46.0 higher                              | Build code            |
-| 4 | Python                   | 3.6 and higher                             | Use python tools      |
-| 5 | Firefox / Chrome / Opera | higher that 2018 year of release           | Web apps , google     |
-| 6 | Whatsapp                 | Lastest                                    | Comunication          |
-| 7 | Discord                  | not older that 2019 year of release        | Comunication          |
-| 8 | Git                      | 2 and higher                               | code editing upload   |
-|9| Idea| Latest                                       | coding                |
 
 Good links:
 
