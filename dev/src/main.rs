@@ -12,9 +12,10 @@ mod config_parse;
 mod controller;
 mod filter;
 mod ibus;
+mod l3dgh20;
 mod logger;
 mod loggics;
-mod l3dgh20;
+mod untils;
 
 fn main() {
     main_loop();

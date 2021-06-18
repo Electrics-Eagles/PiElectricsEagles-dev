@@ -18,10 +18,13 @@ lazy_static = "1.4.0"
 mut_static = "5.0.0"
 hex = "0.4.2"
 log = "0.4.14"
-simplelog = "^0.7.6"
-i2cdev-l3gd20 = "0.1.3"
-i2csensors = "0.1.*"
 i2cdev = "0.3.1"
+simplelog = "^0.7.6"
+i2csensors = "0.1.*"
+i2cdev-l3gd20 ={ git="https://github.com/Electrics-Eagles/i2cdev-sensors"}
+
+
+
 
 [package.metadata.deb]
 maintainer = "Alex / Mike Zaslavskis"

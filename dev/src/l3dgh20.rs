@@ -20,21 +20,23 @@
 extern crate i2cdev_l3gd20;
 extern crate i2csensors;
 
-use self::i2cdev_l3gd20::{L3GD20GyroscopeSettings, L3GD20GyroscopeDataRate, L3GD20GyroscopeBandwidth, L3GD20PowerMode, L3GD20GyroscopeFS, L3GD20GyroscopeHighPassFilterMode, L3GD20HighPassFilterCutOffConfig, get_linux_l3gd20_i2c_device, L3GD20, get_linux_l3gd20h_i2c_device};
-use i2cdev::core::I2CDevice;
-use i2cdev::linux::LinuxI2CDevice;
-use self::i2csensors::Gyroscope;
+use i2cdev_l3gd20::*;
+use i2csensors::{Gyroscope, Vec3};
 
 pub struct data_angles {
-    pub x:f32,
-    pub y:f32,
-    pub z:f32
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
-
-pub struct L3GD20H_Driver{
-    gyro:L3GD20<i2cdev::linux::LinuxI2CDevice>,
+pub struct L3GD20H_Driver {
+    gyro: L3GD20<i2cdev::linux::LinuxI2CDevice>,
 }
+
+static mut gyro_roll_calibration: f64 = 0.0;
+static mut gyro_pitch_calibration: f64 = 0.0;
+static mut gyro_yaw_calibration: f64 = 0.0;
+
 impl L3GD20H_Driver {
     pub fn new() -> L3GD20H_Driver {
         let settings = L3GD20GyroscopeSettings {
@@ -48,24 +50,48 @@ impl L3GD20H_Driver {
             continuous_update: true,
             high_pass_filter_enabled: true,
             high_pass_filter_mode: Some(L3GD20GyroscopeHighPassFilterMode::NormalMode),
-            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_0)
+            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_0),
         };
 
-
-        let mut i2cdev = get_linux_l3gd20h_i2c_device().unwrap();
+        let mut i2cdev = get_linux_l3gd20h_i2c_device("/dev/i2c-2".to_string()).unwrap();
 
         let mut l3gd20_gyro = L3GD20::new(i2cdev, settings).unwrap();
-
 
         return L3GD20H_Driver { gyro: l3gd20_gyro };
     }
 
-        pub fn values(&mut self) -> data_angles {
-            let reading = self.gyro.angular_rate_reading().unwrap();
-            return data_angles {
-                x: reading.x,
-                y: reading.y,
-                z: reading.z,
+    fn calibrate(&mut self) {
+        unsafe {
+            for a in 0..2000 {
+                let reading = self.gyro.angular_rate_reading().unwrap();
+                gyro_roll_calibration += reading.x as f64;
+                gyro_pitch_calibration += reading.y as f64;
+                gyro_yaw_calibration += reading.z as f64;
+            }
+
+            gyro_roll_calibration /= 2000.0;
+            gyro_pitch_calibration /= 2000.0;
+            gyro_yaw_calibration /= 2000.0;
+        }
+    }
+
+    pub fn values(&mut self) -> data_angles {
+        unsafe {
+            if (gyro_roll_calibration > 0.0) {
+                let reading = self.gyro.angular_rate_reading().unwrap();
+                return data_angles {
+                    x: reading.x - gyro_roll_calibration as f32,
+                    y: reading.y - gyro_pitch_calibration as f32,
+                    z: reading.z - gyro_yaw_calibration as f32,
+                };
+            } else {
+                println!("{}", "did you clibaretd gyro??");
+                data_angles {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                }
             }
         }
     }
+}
