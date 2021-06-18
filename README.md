@@ -15,7 +15,7 @@ Code Style:
 
 **SOURCE CODE ONLY**
 
-| 1 | Windows / Ubuntu         | Win7 SP1 Higher or Ubuntu 12.04 and Higher | OS                    |
+| 1 | Software                          Version|                                Usage
 |---|--------------------------|--------------------------------------------|-----------------------|
 | 2 | PiDebug                  | V2                                         | Debuging code via ssh |
 | 3 | rust /cargo              | 1.46.0 higher                              | Build code            |
