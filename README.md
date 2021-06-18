@@ -46,11 +46,11 @@ CLI status:
 
 
 
-MPU6050 Driver:
-![100%](https://progress-bar.dev/100)
+L3GH20H Driver:
+![80%](https://progress-bar.dev/100)
 
-iBUS:
-![100%](https://progress-bar.dev/35)
+iBUS: (as crate)
+![10%](https://progress-bar.dev/35)
 
 ESC_Driver 
 ![95%](https://progress-bar.dev/95)
