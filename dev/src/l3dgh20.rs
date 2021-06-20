@@ -28,6 +28,11 @@ pub struct data_angles {
     pub y: f32,
     pub z: f32,
 }
+pub struct raw_data {
+    pub x: i16,
+    pub y: i16,
+    pub z: i16,
+}
 
 pub struct L3GD20H_Driver {
     gyro: L3GD20<i2cdev::linux::LinuxI2CDevice>,
@@ -85,7 +90,7 @@ impl L3GD20H_Driver {
                     z: reading.z - gyro_yaw_calibration as f32,
                 };
             } else {
-                println!("{}", "did you clibaretd gyro??");
+                println!("{}", "did you calibaretd gyro??");
                 data_angles {
                     x: 0.0,
                     y: 0.0,
@@ -93,5 +98,13 @@ impl L3GD20H_Driver {
                 }
             }
         }
+    }
+    pub fn raw_value(&mut self) -> raw_data {
+        let mut data: (i16, i16, i16) = self.gyro.read_gyroscope_raw().unwrap();
+        return raw_data {
+            x: data.0,
+            y: data.1,
+            z: data.2,
+        };
     }
 }
