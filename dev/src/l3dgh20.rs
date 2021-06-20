@@ -82,7 +82,7 @@ impl L3GD20H_Driver {
 
     pub fn values(&mut self) -> data_angles {
         unsafe {
-            if (gyro_roll_calibration > 0.0) {
+            if gyro_roll_calibration > 0.0 {
                 let reading = self.gyro.angular_rate_reading().unwrap();
                 return data_angles {
                     x: reading.x - gyro_roll_calibration as f32,

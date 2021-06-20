@@ -267,7 +267,7 @@ dependencies = [
 [[package]]
 name = "i2cdev-l3gd20"
 version = "0.1.3"
-source = "git+https://github.com/Electrics-Eagles/i2cdev-sensors#9354095b70f2acd1c6cee78791dc1cba1dda652a"
+source = "git+https://github.com/Electrics-Eagles/i2cdev-sensors?branch=master#d86c3ac93b0d2599fc8d31e1a3040dd4c91ea696"
 dependencies = [
  "byteorder",
  "i2cdev 0.3.2",
