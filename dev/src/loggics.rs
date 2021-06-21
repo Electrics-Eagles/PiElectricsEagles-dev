@@ -110,8 +110,8 @@ pub fn main_loop() {
         loops += 1;
 
         unsafe {
-            if reciver.ch5 > 1700 { start = 1; }
-            if start == 1 && reciver.ch6 > 1700 {
+            if reciver.ch6 > 1300 { start = 1; }
+            if start == 1 && reciver.ch6 > 1600 {
                 start = 2;
                 angle_pitch = angle_pitch_acc;
                 angle_roll = angle_roll_acc;
@@ -123,7 +123,7 @@ pub fn main_loop() {
                 pid_last_yaw_d_error = 0.0;
             }
 
-            if start == 2 && reciver.ch6 < 1500 { start = 0; }
+            if start == 2 && reciver.ch6 < 1200 { start = 0; }
 
 
             pid_roll_setpoint = 0.0;
