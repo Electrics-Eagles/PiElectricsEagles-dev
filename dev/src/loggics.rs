@@ -128,17 +128,17 @@ pub fn main_loop() {
 
             pid_roll_setpoint = 0.0;
             if reciver.ch1 > 1508 {
-                pid_roll_setpoint = (reciver.ch1 - 1508) as f64;
+                pid_roll_setpoint = (reciver.ch1 as f64 - 1508 as f64) as f64;
             } else if reciver.ch1 < 1492 {
-                pid_roll_setpoint = (reciver.ch1 - 1492) as f64;
+                pid_roll_setpoint = (reciver.ch1 as f64 - 1492 as f64) as f64;
             }
             pid_roll_setpoint -= roll_level_correction;
             pid_roll_setpoint /= 3.0;
             pid_pitch_setpoint = 0.0;
             if reciver.ch1 > 1508 {
-                pid_pitch_setpoint = (reciver.ch2 - 1508) as f64;
+                pid_pitch_setpoint = (reciver.ch2 as f64 - 1508 as f64) as f64;
             } else if reciver.ch1 < 1492 {
-                pid_pitch_setpoint = (reciver.ch2 - 1492) as f64;
+                pid_pitch_setpoint = (reciver.ch2 as f64 - 1492 as f64) as f64;
             }
             pid_pitch_setpoint -= pitch_level_correction;
             pid_pitch_setpoint /= 3.0;
@@ -147,9 +147,9 @@ pub fn main_loop() {
 
             if reciver.ch3 > 1050 {
                 if reciver.ch4 > 1508 {
-                    pid_yaw_setpoint = ((reciver.ch4 - 1508) as f64) / 3.0;
+                    pid_yaw_setpoint = ((reciver.ch4 as f64 - 1508 as f64) as f64) / 3.0;
                 } else if reciver.ch4 < 1492 {
-                    pid_yaw_setpoint = ((reciver.ch4 - 1492) as f64) / 3.0;
+                    pid_yaw_setpoint = ((reciver.ch4 as f64 - 1492 as f64) as f64) / 3.0;
                 }
             }
             calculate_pid(config.get_pids());
