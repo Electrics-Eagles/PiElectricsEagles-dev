@@ -1,0 +1,7 @@
+./parser  roll 1.3 0.04 18.0 400
+
+where roll is mode
+where 1.3 is p_pitch
+
+
+400 max_Pitch
