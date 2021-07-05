@@ -1,3 +1,20 @@
+
+//
+//
+// Misha Zaslavskis (Electrics Eagles) 2021
+//
+// ---------------- LIS3DH Driver --------------------
+//
+// Simple software level that retrive data from LIS3DH sensor. Works with the main code file
+//
+// typical usage :
+//
+// 	new(); // create struct of LIS3DH_Driver
+//  init(); // initialize acclerometer
+//  get_data_raw(); // retrive raw data from accelerometer measurement. Each axis are set value as i16
+//  get_data_g(); // retrive g-value data from accelerometer measuremt. Each axis are set value as f32
+//
+// Enjoy
 use lis3dh::Lis3dh;
 use lis3dh::accelerometer::{RawAccelerometer, Accelerometer, vector};
 use embedded_hal::blocking::i2c::{Write, WriteRead};
