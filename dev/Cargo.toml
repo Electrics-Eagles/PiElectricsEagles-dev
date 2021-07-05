@@ -22,8 +22,7 @@ i2cdev = "0.3.1"
 simplelog = "^0.7.6"
 i2csensors = "0.1.*"
 i2cdev-l3gd20 ={ git="https://github.com/Electrics-Eagles/i2cdev-sensors",branch="master"}
-
-
+lis3dh = "0.3.0"
 
 
 [package.metadata.deb]
