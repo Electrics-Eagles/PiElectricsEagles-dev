@@ -88,7 +88,7 @@ fn sqrt(input:f64) -> f64 {
 
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
-        let gyro_roll = gyro_data.x as f64;
+        let gyro_roll =  gyro_data.x as f64;
         let gyro_pitch = gyro_data.y as f64;
         let gyro_yaw = gyro_data.z as f64;
 
@@ -113,13 +113,13 @@ fn sqrt(input:f64) -> f64 {
         angle_pitch_acc -= 0.0;                                                   //Accelerometer calibration value for pitch.
         angle_roll_acc -= 0.0;
         //Gyro angle calculations
-        //0.0000611 = 1 / (250Hz / 65.5)
-        angle_pitch += gyro_pitch * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += gyro_roll * 0.0000611; //Calculate the traveled roll angle and add this to the angle_roll variable.
+        //0.0000611 = 1 / (25Hz / 65.5)
+        angle_pitch += gyro_pitch * 0.000610687; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += gyro_roll * 0.000610687; //Calculate the traveled roll angle and add this to the angle_roll variable.
 
-        //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
-        angle_pitch -= angle_roll * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the pitch angle to the roll angel.
+        //0.000001066 = (0.0000611 * 3.142) / 180degrThe Arduino sin function is in radians
+        angle_pitch -= angle_roll * sin(gyro_yaw * 0.00001065849); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * sin(gyro_yaw * 0.00001065849); //If the IMU has yawed transfer the pitch angle to the roll angel.
 
 
 
