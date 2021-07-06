@@ -34,6 +34,7 @@ pub struct raw_data {
     pub z: i16,
 }
 
+
 pub struct L3GD20H_Driver {
     gyro: L3GD20<i2cdev::linux::LinuxI2CDevice>,
 }
@@ -46,7 +47,7 @@ impl L3GD20H_Driver {
     pub fn new() -> L3GD20H_Driver {
         let settings = L3GD20GyroscopeSettings {
             DR: L3GD20GyroscopeDataRate::Hz95,
-            BW: L3GD20GyroscopeBandwidth::BW4,
+            BW: L3GD20GyroscopeBandwidth::BW1,
             power_mode: L3GD20PowerMode::Normal,
             zen: true,
             yen: true,
@@ -55,7 +56,7 @@ impl L3GD20H_Driver {
             continuous_update: true,
             high_pass_filter_enabled: true,
             high_pass_filter_mode: Some(L3GD20GyroscopeHighPassFilterMode::NormalMode),
-            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_0),
+            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_9),
         };
 
         let mut i2cdev = get_linux_l3gd20h_i2c_device("/dev/i2c-2".to_string()).unwrap();

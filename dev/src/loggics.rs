@@ -20,7 +20,7 @@ use cgmath::Zero;
 use std::borrow::Borrow;
 use cgmath::num_traits::abs;
 use ang::asin;
-
+use low_pass_filter;
 static mut pid_error_temp: f64 = 0.0;
 
 static mut pid_i_mem_roll: f64 = 0.0;
@@ -82,15 +82,15 @@ fn sqrt(input:f64) -> f64 {
         let now = SystemTime::now();
         let mut gyro_data = l3dgh20_driver.raw_value();
         let mut acc_data=lis3dh_driver.get_data_raw();
-        let acc_x:f64=acc_data.x as f64;
-        let acc_y:f64=acc_data.y as f64;
-        let acc_z:f64=acc_data.z as f64;
+        let acc_x:f64= filter(acc_data.x as f64,0.04,0.2);
+        let acc_y:f64=filter(acc_data.y as f64,0.04,0.2);
+        let acc_z:f64=filter(acc_data.z as f64,0.04,0.2);
 
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
-        let gyro_roll =  gyro_data.x as f64;
-        let gyro_pitch = gyro_data.y as f64;
-        let gyro_yaw = gyro_data.z as f64;
+        let gyro_roll =  filter(gyro_data.x as f64,0.04,0.2);
+        let gyro_pitch = filter(gyro_data.y as f64,0.04,0.2);
+        let gyro_yaw = filter(gyro_data.z as f64,0.04,0.2) ;
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for more information).
         unsafe {
@@ -114,12 +114,11 @@ fn sqrt(input:f64) -> f64 {
         angle_roll_acc -= 0.0;
         //Gyro angle calculations
         //0.0000611 = 1 / (25Hz / 65.5)
-        angle_pitch += gyro_pitch * 0.000610687; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += gyro_roll * 0.000610687; //Calculate the traveled roll angle and add this to the angle_roll variable.
-
+        angle_pitch += gyro_pitch * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += gyro_roll * 0.0000611; //Calculate the traveled roll angle and add this to the angle_roll variable.
         //0.000001066 = (0.0000611 * 3.142) / 180degrThe Arduino sin function is in radians
-        angle_pitch -= angle_roll * sin(gyro_yaw * 0.00001065849); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * sin(gyro_yaw * 0.00001065849); //If the IMU has yawed transfer the pitch angle to the roll angel.
+        angle_pitch -= angle_roll * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the pitch angle to the roll angel.
 
 
 

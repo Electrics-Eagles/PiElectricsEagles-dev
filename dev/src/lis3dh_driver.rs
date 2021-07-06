@@ -44,8 +44,8 @@ impl LIS3DH_Driver {
     }
     pub fn init(&mut self)
     {
-        self.acc.set_mode(lis3dh::Mode::HighResolution).unwrap();
-        self.acc.set_datarate(lis3dh::DataRate::Hz_200).unwrap();
+        self.acc.set_mode(lis3dh::Mode::Normal).unwrap();
+        self.acc.set_datarate(lis3dh::DataRate::Hz_10).unwrap();
         self.acc.set_range(lis3dh::Range::G8).unwrap();
     }
     pub fn get_data_raw(&mut self) -> raw_acc_data
