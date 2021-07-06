@@ -232,9 +232,9 @@ fn sqrt(input:f64) -> f64 {
 
             let time_spend = now.elapsed().unwrap().as_millis() as u128;
             let logging_data: LoggingStruct = LoggingStruct {
-                acc_z: 0.0,
-                acc_y: 0.0,
-                acc_x: 0.0,
+                acc_z,
+                acc_y,
+                acc_x,
                 gyro_x: gyro_data.x as f64,
                 gyro_y: gyro_data.y as f64,
                 gyro_z: gyro_data.z as f64,
