@@ -44,8 +44,8 @@ fn main() {
     } else if (number_motor == 3) {
         controller.run_single_motor(pwm_pca9685::Channel::C3, 1000);
     }
-    println!("Motor will run with pulse 1200 us. Please don't touch a motor to avoid injury");
-    std::thread::sleep(time::Duration::from_millis(2000));
+    println!("Motor will run with pulse 1200 us in next the 10 seconds. Please don't touch a motor to avoid injury. Just wait for 10 seconds before running motor");
+    std::thread::sleep(time::Duration::from_millis(10000));
     if (number_motor == 0) {
         controller.run_single_motor(pwm_pca9685::Channel::C0, 1200);
     } else if (number_motor == 1) {
