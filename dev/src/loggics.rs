@@ -42,8 +42,13 @@ static mut pid_last_yaw_d_error: f64 = 0.0;
 static mut gyro_roll_input: f64 = 0.0;
 static mut gyro_pitch_input: f64 = 0.0;
 static mut gyro_yaw_input: f64 = 0.0;
+
+static mut gyro_angles_set:bool = false; 
 fn convert(v: u8) -> f64 {
     return v as f64;
+}
+fn sqrt(input:f64) -> f64 {
+    input.sqrt()
 }
 pub fn main_loop() {
     let mut loops = 0;
@@ -74,14 +79,11 @@ pub fn main_loop() {
     let mut l3dgh20_driver = L3GD20H_Driver::new();
     let mut lis3dh_driver=LIS3DH_Driver::new();
 
-fn sqrt(input:f64) -> f64 {
-    input.sqrt()
-}
-
     loop {
         let now = SystemTime::now();
         let mut gyro_data = l3dgh20_driver.raw_value();
         let mut acc_data=lis3dh_driver.get_data_raw();
+        
         let acc_x:f64= filter(acc_data.x as f64,0.04,0.2);
         let acc_y:f64=filter(acc_data.y as f64,0.04,0.2);
         let acc_z:f64=filter(acc_data.z as f64,0.04,0.2);
@@ -99,19 +101,6 @@ fn sqrt(input:f64) -> f64 {
             gyro_yaw_input = (gyro_yaw_input * 0.7) + ((gyro_yaw / 65.5) * 0.3); //Gyro pid input is deg/sec.
         }
 
-        //Accelerometer angle calculations
-        acc_total_vector = sqrt((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z));       //Calculate the total accelerometer vector.
-
-        if abs(acc_y) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
-            angle_pitch_acc = (acc_y/acc_total_vector).asin().to_radians()          //Calculate the pitch angle.
-        }
-        if abs(acc_x) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
-            angle_roll_acc = (acc_y /acc_total_vector).asin().to_radians()           //Calculate the pitch angle.
-        }
-
-        //Place the MPU-6050 spirit level and note the values in the following two lines for calibration.
-        angle_pitch_acc -= 0.0;                                                   //Accelerometer calibration value for pitch.
-        angle_roll_acc -= 0.0;
         //Gyro angle calculations
         //0.0000611 = 1 / (25Hz / 65.5)
         angle_pitch += gyro_pitch * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
@@ -120,7 +109,19 @@ fn sqrt(input:f64) -> f64 {
         angle_pitch -= angle_roll * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the roll angle to the pitch angel.
         angle_roll += angle_pitch * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the pitch angle to the roll angel.
 
+        //Accelerometer angle calculations
+        acc_total_vector = sqrt((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z));       //Calculate the total accelerometer vector.
 
+        if abs(acc_y) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
+            angle_pitch_acc = (acc_y/acc_total_vector).asin().to_radians() * 57.296;          //Calculate the pitch angle.
+        }
+        if abs(acc_x) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
+            angle_roll_acc = (acc_x/acc_total_vector).asin().to_radians() * -57.296;           //Calculate the pitch angle.
+        }
+
+        //Place the MPU-6050 spirit level and note the values in the following two lines for calibration.
+        angle_pitch_acc -= 0.0;                                                   //Accelerometer calibration value for pitch.
+        angle_roll_acc -= 0.0;
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
@@ -140,8 +141,12 @@ fn sqrt(input:f64) -> f64 {
             if reciver.ch6 > 1300 { start = 1; }
             if start == 1 && reciver.ch6 > 1600 {
                 start = 2;
+
                 angle_pitch = angle_pitch_acc;
                 angle_roll = angle_roll_acc;
+
+                gyro_angles_set = true;
+
                 pid_i_mem_roll = 0.0;
                 pid_last_pitch_d_error = 0.0;
                 pid_i_mem_pitch = 0.0;
@@ -191,10 +196,6 @@ fn sqrt(input:f64) -> f64 {
                 esc_3 = throllite as f64 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
                 esc_4 = throllite as f64 - pid_output_pitch - pid_output_roll + pid_output_yaw;
 
-                if throllite > 1800 {
-                    throllite = 1800;
-                }
-
                 if esc_1 < 1100.0 {
                     esc_1 = 1100.0;
                 } //Keep the motors running.
@@ -220,6 +221,12 @@ fn sqrt(input:f64) -> f64 {
                 if esc_4 > 2000.0 {
                     esc_4 = 2000.0;
                 }
+            }
+            else {
+                esc_1 = 1000.0;
+                esc_2 = 1000.0;
+                esc_3 = 1000.0;
+                esc_4 = 1000.0;
             }
 
             controller.set_throttle_external_pwm(
