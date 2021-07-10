@@ -84,15 +84,15 @@ pub fn main_loop() {
         let mut gyro_data = l3dgh20_driver.raw_value();
         let mut acc_data=lis3dh_driver.get_data_raw();
         
-        let acc_x:f64= filter(acc_data.x as f64,0.04,0.2);
-        let acc_y:f64=filter(acc_data.y as f64,0.04,0.2);
-        let acc_z:f64=filter(acc_data.z as f64,0.04,0.2);
+        let acc_x:f64= (acc_data.x as f64,0.04,0.2);
+        let acc_y:f64=(acc_data.y as f64,0.04,0.2);
+        let acc_z:f64=(acc_data.z as f64,0.04,0.2);
 
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
-        let gyro_roll =  filter(gyro_data.x as f64,0.04,0.2);
-        let gyro_pitch = filter(gyro_data.y as f64,0.04,0.2);
-        let gyro_yaw = filter(gyro_data.z as f64,0.04,0.2) ;
+        let gyro_roll =  (gyro_data.x as f64,0.04,0.2);
+        let gyro_pitch = (gyro_data.y as f64,0.04,0.2);
+        let gyro_yaw = (gyro_data.z as f64,0.04,0.2) ;
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for more information).
         unsafe {
