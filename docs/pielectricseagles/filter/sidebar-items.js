@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["filter",""],["low_pass_filter",""]],"static":[["result_lpf",""]]});

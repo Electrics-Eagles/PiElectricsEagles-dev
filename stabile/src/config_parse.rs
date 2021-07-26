@@ -71,6 +71,7 @@ pub struct EscMotors {
     pub port: String,
 }
 /// It is PID - configuration struct for each type
+#[derive(Debug, Copy, Clone)]
 pub struct PID {
     /// Gain of proportional
     pub p: f64,
@@ -82,6 +83,7 @@ pub struct PID {
     pub max: f64,
 }
 /// It is PID - configuration struct for all type of controls
+#[derive(Debug, Copy, Clone)]
 pub struct PIDS {
     /// PID of roll control
     pub roll: PID,
@@ -126,10 +128,13 @@ impl config_parser {
     /// # Example
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     ///
+    ///
+    /*
     pub fn parse(&mut self, first_number_str: &str) -> Result<i32, ParseIntError> {
         let value = first_number_str.parse::<i32>()?;
         Ok(value)
     }
+     */
     /// Parse u8 value from &str value
     ///
     /// # Arguments
@@ -146,10 +151,7 @@ impl config_parser {
     /// let val_u8: u8 = config.parse("55").unwrap(); // getting value u8 from string with numberic value
     /// ```
     ///
-    pub fn parse_u8(&mut self, first_number_str: &str) -> Result<u8, ParseIntError> {
-        let value = first_number_str.parse::<u8>()?;
-        Ok(value)
-    }
+
     /// Parse u32 value from &str value
     ///
     /// # Arguments
@@ -166,10 +168,102 @@ impl config_parser {
     /// let val_u32: u32 = config.parse("55").unwrap(); // getting value u32 from string with numberic value
     /// ```
     ///
+
+    /// Parse f64 value from &str value
+    ///
+    /// # Arguments
+    ///
+    /// ```first_number_str``` is value with type &str (std:str)
+    ///
+    /// # Return
+    /// ```Result<f64, ParseIntError>```
+    ///
+    /// # Example
+    /// ```
+    /// let mut config = config_parser::new(); // create object of config_parse
+    /// let val_f64: f64 = config.parse("5.51").unwrap(); // getting value f64 from string with numberic value
+    /// ```
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    ///
+    /// Show version of configuration parser
+    ///
+    /// # Arguments
+    ///
+    /// No arguments required
+    ///
+    /// # Return
+    /// ```&'static str```
+    ///
+    /// # Example
+    /// ```
+    /// use crate::config_parse::*;
+    /// let mut config = config_parser::new(); // create object of config_parse
+    /// let version_config: &'static str = config.config_parser_version();
+    /// println!("{}", version_config); // print that shows version into console
+    /// ```
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    ///
+
+    /// Return data of esc motor configuration from pasring ini-file
+    ///
+    /// # Arguments
+    ///
+    /// No arguments required
+    ///
+    /// # Return
+    /// ```EscMotors```
+
+    ///
+    /*
+    pub fn parse(&mut self, first_number_str: &str) -> Result<i32, ParseIntError> {
+        let value = first_number_str.parse::<i32>()?;
+        Ok(value)
+    }
+     */
+    /// Parse u8 value from &str value
+    ///
+    /// # Arguments
+    ///
+    /// ```first_number_str``` is value with type &str (std:str)
+    ///
+    /// # Return
+    /// ```Result<u8, ParseIntError>```
+    ///
+    /// # Example
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    /// ```
+    /// let mut config = config_parser::new(); // create object of config_parse
+    /// let val_u8: u8 = config.parse("55").unwrap(); // getting value u8 from string with numberic value
+    /// ```
+    ///
+
+    pub fn parse_u8(&mut self, first_number_str: &str) -> Result<u8, ParseIntError> {
+        let value = first_number_str.parse::<u8>()?;
+        Ok(value)
+    }
+
+    /// Parse u32 value from &str value
+    ///
+    /// # Arguments
+    ///
+    /// ```first_number_str``` is value with type &str (std:str)
+    ///
+    /// # Return
+    /// ```Result<u32, ParseIntError>```
+    ///
+    /// # Example
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    /// ```
+    /// let mut config = config_parser::new(); // create object of config_parse
+    /// let val_u32: u32 = config.parse("55").unwrap(); // getting value u32 from string with numberic value
+    /// ```
+    ///
+
     pub fn parse_u32(&mut self, first_number_str: &str) -> Result<u32, ParseIntError> {
         let value = first_number_str.parse::<u32>()?;
         Ok(value)
     }
+
     /// Parse f64 value from &str value
     ///
     /// # Arguments

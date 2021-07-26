@@ -12,9 +12,12 @@ mod config_parse;
 mod controller;
 mod filter;
 mod ibus;
+mod l3dgh20;
 mod logger;
 mod loggics;
-mod mpu6050;
+mod untils;
+mod lis3dh_driver;
+
 
 fn main() {
     main_loop();
