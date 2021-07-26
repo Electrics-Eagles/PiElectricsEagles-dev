@@ -107,18 +107,15 @@ impl ibus_receiver {
     pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
         // buffer for reading uart before convert into hexidecimal value
         let mut _value_before: [u16; 6] = [0; 6];
-
         let mut buffer = [0u8; 32];
         // array for getting a data
         let mut data_of_channels: [u16; 6] = [0; 6];
-
         // reading a buffer from ibus intefance
         if self.uart_mod.read(&mut buffer).unwrap() > 0 {
             // encode buffer into hex decimal and convert string
             let input_string_in_hex = hex::encode(buffer);
             // contain chars of hex decimal values by using std::vec
             let input_string_in_char: Vec<char> = input_string_in_hex.chars().collect();
-
             if input_string_in_char.len() > 0 {
                 // each channel is size two bytes after welcoming two bytes (0x20 and 0x40)
                 if input_string_in_char[0] == '2'
@@ -147,12 +144,10 @@ impl ibus_receiver {
                             input_string_in_char[4 + (4 * x)],
                             input_string_in_char[5 + (4 * x)],
                         ];
-
                         // convert string with real hex value
                         let str_value = String::from_iter(ch1_raw_hex);
                         // convert into u16 from hex string
                         let value: u16 = u16::from_str_radix(str_value.as_str(), 16).unwrap();
-
                         // write a new value of channel into array
                         data_of_channels[x] = value;
                     }
@@ -170,7 +165,7 @@ impl ibus_receiver {
                 }
             }
         }
-        thread::sleep(Duration::from_millis(1));
+        //thread::sleep(Duration::from_millis(1));
         self.uart_mod
             .flush(rppal::uart::Queue::Input)
             .expect("error");

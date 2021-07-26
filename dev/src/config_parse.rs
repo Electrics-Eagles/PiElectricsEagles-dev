@@ -71,6 +71,7 @@ pub struct EscMotors {
     pub port: String,
 }
 /// It is PID - configuration struct for each type
+#[derive(Debug, Copy, Clone)]
 pub struct PID {
     /// Gain of proportional
     pub p: f64,
@@ -82,6 +83,7 @@ pub struct PID {
     pub max: f64,
 }
 /// It is PID - configuration struct for all type of controls
+#[derive(Debug, Copy, Clone)]
 pub struct PIDS {
     /// PID of roll control
     pub roll: PID,

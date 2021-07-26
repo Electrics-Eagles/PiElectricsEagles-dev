@@ -60,9 +60,7 @@ impl L3GD20H_Driver {
         };
 
         let mut i2cdev = get_linux_l3gd20h_i2c_device("/dev/i2c-2".to_string()).unwrap();
-
         let mut l3gd20_gyro = L3GD20::new(i2cdev, settings).unwrap();
-
         return L3GD20H_Driver { gyro: l3gd20_gyro };
     }
 
@@ -74,7 +72,6 @@ impl L3GD20H_Driver {
                 gyro_pitch_calibration += reading.y as f64;
                 gyro_yaw_calibration += reading.z as f64;
             }
-
             gyro_roll_calibration /= 2000.0;
             gyro_pitch_calibration /= 2000.0;
             gyro_yaw_calibration /= 2000.0;
