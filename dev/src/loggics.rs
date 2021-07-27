@@ -71,6 +71,8 @@ pub fn main_loop() {
     let mut l3dgh20_driver = L3GD20H_Driver::new();
     let mut lis3dh_driver=LIS3DH_Driver::new();
     let mut PIds = config_parser::new().get_pids();
+    
+    lis3dh_driver.init();
     loop {
         let now = SystemTime::now();
         let mut gyro_data = l3dgh20_driver.raw_value();
