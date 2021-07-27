@@ -1,25 +1,15 @@
-use linux_embedded_hal::{Delay, I2cdev};
-extern crate pid;
-use crate::clk_driver::ClkDriver;
+
 use crate::config_parse::*;
 use crate::controller::*;
-use crate::filter::*;
 use crate::ibus::*;
 use crate::logger::*;
-use pid::Pid;
-use pwm_pca9685::{Address, Channel, Pca9685};
-use std::{
-    thread,
-    time::{self, SystemTime},
-};
-use crate::lis3dh_driver::LIS3DH_Driver;
+use std::time::SystemTime;
 
 use crate::l3dgh20::L3GD20H_Driver;
 use crate::untils::sin;
-use cgmath::Zero;
-use std::borrow::Borrow;
 use cgmath::num_traits::abs;
-use ang::asin;
+
+use crate::lis3dh_driver;
 
 static mut pid_error_temp: f64 = 0.0;
 
@@ -42,16 +32,12 @@ static mut pid_last_yaw_d_error: f64 = 0.0;
 static mut gyro_roll_input: f64 = 0.0;
 static mut gyro_pitch_input: f64 = 0.0;
 static mut gyro_yaw_input: f64 = 0.0;
+ 
 
-static mut gyro_angles_set:bool = false; 
-fn convert(v: u8) -> f64 {
-    return v as f64;
-}
 fn sqrt(input:f64) -> f64 {
     input.sqrt()
 }
 pub fn main_loop() {
-    let mut loops = 0;
     let mut logger = Logger::new();
     let mut reciver_driver = ibus_receiver::new();
     let mut controller = Controller::new();
@@ -62,28 +48,32 @@ pub fn main_loop() {
     let mut pitch_level_correction;
     let mut roll_level_correction;
     let mut start: i32 = 0;
-    let mut throllite = 1000;
-    let mut esc_1 = 1000.0;
-    let mut esc_2 = 1000.0;
-    let mut esc_3 = 1000.0;
-    let mut esc_4 = 1000.0;
+    let mut throllite:u16;
+    let mut esc_1:f64;
+    let mut esc_2 :f64;
+    let mut esc_3 :f64;
+    let mut esc_4 :f64;
     let  mut acc_total_vector;
     let mut l3dgh20_driver = L3GD20H_Driver::new();
-    let mut lis3dh_driver=LIS3DH_Driver::new();
-    let mut PIds = config_parser::new().get_pids();
-    
+    let mut lis3dh_driver=lis3dh_driver::LIS3DH_Driver::new();
     lis3dh_driver.init();
+    l3dgh20_driver.calibrate();
+
+
+    let  PIds = config_parser::new().get_pids();
     loop {
         let now = SystemTime::now();
-        let mut gyro_data = l3dgh20_driver.raw_value();
-        let mut acc_data=lis3dh_driver.get_data_raw();
-        let acc_x:f64= (acc_data.x as f64);
-        let acc_y:f64=(acc_data.y as f64);
-        let acc_z:f64=(acc_data.z as f64);
+        let  gyro_data = l3dgh20_driver.raw_value();
+        let  acc_data=lis3dh_driver.get_data_raw();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        let gyro_roll =  (gyro_data.x as f64) ;
-        let gyro_pitch = (gyro_data.y as f64);
-        let gyro_yaw = (gyro_data.z  as f64) ;
+        let gyro_roll =  gyro_data.x as f64;
+        let gyro_pitch = gyro_data.y as f64;
+        let gyro_yaw = gyro_data.z  as f64 ;
+
+
+        let acc_x:f64=  acc_data.x as f64;
+        let acc_y:f64=acc_data.y as f64;
+        let acc_z:f64=acc_data.z as f64;
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.
@@ -112,7 +102,6 @@ pub fn main_loop() {
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
         pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
-        loops += 1;
         unsafe {
             if reciver.ch6 > 1300 { start = 1; }
             if start == 1 && reciver.ch6 > 1600 {
