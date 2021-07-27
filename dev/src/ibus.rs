@@ -15,11 +15,8 @@
 // Enjoy
 
 extern crate hex; // crate for convert from u8 to hex
-use crate::config_parse::config_parser;
-use rppal::uart::Queue::Both;
 use rppal::uart::{Parity, Uart}; // crate for uart reading
-use std::iter::FromIterator; // std libary for convert into string via vec with char
-use std::thread;
+use std::iter::FromIterator; // std libary for convert into string via vec with char 
 use std::time::Duration;
 use std::vec::Vec;
 
