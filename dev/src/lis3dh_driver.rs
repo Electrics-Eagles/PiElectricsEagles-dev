@@ -39,7 +39,7 @@ pub struct LIS3DH_Driver {
 impl LIS3DH_Driver {
     pub fn new() -> Self
     {
-        let mut dev = I2cdev::new("/dev/i2c-2").unwrap();
+        let mut dev = I2cdev::new("/dev/i2c-3").unwrap();
         LIS3DH_Driver { acc: lis3dh::Lis3dh::new(dev, lis3dh::SlaveAddr::Default).unwrap() }
     }
     pub fn init(&mut self)
