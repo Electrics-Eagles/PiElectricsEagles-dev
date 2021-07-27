@@ -114,7 +114,7 @@ impl Logger {
         self.stream_buf.push_str("\n");
     }
     pub fn save_file(&mut self) {
-        self.file_.write_all(self.stream_buf.as_bytes());
+        self.file_.write_all(self.stream_buf.as_bytes()).expect("Log write error");
         self.stream_buf.clear();
     }
 }
