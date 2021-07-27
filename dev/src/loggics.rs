@@ -9,7 +9,9 @@ use crate::l3dgh20::L3GD20H_Driver;
 use crate::untils::sin;
 use cgmath::num_traits::abs;
 
-use crate::lis3dh_driver;
+use crate::{lis3dh_driver, l3dgh20};
+use std::thread;
+use core::time;
 
 static mut pid_error_temp: f64 = 0.0;
 
@@ -54,18 +56,19 @@ pub fn main_loop() {
     let mut esc_3 :f64;
     let mut esc_4 :f64;
     let  mut acc_total_vector;
-    let mut l3dgh20_driver = L3GD20H_Driver::new();
-    let mut lis3dh_driver=lis3dh_driver::LIS3DH_Driver::new();
-    lis3dh_driver.init();
-    l3dgh20_driver.calibrate();
-
-
+    let mut acc = lis3dh_driver::LIS3DH_Driver::new();
+    acc.init();
+    thread::sleep(time::Duration::from_millis(300));
+    let mut gyro = l3dgh20::L3GD20H_Driver::new();
+    gyro.calibrate();
     let  PIds = config_parser::new().get_pids();
     loop {
         let now = SystemTime::now();
-        let  gyro_data = l3dgh20_driver.raw_value();
-        let  acc_data=lis3dh_driver.get_data_raw();
+        let acc_data = acc.get_data_raw();
+        let gyro_data = gyro.values();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+
+
         let gyro_roll =  gyro_data.x as f64;
         let gyro_pitch = gyro_data.y as f64;
         let gyro_yaw = gyro_data.z  as f64 ;
@@ -194,9 +197,9 @@ pub fn main_loop() {
                 acc_z,
                 acc_y,
                 acc_x,
-                gyro_x: gyro_data.x as f64,
-                gyro_y: gyro_data.y as f64,
-                gyro_z: gyro_data.z as f64,
+                gyro_x: gyro_roll,
+                gyro_y: gyro_pitch,
+                gyro_z: gyro_yaw,
                 reciver_ch1: reciver.ch1,
                 reciver_ch2: reciver.ch2,
                 reciver_ch3: reciver.ch3,

@@ -46,17 +46,17 @@ static mut gyro_yaw_calibration: f64 = 0.0;
 impl L3GD20H_Driver {
     pub fn new() -> L3GD20H_Driver {
         let settings = L3GD20GyroscopeSettings {
-            DR: L3GD20GyroscopeDataRate::Hz95,
-            BW: L3GD20GyroscopeBandwidth::BW1,
+            DR: L3GD20GyroscopeDataRate::Hz760,
+            BW: L3GD20GyroscopeBandwidth::BW4,
             power_mode: L3GD20PowerMode::Normal,
             zen: true,
             yen: true,
             xen: true,
             sensitivity: L3GD20GyroscopeFS::dps500,
-            continuous_update: true,
-            high_pass_filter_enabled: true,
+            continuous_update: false,
+            high_pass_filter_enabled: false,
             high_pass_filter_mode: Some(L3GD20GyroscopeHighPassFilterMode::NormalMode),
-            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_9),
+            high_pass_filter_configuration: Some(L3GD20HighPassFilterCutOffConfig::HPCF_0),
         };
 
         let mut i2cdev = get_linux_l3gd20h_i2c_device("/dev/i2c-2".to_string()).unwrap();
