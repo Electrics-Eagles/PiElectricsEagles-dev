@@ -64,7 +64,7 @@ impl L3GD20H_Driver {
         return L3GD20H_Driver { gyro: l3gd20_gyro };
     }
 
-    fn calibrate(&mut self) {
+    pub fn calibrate(&mut self) {
         unsafe {
             for a in 0..2000 {
                 let reading = self.gyro.angular_rate_reading().unwrap();
