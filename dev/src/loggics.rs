@@ -5,7 +5,6 @@ use crate::ibus::*;
 use crate::logger::*;
 use std::time::SystemTime;
 
-use crate::l3dgh20::L3GD20H_Driver;
 use crate::untils::sin;
 use cgmath::num_traits::abs;
 
@@ -13,48 +12,48 @@ use crate::{lis3dh_driver, l3dgh20};
 use std::thread;
 use core::time;
 
-static mut pid_error_temp: f64 = 0.0;
+static mut pid_error_temp: f32 = 0.0;
 
-static mut pid_i_mem_roll: f64 = 0.0;
-static mut pid_i_mem_pitch: f64 = 0.0;
-static mut pid_i_mem_yaw: f64 = 0.0;
+static mut pid_i_mem_roll: f32 = 0.0;
+static mut pid_i_mem_pitch: f32 = 0.0;
+static mut pid_i_mem_yaw: f32 = 0.0;
 
-static mut pid_roll_setpoint: f64 = 0.0;
-static mut pid_pitch_setpoint: f64 = 0.0;
-static mut pid_yaw_setpoint: f64 = 0.0;
+static mut pid_roll_setpoint: f32 = 0.0;
+static mut pid_pitch_setpoint: f32 = 0.0;
+static mut pid_yaw_setpoint: f32 = 0.0;
 
-static mut pid_output_roll: f64 = 0.0;
-static mut pid_output_pitch: f64 = 0.0;
-static mut pid_output_yaw: f64 = 0.0;
+static mut pid_output_roll: f32= 0.0;
+static mut pid_output_pitch: f32 = 0.0;
+static mut pid_output_yaw: f32 = 0.0;
 
-static mut pid_last_roll_d_error: f64 = 0.0;
-static mut pid_last_pitch_d_error: f64 = 0.0;
-static mut pid_last_yaw_d_error: f64 = 0.0;
+static mut pid_last_roll_d_error: f32 = 0.0;
+static mut pid_last_pitch_d_error: f32 = 0.0;
+static mut pid_last_yaw_d_error: f32 = 0.0;
 
-static mut gyro_roll_input: f64 = 0.0;
-static mut gyro_pitch_input: f64 = 0.0;
-static mut gyro_yaw_input: f64 = 0.0;
+static mut gyro_roll_input: f32 = 0.0;
+static mut gyro_pitch_input: f32 = 0.0;
+static mut gyro_yaw_input: f32 = 0.0;
  
 
-fn sqrt(input:f64) -> f64 {
+fn sqrt(input:f32) -> f32 {
     input.sqrt()
 }
 pub fn main_loop() {
     let mut logger = Logger::new();
     let mut reciver_driver = ibus_receiver::new();
     let mut controller = Controller::new();
-    let mut angle_pitch_acc: f64 = 0.0;
-    let mut angle_roll_acc: f64 = 0.0;
-    let mut angle_pitch: f64 = 0.0;
-    let mut angle_roll: f64 = 0.0;
+    let mut angle_pitch_acc: f32 = 0.0;
+    let mut angle_roll_acc: f32= 0.0;
+    let mut angle_pitch: f32 = 0.0;
+    let mut angle_roll: f32 = 0.0;
     let mut pitch_level_correction;
     let mut roll_level_correction;
     let mut start: i32 = 0;
     let mut throllite:u16;
-    let mut esc_1:f64;
-    let mut esc_2 :f64;
-    let mut esc_3 :f64;
-    let mut esc_4 :f64;
+    let mut esc_1:f32;
+    let mut esc_2 :f32;
+    let mut esc_3 :f32;
+    let mut esc_4 :f32;
     let  mut acc_total_vector;
     let mut acc = lis3dh_driver::LIS3DH_Driver::new();
     acc.init();
@@ -62,21 +61,22 @@ pub fn main_loop() {
     let mut gyro = l3dgh20::L3GD20H_Driver::new();
     gyro.calibrate();
     let  PIds = config_parser::new().get_pids();
+    println!("Initialize all devices finished!!! Welcome to PIEEA");
     loop {
         let now = SystemTime::now();
         let acc_data = acc.get_data_raw();
-        let gyro_data = gyro.values();
+        let gyro_data = gyro.raw_value();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
 
-        let gyro_roll =  gyro_data.x as f64;
-        let gyro_pitch = gyro_data.y as f64;
-        let gyro_yaw = gyro_data.z  as f64 ;
+        let gyro_roll =  gyro_data.x as f32;
+        let gyro_pitch = gyro_data.y as f32;
+        let gyro_yaw = gyro_data.z  as f32;
 
 
-        let acc_x:f64=  acc_data.x as f64;
-        let acc_y:f64=acc_data.y as f64;
-        let acc_z:f64=acc_data.z as f64;
+        let acc_x:f32=  acc_data.x as f32;
+        let acc_y:f32=acc_data.y as f32;
+        let acc_z:f32=acc_data.z as f32;
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.
@@ -85,11 +85,11 @@ pub fn main_loop() {
         }
         //Gyro angle calculations
         //0.0000611 = 1 / (25Hz / 65.5)
-        angle_pitch += gyro_pitch * 0.0000611; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
-        angle_roll += gyro_roll * 0.0000611; //Calculate the traveled roll angle and add this to the angle_roll variable.
+        angle_pitch += gyro_pitch * 0.0000916; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
+        angle_roll += gyro_roll * 0.0000916; //Calculate the traveled roll angle and add this to the angle_roll variable.
         //0.000001066 = (0.0000611 * 3.142) / 180degrThe Arduino sin function is in radians
-        angle_pitch -= angle_roll * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the roll angle to the pitch angel.
-        angle_roll += angle_pitch * sin(gyro_yaw * 0.000001066); //If the IMU has yawed transfer the pitch angle to the roll angel.
+        angle_pitch -= angle_roll * sin(gyro_yaw  as f64 * 0.000001599) as f32; //If the IMU has yawed transfer the roll angle to the pitch angel.
+        angle_roll += angle_pitch * sin(gyro_yaw as f64 * 0.000001599) as f32; //If the IMU has yawed transfer the pitch angle to the roll angel.
         //Accelerometer angle calculations
         acc_total_vector = sqrt((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z));       //Calculate the total accelerometer vector.
         if abs(acc_y) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
@@ -121,26 +121,26 @@ pub fn main_loop() {
             if start == 2 && reciver.ch6 < 1200 { start = 0; }
             pid_roll_setpoint = 0.0;
             if reciver.ch1 > 1508 {
-                pid_roll_setpoint = (reciver.ch1 as f64 - 1508 as f64) as f64;
+                pid_roll_setpoint = (reciver.ch1 as f32 - 1508 as f32) as f32;
             } else if reciver.ch1 < 1492 {
-                pid_roll_setpoint = (reciver.ch1 as f64 - 1492 as f64) as f64;
+                pid_roll_setpoint = (reciver.ch1 as f32 - 1492 as f32) as f32;
             }
             pid_roll_setpoint -= roll_level_correction;
             pid_roll_setpoint /= 3.0;
             pid_pitch_setpoint = 0.0;
             if reciver.ch1 > 1508 {
-                pid_pitch_setpoint = (reciver.ch2 as f64 - 1508 as f64) as f64;
+                pid_pitch_setpoint = (reciver.ch2 as f32 - 1508 as f32) as f32;
             } else if reciver.ch1 < 1492 {
-                pid_pitch_setpoint = (reciver.ch2 as f64 - 1492 as f64) as f64;
+                pid_pitch_setpoint = (reciver.ch2 as f32 - 1492 as f32) as f32;
             }
             pid_pitch_setpoint -= pitch_level_correction;
             pid_pitch_setpoint /= 3.0;
             pid_yaw_setpoint = 0.0;
             if reciver.ch3 > 1050 {
                 if reciver.ch4 > 1508 {
-                    pid_yaw_setpoint = ((reciver.ch4 as f64 - 1508 as f64) as f64) / 3.0;
+                    pid_yaw_setpoint = ((reciver.ch4 as f32 - 1508 as f32) as f32) / 3.0;
                 } else if reciver.ch4 < 1492 {
-                    pid_yaw_setpoint = ((reciver.ch4 as f64 - 1492 as f64) as f64) / 3.0;
+                    pid_yaw_setpoint = ((reciver.ch4 as f32 - 1492 as f32) as f32) / 3.0;
                 }
             }
             calculate_pid(PIds.clone());
@@ -148,10 +148,10 @@ pub fn main_loop() {
             throllite = reciver.ch3;
             if start == 2 {
                 if throllite > 1800 { throllite = 1800; }
-                esc_1 = throllite as f64 - pid_output_pitch + pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 1 (front-right - CCW)
-                esc_2 = throllite as f64 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
-                esc_3 = throllite as f64 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
-                esc_4 = throllite as f64 - pid_output_pitch - pid_output_roll + pid_output_yaw;
+                esc_1 = throllite as f32 - pid_output_pitch + pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 1 (front-right - CCW)
+                esc_2 = throllite as f32 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
+                esc_3 = throllite as f32 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
+                esc_4 = throllite as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
                 if esc_1 < 1100.0 {
                     esc_1 = 1100.0;
                 } //Keep the motors running.
@@ -219,7 +219,7 @@ pub fn main_loop() {
                 esc_2,
                 esc_3,
                 esc_4,
-                temp: 0.0 as f64,
+                temp: 0.0,
                 time_spent: time_spend,
             };
             logger.write_to_log(0, &logging_data);
@@ -234,55 +234,55 @@ fn calculate_pid(pid: PIDS) {
     unsafe {
         //roll calculation
         pid_error_temp = gyro_roll_input - pid_roll_setpoint;
-        pid_i_mem_roll += pid.roll.i * pid_error_temp;
-        if pid_i_mem_roll > pid.roll.max {
-            pid_i_mem_roll = pid.roll.max;
-        } else if pid_i_mem_roll < (pid.roll.max * -1.0) {
-            pid_i_mem_roll = pid.roll.max * -1.0;
+        pid_i_mem_roll += pid.roll.i as f32 * pid_error_temp;
+        if pid_i_mem_roll > pid.roll.max as f32 {
+            pid_i_mem_roll = pid.roll.max as f32;
+        } else if pid_i_mem_roll < (pid.roll.max as f32 * -1.0) {
+            pid_i_mem_roll = pid.roll.max as f32 * -1.0;
         }
-        pid_output_roll = pid.roll.p * pid_error_temp
+        pid_output_roll = pid.roll.p as f32 * pid_error_temp
             + pid_i_mem_roll
-            + pid.roll.d * (pid_error_temp - pid_last_roll_d_error);
-        if pid_output_roll > pid.roll.max {
-            pid_output_roll = pid.roll.max;
-        } else if pid_output_roll < (pid.roll.max * -1.0) {
-            pid_output_roll = pid.roll.max * -1.0;
+            + pid.roll.d as f32 * (pid_error_temp - pid_last_roll_d_error);
+        if pid_output_roll > pid.roll.max as f32 {
+            pid_output_roll = pid.roll.max as f32;
+        } else if pid_output_roll < (pid.roll.max as f32 * -1.0) {
+            pid_output_roll = pid.roll.max as f32 * -1.0;
         }
         pid_last_roll_d_error = pid_error_temp;
 
         //pitch calculation
         pid_error_temp = gyro_pitch_input - pid_pitch_setpoint;
-        pid_i_mem_pitch += pid.pitch.i * pid_error_temp;
-        if pid_i_mem_pitch > pid.pitch.max {
-            pid_i_mem_pitch = pid.pitch.max;
-        } else if pid_i_mem_pitch < (pid.pitch.max * -1.0) {
-            pid_i_mem_pitch = pid.pitch.max * -1.0;
+        pid_i_mem_pitch += pid.pitch.i as f32 * pid_error_temp;
+        if pid_i_mem_pitch > pid.pitch.max as f32 {
+            pid_i_mem_pitch = pid.pitch.max as f32;
+        } else if pid_i_mem_pitch < (pid.pitch.max as f32 * -1.0) {
+            pid_i_mem_pitch = pid.pitch.max as f32 * -1.0;
         }
-        pid_output_pitch = pid.pitch.p * pid_error_temp
+        pid_output_pitch = pid.pitch.p as f32 * pid_error_temp
             + pid_i_mem_pitch
-            + pid.pitch.d * (pid_error_temp - pid_last_pitch_d_error);
-        if pid_output_pitch > pid.pitch.max {
-            pid_output_pitch = pid.pitch.max;
-        } else if pid_output_pitch < (pid.pitch.max * -1.0) {
-            pid_output_pitch = pid.pitch.max * -1.0;
+            + pid.pitch.d as f32 * (pid_error_temp - pid_last_pitch_d_error);
+        if pid_output_pitch > pid.pitch.max as f32 {
+            pid_output_pitch = pid.pitch.max as f32;
+        } else if pid_output_pitch < (pid.pitch.max as f32 * -1.0) {
+            pid_output_pitch = pid.pitch.max as f32 * -1.0;
         }
         pid_last_pitch_d_error = pid_error_temp;
 
         //yaw calculation
         pid_error_temp = gyro_yaw_input - pid_yaw_setpoint;
-        pid_i_mem_yaw += pid.yaw.i * pid_error_temp;
-        if pid_i_mem_yaw > pid.yaw.max {
-            pid_i_mem_yaw = pid.yaw.max;
-        } else if pid_i_mem_yaw < (pid.yaw.max * -1.0) {
-            pid_i_mem_yaw = pid.yaw.max * -1.0;
+        pid_i_mem_yaw += pid.yaw.i as f32 * pid_error_temp;
+        if pid_i_mem_yaw > pid.yaw.max as f32 {
+            pid_i_mem_yaw = pid.yaw.max as f32;
+        } else if pid_i_mem_yaw < (pid.yaw.max as f32 * -1.0) {
+            pid_i_mem_yaw = pid.yaw.max as f32 * -1.0;
         }
-        pid_output_yaw = pid.yaw.p * pid_error_temp
+        pid_output_yaw = pid.yaw.p as f32 * pid_error_temp
             + pid_i_mem_yaw
-            + pid.yaw.d * (pid_error_temp - pid_last_yaw_d_error);
-        if pid_output_yaw > pid.yaw.max {
-            pid_output_yaw = pid.yaw.max;
-        } else if pid_output_yaw < (pid.yaw.max * -1.0) {
-            pid_output_yaw = pid.yaw.max * -1.0;
+            + pid.yaw.d as f32 * (pid_error_temp - pid_last_yaw_d_error);
+        if pid_output_yaw > pid.yaw.max as f32 {
+            pid_output_yaw = pid.yaw.max as f32;
+        } else if pid_output_yaw < (pid.yaw.max as f32 * -1.0) {
+            pid_output_yaw = pid.yaw.max as f32 * -1.0;
         }
         pid_last_yaw_d_error = pid_error_temp;
     }

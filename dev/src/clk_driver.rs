@@ -22,10 +22,6 @@
 //
 // Enjoy
 
-use std::error::Error;
-use std::thread;
-use std::time::Duration;
-
 use rppal::gpio::{Gpio, OutputPin};
 
 /// This constant is a port where is a CLK pin connected.
