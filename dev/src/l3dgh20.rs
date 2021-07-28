@@ -67,7 +67,7 @@ impl L3GD20H_Driver {
     pub fn calibrate(&mut self) {
         unsafe {
             for a in 0..2000 {
-                let reading = self.gyro.angular_rate_reading().unwrap();
+                let reading = self.gyro.read_gyroscope_raw().unwrap();
                 gyro_roll_calibration += reading.x as f64;
                 gyro_pitch_calibration += reading.y as f64;
                 gyro_yaw_calibration += reading.z as f64;
@@ -81,7 +81,7 @@ impl L3GD20H_Driver {
     pub fn values(&mut self) -> data_angles {
         unsafe {
             if gyro_roll_calibration > 0.0 {
-                let reading = self.gyro.angular_rate_reading().unwrap();
+                let reading = self.gyro.read_gyroscope_raw().unwrap();
                 return data_angles {
                     x: reading.x - gyro_roll_calibration as f32,
                     y: reading.y - gyro_pitch_calibration as f32,
