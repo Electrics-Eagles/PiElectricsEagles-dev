@@ -15,9 +15,7 @@ linux-embedded-hal = "0.3.0"
 cgmath = "0.18.0"
 hex = "0.4.2"
 i2cdev = "0.3.1"
-i2csensors = "0.1.*"
-i2cdev-l3gd20 ={ git="https://github.com/Electrics-Eagles/i2cdev-sensors",branch="master"}
-lis3dh = "0.3.0"
+mpu6050 = {git="https://github.com/Electrics-Eagles/mpu6050"}
 embedded-hal = "0.2.5"
 
 

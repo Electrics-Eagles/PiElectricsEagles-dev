@@ -5,10 +5,10 @@ use crate::ibus::*;
 use crate::logger::*;
 use std::time::SystemTime;
 
-use crate::untils::sin;
+use crate::utils::sin;
 use cgmath::num_traits::abs;
 
-use crate::{lis3dh_driver, l3dgh20};
+use crate::imu;
 use std::thread;
 use core::time;
 
@@ -55,28 +55,25 @@ pub fn main_loop() {
     let mut esc_3 :f32;
     let mut esc_4 :f32;
     let  mut acc_total_vector;
-    let mut acc = lis3dh_driver::LIS3DH_Driver::new();
-    acc.init();
-    thread::sleep(time::Duration::from_millis(300));
-    let mut gyro = l3dgh20::L3GD20H_Driver::new();
-    gyro.calibrate();
-    let  PIds = config_parser::new().get_pids();
+    let mut config =config_parser::new();
+    let mut imu =imu::imu::new(config.mpu_config_parser().port);
+    let  PIds =config .get_pids();
     println!("Initialize all devices finished!!! Welcome to PIEEA");
     loop {
         let now = SystemTime::now();
-        let acc_data = acc.get_data_raw();
-        let gyro_data = gyro.raw_value();
+        let acc = imu.get_acc_data();
+        let gyro= imu.get_normalised_gyro_data();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
 
-        let gyro_roll =  gyro_data.x as f32;
-        let gyro_pitch = gyro_data.y as f32;
-        let gyro_yaw = gyro_data.z  as f32;
+        let gyro_roll =  gyro.roll as f32;
+        let gyro_pitch = gyro.pitch as f32;
+        let gyro_yaw = gyro.yaw  as f32;
 
 
-        let acc_x:f32=  acc_data.x as f32;
-        let acc_y:f32=acc_data.y as f32;
-        let acc_z:f32=acc_data.z as f32;
+        let acc_x:f32=  acc.roll as f32;
+        let acc_y:f32=acc.pitch as f32;
+        let acc_z:f32=acc.yaw as f32;
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.
