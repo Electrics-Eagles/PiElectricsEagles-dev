@@ -112,3 +112,9 @@ NC='\033[1;30' # No Color
 printf "With love to classic .....${RED}  \n \n  S.T.A.L.K.E.R ${NC} n"
   
 #prompt_confirm "Are you want to exit?" || exit 0
+
+#############################################OPTIONAL#####################################################
+#Optional 
+
+#sudo cp  /home/linux/Desktop/PiElectricsEagles/dev/target/arm-unknown-linux-musleabi/debug/pielectriseagles /media/linux/rootfs/usr/bin 
+#echo Copiend binary to sd card
