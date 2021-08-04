@@ -56,8 +56,9 @@ pub fn main_loop() {
     let mut esc_4 :f32;
     let  mut acc_total_vector;
     let mut config =config_parser::new();
-    let mut imu =imu::imu::new(config.mpu_config_parser().port);
+    let mut imu =imu::imu::new();
     let  PIds =config .get_pids();
+    imu.calibrate();
     println!("Initialize all devices finished!!! Welcome to PIEEA");
     loop {
         let now = SystemTime::now();
