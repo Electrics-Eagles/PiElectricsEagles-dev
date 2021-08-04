@@ -2,7 +2,7 @@
 use mpu6050::{Mpu6050Error, Mpu6050};
 use linux_embedded_hal::{I2cdev, Delay};
 use mpu6050::device::{AccelRange, GyroRange, ACCEL_HPF, GYRO_REGX_H, ACC_REGX_H};
-
+use crate::config_parse::config_parser;
 /// IMU unit struct
 /// so there are object of imu that has methods and functions .
 /// So the usage inside imu.rs is :
@@ -55,8 +55,9 @@ impl imu {
     ///
     /// ```
     /// As argument in requires the path of i2c (String)
-    pub fn new(path:String) -> Self {
-        let i2c = I2cdev::new(path)
+    pub fn new() -> Self {
+        let  mut config = config_parser::new();
+        let i2c = I2cdev::new(config.imu_config_parser().port)
             .map_err(Mpu6050Error::I2c).unwrap();
         let mut delay = Delay;
         let mut mpu = Mpu6050::new_with_sens(i2c, AccelRange::G8, GyroRange::D500);
