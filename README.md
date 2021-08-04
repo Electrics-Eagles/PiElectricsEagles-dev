@@ -15,6 +15,8 @@ Code Style:
 
 
 **DO NOT COMMIT TARGET FOLDER WITH DOCS AND BUILD RESULT**
+Git Ignore file should help
+
 
 **SOURCE CODE ONLY**
 
@@ -31,13 +33,11 @@ Core status :
 Bug fix status:
 ![90%](https://progress-bar.dev/90)
 
-CLI status:
-![0%](https://progress-bar.dev/0)
 
 
 
 
-L3GH20H Driver:
+IMU  Driver:
 ![80%](https://progress-bar.dev/100)
 
 iBUS: (as crate)
