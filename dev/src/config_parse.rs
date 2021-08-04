@@ -44,15 +44,9 @@ pub struct config_parser {
     config_parser: ini::Ini,
 }
 /// It is a UART/Sbus/Ibus configuration struct
-pub struct SbusConfig {
+pub struct IbusConfig {
     /// baudrate (u32 value)
     pub baudrate: u32,
-    /// parity (u32 value)
-    pub parity: u32,
-    /// Data bits (u8 value)
-    pub data_bits: u8,
-    /// Stop bit (u8 value)
-    pub stop_bit: u8,
     /// Port name to connect UART/Sbus/Ibus (String value)
     pub port: String,
 }
@@ -60,13 +54,10 @@ pub struct SbusConfig {
 pub struct Mpu6050Config {
     /// Name port of connecting MPU6050 via I2C interface (String value)
     pub port: String,
-    /// Amount of sample data (u8 value)
-    pub sample_amount: u8,
 }
 /// It is esc driver configuration struct
 pub struct EscMotors {
-    /// Name of driver for esc motor (String value)
-    pub driver: String,
+
     /// Name port of connecting ESC driver via I2C inferface (String value)
     pub port: String,
 }
@@ -92,6 +83,12 @@ pub struct PIDS {
     /// PID of yaw control
     pub yaw: PID,
 }
+
+pub struct Filter{
+    pub conf_a:f64,
+    pub conf_b:f64,
+}
+
 
 impl config_parser {
     /// Returns config_parser object
@@ -129,12 +126,7 @@ impl config_parser {
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     ///
     ///
-    /*
-    pub fn parse(&mut self, first_number_str: &str) -> Result<i32, ParseIntError> {
-        let value = first_number_str.parse::<i32>()?;
-        Ok(value)
-    }
-     */
+
     /// Parse u8 value from &str value
     ///
     /// # Arguments
@@ -322,12 +314,15 @@ impl config_parser {
     /// ```
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     ///
+    ///
+    pub fn filter_config(&mut self){
+        let filter_config = self.config_parser.section(Some("filter")).unwrap();
+    }
+
     pub fn esc_config_parser(&mut self) -> EscMotors {
-        let esc_config = self.config_parser.section(Some("esc-config")).unwrap();
-        let driver = (esc_config.get("driver")).unwrap();
+        let esc_config = self.config_parser.section(Some("esc")).unwrap();
         let port = (esc_config.get("port")).unwrap();
         let esc_motors_val = EscMotors {
-            driver: driver.parse().unwrap(),
             port: port.parse().unwrap(),
         };
         return esc_motors_val;
@@ -348,16 +343,14 @@ impl config_parser {
     /// let mpu6050_conifg = config.mpu_config_parser(); // getting object value of configuartion for MPU6050 sensor
     /// ```
     ///
-    pub fn mpu_config_parser(&mut self) -> Mpu6050Config {
+    pub fn imu_config_parser(&mut self) -> Mpu6050Config {
         let conf = Ini::load_from_file(file_path).unwrap();
-        let mpu_config = conf.section(Some("mpu6050")).unwrap();
-        let sample = self.parse_u8((mpu_config.get("sample")).unwrap()).unwrap();
-        let port = (mpu_config.get("port")).unwrap();
-        let mpu6050_config = Mpu6050Config {
+        let imu_config_ = conf.section(Some("imu")).unwrap();
+        let port = (imu_config_.get("port")).unwrap();
+        let imu_config = Mpu6050Config {
             port: port.parse().unwrap(),
-            sample_amount: sample,
         };
-        return mpu6050_config;
+        return imu_config;
     }
     /// Return data of Sbus/Ibus configuration from pasring ini-file
     ///
@@ -376,30 +369,18 @@ impl config_parser {
     /// let Sbus = config.ibus_receiver_conifg(); // get object of values S-BUS configuration
     /// ```
     ///
-    pub fn ibus_receiver_conifg(&mut self) -> SbusConfig {
+    pub fn ibus_receiver_conifg(&mut self) -> IbusConfig {
         let conf = Ini::load_from_file(file_path).unwrap();
-        let sbus_config = conf.section(Some("ibus_config")).unwrap();
+        let sbus_config = conf.section(Some("ibus")).unwrap();
         let baudrate = self
             .parse_u32((sbus_config.get("baudrate")).unwrap())
             .unwrap();
-        let parity = self
-            .parse_u32((sbus_config.get("parity")).unwrap())
-            .unwrap();
-        let data_bits = self
-            .parse_u8((sbus_config.get("data_bits")).unwrap())
-            .unwrap();
-        let stop_bit = self
-            .parse_u8((sbus_config.get("stop_bit")).unwrap())
-            .unwrap();
         let port = sbus_config.get("port").unwrap();
-        let sbus = SbusConfig {
+        let Ibus = IbusConfig {
             baudrate: baudrate,
-            parity: parity,
-            data_bits: data_bits,
-            stop_bit: stop_bit,
             port: port.to_string(),
         };
-        return sbus;
+        return Ibus;
     }
     /// PID parse for selected section from ini file
     ///
