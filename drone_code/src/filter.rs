@@ -65,14 +65,7 @@ pub struct Filter {
 
 const   dt: f32 =0.006;
 
-impl Filter {
-
-    pub fn new() -> Self {
-        let mut config = config_parser::new();
-        let coff=Coff{a:  config.filter_config().conf_a, b:  config.filter_config().conf_b };
-        return Filter{ coff};
-    }
-    pub fn ABfilter(&mut self,newVal:f32) -> f32 {
+    pub fn ABfilter(newVal:f32,conf_a:f32,conf_b:f32) -> f32 {
     let mut xk_1:f32 = 0.0;
     let mut vk_1:f32=0.0;
         let mut a:f32=0.0;
@@ -82,7 +75,7 @@ impl Filter {
         let  mut rk:f32=0.0;
 
     let  mut xm:f32=0.0;
-    let mut lambda = self.coff.a as f32 * dt * dt / self.coff.b as f32;
+    let mut lambda = conf_a as f32 * dt * dt / conf_b as f32;
     let mut r = (4.0 + lambda - sqrt(8.0 * lambda + lambda * lambda)) / 4.0;
     a = 1.0 - r * r;
     b = 2.0 * (2.0 - a) - 4.0 * sqrt(1.0 - a);
@@ -140,5 +133,5 @@ impl Filter {
     }
 
  */
-}
+
 

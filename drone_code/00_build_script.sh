@@ -94,7 +94,7 @@ git clone https://github.com/Electrics-Eagles/PiElectricsEagles
 echo "moving to folder "
 
 cd PiElectricsEagles
-cd dev
+cd drone_code
 
 sudo chmod -R 777 /var/run/docker.sock
 
@@ -116,5 +116,5 @@ printf "With love to classic .....${RED}  \n \n  S.T.A.L.K.E.R ${NC} n"
 #############################################OPTIONAL#####################################################
 #Optional 
 
-#sudo cp  /home/linux/Desktop/PiElectricsEagles/dev/target/arm-unknown-linux-musleabi/debug/pielectriseagles /media/linux/rootfs/usr/bin 
-#echo Copiend binary to sd card
+sudo cp  /home/linux/Desktop/PiElectricsEagles/drone_code/target/arm-unknown-linux-musleabi/debug/pielectricseagles /media/linux/rootfs/usr/bin/pielectricseagles
+echo Copiend binary to sd card

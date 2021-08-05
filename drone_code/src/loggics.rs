@@ -11,7 +11,7 @@ use cgmath::num_traits::abs;
 use crate::imu;
 use std::thread;
 use core::time;
-
+use crate::filter::ABfilter;
 static mut pid_error_temp: f32 = 0.0;
 
 static mut pid_i_mem_roll: f32 = 0.0;
@@ -33,7 +33,8 @@ static mut pid_last_yaw_d_error: f32 = 0.0;
 static mut gyro_roll_input: f32 = 0.0;
 static mut gyro_pitch_input: f32 = 0.0;
 static mut gyro_yaw_input: f32 = 0.0;
- 
+const a:f32=3.0;
+const b: f32 =0.7;
 
 fn sqrt(input:f32) -> f32 {
     input.sqrt()
@@ -58,7 +59,6 @@ pub fn main_loop() {
     let mut config =config_parser::new();
     let mut imu =imu::imu::new();
     let  PIds =config .get_pids();
-    let filter=Filter::new();
     imu.calibrate();
     println!("Initialize all devices finished!!! Welcome to PIEEA");
     loop {
@@ -68,14 +68,24 @@ pub fn main_loop() {
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
 
-        let gyro_roll =  gyro.roll as f32;
-        let gyro_pitch = gyro.pitch as f32;
-        let gyro_yaw = gyro.yaw  as f32;
+        let raw_gyro_roll =  gyro.roll as f32;
+        let raw_gyro_pitch = gyro.pitch as f32;
+        let raw_gyro_yaw = gyro.yaw  as f32;
+
+        let gyro_roll=ABfilter(raw_gyro_roll, a, b);
+        let gyro_pitch=ABfilter(raw_gyro_pitch, a, b);
+        let gyro_yaw=ABfilter(raw_gyro_yaw, a, b);
 
 
-        let acc_x:f32=  acc.roll as f32;
-        let acc_y:f32=acc.pitch as f32;
-        let acc_z:f32=acc.yaw as f32;
+
+        let raw_acc_x:f32=  acc.roll as f32;
+        let raw_acc_y:f32=acc.pitch as f32;
+        let raw_acc_z:f32=acc.yaw as f32;
+
+
+        let acc_x=ABfilter(raw_acc_x, a, b);
+        let acc_y=ABfilter(raw_acc_y, a, b);
+        let acc_z=ABfilter(raw_acc_z, a, b);
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.

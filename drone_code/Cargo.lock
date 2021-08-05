@@ -292,7 +292,7 @@ checksum = "b16bd47d9e329435e309c58469fe0791c2d0d1ba96ec0954152a5ae2b04387dc"
 [[package]]
 name = "mpu6050"
 version = "0.1.4"
-source = "git+https://github.com/Electrics-Eagles/mpu6050#ee9bab788fa90ddf984ee5f70e534dfc0c17386a"
+source = "git+https://github.com/Electrics-Eagles/mpu6050#be8fa07dc311b04cd8179d6781e0a17e95c91a07"
 dependencies = [
  "embedded-hal",
  "libm",
