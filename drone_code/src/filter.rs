@@ -49,18 +49,96 @@ def lpf(x, alpha,d):
     return y
  */
 
-static mut result_lpf: f64 = 0.0;
-pub  fn low_pass_filter(x: f64, delta_t: f64, filtration_period: f64) -> f64 {
-    unsafe {
-        let  alpha = delta_t / filtration_period;
-        result_lpf += alpha * (x - result_lpf);
-        return result_lpf;
+
+use crate::config_parse::config_parser;
+use crate::utils::sqrt;
+
+pub struct  Coff {
+    a:f64,
+    b:f64,
+}
+
+pub struct Filter {
+    coff:Coff,
+}
+
+
+const   dt: f32 =0.006;
+
+impl Filter {
+
+    pub fn new() -> Self {
+        let mut config = config_parser::new();
+        let coff=Coff{a:  config.filter_config().conf_a, b:  config.filter_config().conf_b };
+        return Filter{ coff};
     }
-}
+    pub fn ABfilter(&mut self,newVal:f32) -> f32 {
+    let mut xk_1:f32 = 0.0;
+    let mut vk_1:f32=0.0;
+        let mut a:f32=0.0;
+        let mut b:f32=0.0;
+     let  mut xk:f32=0.0;
+        let mut vk:f32=0.0;
+        let  mut rk:f32=0.0;
+
+    let  mut xm:f32=0.0;
+    let mut lambda = self.coff.a as f32 * dt * dt / self.coff.b as f32;
+    let mut r = (4.0 + lambda - sqrt(8.0 * lambda + lambda * lambda)) / 4.0;
+    a = 1.0 - r * r;
+    b = 2.0 * (2.0 - a) - 4.0 * sqrt(1.0 - a);
+    xm = newVal;
+    xk = xk_1 + ( vk_1 * dt );
+    vk = vk_1;
+    rk = xm - xk;
+    xk += a * rk;
+    vk += ( b * rk ) / dt;
+    xk_1 = xk;
+    vk_1 = vk;
+    return xk_1;
+    }
 
 
-pub fn filter(x: f64, delta_t: f64, filtration_period: f64)  -> f64 {
-    let result=low_pass_filter(x,delta_t,filtration_period);
-    unsafe { result_lpf = 0.0; }
-    return result
+    /*
+        pub  fn low_pass_filter(x: f64, delta_t: f64, filtration_period: f64) -> f64 {
+            unsafe {
+                let  alpha = delta_t / filtration_period;
+                result_lpf += alpha * (x - result_lpf);
+                return result_lpf;
+            }
+        }
+
+
+        pub fn filter(x: f64, delta_t: f64, filtration_period: f64)  -> f64 {
+            let result=selow_pass_filter(x,delta_t,filtration_period);
+            unsafe { result_lpf = 0.0; }
+            return result
+        }
+    */
+
+// период дискретизации (измерений), process variation, noise variation
+/*
+    float dt = 0.02;
+    float sigma_process = 3.0;
+    float sigma_noise = 0.7;
+    float ABfilter(float newVal) {
+    static float xk_1, vk_1, a, b;
+    static float xk, vk, rk;
+    static float xm;
+    float lambda = (float)sigma_process * dt * dt / sigma_noise;
+    float r = (4 + lambda - (float)sqrt(8 * lambda + lambda * lambda)) / 4;
+    a = (float)1 - r * r;
+    b = (float)2 * (2 - a) - 4 * (float)sqrt(1 - a);
+    xm = newVal;
+    xk = xk_1 + ((float) vk_1 * dt );
+    vk = vk_1;
+    rk = xm - xk;
+    xk += (float)a * rk;
+    vk += (float)( b * rk ) / dt;
+    xk_1 = xk;
+    vk_1 = vk;
+    return xk_1;
+    }
+
+ */
 }
+

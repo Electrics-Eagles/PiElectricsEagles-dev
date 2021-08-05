@@ -4,7 +4,7 @@ use crate::controller::*;
 use crate::ibus::*;
 use crate::logger::*;
 use std::time::SystemTime;
-
+use crate::filter::Filter;
 use crate::utils::sin;
 use cgmath::num_traits::abs;
 
@@ -58,6 +58,7 @@ pub fn main_loop() {
     let mut config =config_parser::new();
     let mut imu =imu::imu::new();
     let  PIds =config .get_pids();
+    let filter=Filter::new();
     imu.calibrate();
     println!("Initialize all devices finished!!! Welcome to PIEEA");
     loop {

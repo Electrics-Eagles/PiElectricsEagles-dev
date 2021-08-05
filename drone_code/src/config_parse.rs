@@ -84,7 +84,7 @@ pub struct PIDS {
     pub yaw: PID,
 }
 
-pub struct Filter{
+pub struct Filter_Val{
     pub conf_a:f64,
     pub conf_b:f64,
 }
@@ -315,8 +315,13 @@ impl config_parser {
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     ///
     ///
-    pub fn filter_config(&mut self){
+    pub fn filter_config(&mut self) -> Filter_Val {
         let filter_config = self.config_parser.section(Some("filter")).unwrap();
+        let a=filter_config.get("conf_a").unwrap();
+        let b=filter_config.get("conf_a").unwrap();
+        let data=Filter_Val{ conf_a: a.parse().unwrap(), conf_b: b.parse().unwrap() };
+        return data;
+
     }
 
     pub fn esc_config_parser(&mut self) -> EscMotors {
