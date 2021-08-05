@@ -1,4 +1,4 @@
-Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/wiki
+Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/wiki or www.eeagles.net
 
 
 ** As we don`t have the stablie verison that do it stabilly we will do not had the dev/stabile folders. FOr now is redudant **
