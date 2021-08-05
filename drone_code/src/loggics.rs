@@ -92,10 +92,10 @@ pub fn main_loop() {
         //Accelerometer angle calculations
         acc_total_vector = sqrt((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z));       //Calculate the total accelerometer vector.
         if abs(acc_y) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
-            angle_pitch_acc = (acc_y/acc_total_vector).asin().to_radians() * 57.296;          //Calculate the pitch angle.
+            angle_pitch_acc = (acc_y/acc_total_vector).asin() * 57.296;          //Calculate the pitch angle.
         }
         if abs(acc_x) < acc_total_vector {                                        //Prevent the asin function to produce a NaN
-            angle_roll_acc = (acc_x/acc_total_vector).asin().to_radians() * -57.296;           //Calculate the pitch angle.
+            angle_roll_acc = (acc_x/acc_total_vector).asin() * -57.296;           //Calculate the pitch angle.
         }
         //Place the MPU-6050 spirit level and note the values in the following two lines for calibration.
         angle_pitch_acc -= 0.0;                                                   //Accelerometer calibration value for pitch.
