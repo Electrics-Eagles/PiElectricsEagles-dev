@@ -1,3 +1,5 @@
+#[allow(non_camel_case_types)]
+
 /* Python code */
 
 /*
@@ -133,5 +135,3 @@ const   dt: f32 =0.006;
     }
 
  */
-
-
