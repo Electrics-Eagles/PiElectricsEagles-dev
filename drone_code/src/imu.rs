@@ -1,3 +1,5 @@
+#[allow(non_camel_case_types)]
+
 
 use mpu6050::{Mpu6050Error, Mpu6050};
 use linux_embedded_hal::{I2cdev, Delay};
@@ -62,8 +64,8 @@ impl imu {
         let mut delay = Delay;
         let mut mpu = Mpu6050::new_with_sens(i2c, AccelRange::G8, GyroRange::D500);
         mpu.init(&mut delay).unwrap();
-        mpu.set_accel_hpf(ACCEL_HPF::_5);
-        mpu.set_sleep_enabled(false);
+        mpu.set_accel_hpf(ACCEL_HPF::_5).unwrap();
+        mpu.set_sleep_enabled(false).unwrap();
         imu { imu: mpu }
     }
      /// The get_acc_data() is function that return raw values acc the returns ImuData struct .
@@ -150,4 +152,3 @@ impl imu {
     }
 
 }
-
