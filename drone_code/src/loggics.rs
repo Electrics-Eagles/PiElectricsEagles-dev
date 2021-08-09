@@ -1,3 +1,12 @@
+#[allow(non_camel_case_types)]
+
+
+/*
+This code is a port of our verison of YMFC-AL 
+ YMFC-AL -> Electrics Eagles (Arduino) -> PiElectricsEagles (Raspberry Pi Zero )
+*/
+
+
 
 use crate::config_parse::*;
 use crate::controller::*;
@@ -6,8 +15,7 @@ use crate::logger::*;
 use std::time::SystemTime;
 use crate::filter::Filter;
 use crate::utils::sin;
-use cgmath::num_traits::abs;
-
+use crate::utils::abs;
 use crate::imu;
 use std::thread;
 use core::time;
@@ -33,7 +41,7 @@ static mut pid_last_yaw_d_error: f32 = 0.0;
 static mut gyro_roll_input: f32 = 0.0;
 static mut gyro_pitch_input: f32 = 0.0;
 static mut gyro_yaw_input: f32 = 0.0;
-const a:f32=3.0;
+const a:f32=2.0;
 const b: f32 =0.7;
 
 fn sqrt(input:f32) -> f32 {
@@ -61,6 +69,7 @@ pub fn main_loop() {
     let  PIds =config .get_pids();
     imu.calibrate();
     println!("Initialize all devices finished!!! Welcome to PIEEA");
+    thread::sleep(time::Duration::from_millis(1000));
     loop {
         let now = SystemTime::now();
         let acc = imu.get_acc_data();
@@ -72,20 +81,20 @@ pub fn main_loop() {
         let raw_gyro_pitch = gyro.pitch as f32;
         let raw_gyro_yaw = gyro.yaw  as f32;
 
-        let gyro_roll=ABfilter(raw_gyro_roll, a, b);
-        let gyro_pitch=ABfilter(raw_gyro_pitch, a, b);
-        let gyro_yaw=ABfilter(raw_gyro_yaw, a, b);
+        let gyro_roll = ABfilter(raw_gyro_roll, a, b);
+        let gyro_pitch = ABfilter(raw_gyro_pitch, a, b);
+        let gyro_yaw = ABfilter(raw_gyro_yaw, a, b);
 
 
 
-        let raw_acc_x:f32=  acc.roll as f32;
-        let raw_acc_y:f32=acc.pitch as f32;
-        let raw_acc_z:f32=acc.yaw as f32;
+        let raw_acc_x:f32 = acc.roll as f32;
+        let raw_acc_y:f32 = acc.pitch as f32;
+        let raw_acc_z:f32 = acc.yaw as f32;
 
 
-        let acc_x=ABfilter(raw_acc_x, a, b);
-        let acc_y=ABfilter(raw_acc_y, a, b);
-        let acc_z=ABfilter(raw_acc_z, a, b);
+        let acc_x = ABfilter(raw_acc_x, a, b);
+        let acc_y = ABfilter(raw_acc_y, a, b);
+        let acc_z = ABfilter(raw_acc_z, a, b);
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.
@@ -144,16 +153,18 @@ pub fn main_loop() {
             }
             pid_pitch_setpoint -= pitch_level_correction;
             pid_pitch_setpoint /= 3.0;
-            pid_yaw_setpoint = 0.0;
-            if reciver.ch3 > 1050 {
-                if reciver.ch4 > 1508 {
-                    pid_yaw_setpoint = ((reciver.ch4 as f32 - 1508 as f32) as f32) / 3.0;
-                } else if reciver.ch4 < 1492 {
-                    pid_yaw_setpoint = ((reciver.ch4 as f32 - 1492 as f32) as f32) / 3.0;
-                }
+            pid_yaw_setpoint = 0.0; 
+
+            if reciver.ch4 > 1508 {
+                pid_yaw_setpoint = reciver.ch4 as f32  -1508 as f32;
+            } else if reciver.ch4 < 1492 {
+                pid_yaw_setpoint = reciver.ch4 as f32-1492 as f32;
+                
             }
+
+            pid_yaw_setpoint /=3.0;
             calculate_pid(PIds.clone());
-// To :DO Check it if will work with division of pid_yaw_setpoint/3.0;
+
             throllite = reciver.ch3;
             if start == 2 {
                 if throllite > 1800 { throllite = 1800; }
