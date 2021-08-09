@@ -6,3 +6,8 @@ pub fn sin(input: f64) -> f64 {
 pub fn sqrt(input:f32) -> f32{
     input.sqrt()
 }
+
+
+pub fn abs(input:f32) -> f32{
+    input.abs()
+}
