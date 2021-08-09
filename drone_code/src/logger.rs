@@ -1,3 +1,5 @@
+#[allow(non_camel_case_types)]
+
 use std::fs::File;
 use std::io::prelude::*;
 const LOG_PATH: &str = "/var/pi_drone.log";
