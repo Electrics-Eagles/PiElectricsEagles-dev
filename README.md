@@ -1,3 +1,6 @@
+Our code is YMFC-AL based. So we are not a full developers of code. But the PCB Design is developed by us.
+
+
 Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/wiki or www.eeagles.net
 
 
