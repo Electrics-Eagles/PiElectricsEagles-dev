@@ -124,8 +124,8 @@ pub fn main_loop() {
         pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
         unsafe {
-            if reciver.ch6 > 1300 { start = 1; }
-            if start == 1 && reciver.ch6 > 1600 {
+            if reciver.ch3  < 1050 && reciver.ch4 < 1050 { start = 1; }
+            if start == 1 && reciver.ch3  < 1050 && reciver.ch4 > 1450 {
                 start = 2;
                 angle_pitch = angle_pitch_acc;
                 angle_roll = angle_roll_acc;
@@ -136,7 +136,8 @@ pub fn main_loop() {
                 pid_i_mem_yaw = 0.0;
                 pid_last_yaw_d_error = 0.0;
             }
-            if start == 2 && reciver.ch6 < 1200 { start = 0; }
+            if start == 2 && reciver.ch3 < 1050 && reciver.ch4 > 1950 { start = 0; }
+            
             pid_roll_setpoint = 0.0;
             if reciver.ch1 > 1508 {
                 pid_roll_setpoint = (reciver.ch1 as f32 - 1508 as f32) as f32;
