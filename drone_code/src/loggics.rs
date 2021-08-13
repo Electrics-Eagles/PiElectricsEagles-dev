@@ -58,7 +58,7 @@ pub fn main_loop() {
     let mut pitch_level_correction;
     let mut roll_level_correction;
     let mut start: i32 = 0;
-    let mut throllite:u16;
+    let mut throttle:u16;
     let mut esc_1:f32;
     let mut esc_2 :f32;
     let mut esc_3 :f32;
@@ -145,58 +145,41 @@ pub fn main_loop() {
             }
             pid_roll_setpoint -= roll_level_correction;
             pid_roll_setpoint /= 3.0;
+
             pid_pitch_setpoint = 0.0;
-            if reciver.ch1 > 1508 {
+            if reciver.ch2 > 1508 {
                 pid_pitch_setpoint = (reciver.ch2 as f32 - 1508 as f32) as f32;
-            } else if reciver.ch1 < 1492 {
+            } else if reciver.ch2 < 1492 {
                 pid_pitch_setpoint = (reciver.ch2 as f32 - 1492 as f32) as f32;
             }
             pid_pitch_setpoint -= pitch_level_correction;
             pid_pitch_setpoint /= 3.0;
-            pid_yaw_setpoint = 0.0; 
 
-            if reciver.ch4 > 1508 {
-                pid_yaw_setpoint = reciver.ch4 as f32  -1508 as f32;
-            } else if reciver.ch4 < 1492 {
-                pid_yaw_setpoint = reciver.ch4 as f32-1492 as f32;
-                
+            pid_yaw_setpoint = 0.0; 
+            if reciver.ch3 > 1050 {
+                if (reciver.ch4 > 1508) { pid_yaw_setpoint = (reciver.ch4 as f32 - 1508 as f32)/3.0; }
+                else if (reciver.ch4 < 1492) { pid_yaw_setpoint = (reciver.ch4 as f32 - 1492 as f32)/3.0; }
             }
 
-            pid_yaw_setpoint /=3.0;
             calculate_pid(PIds.clone());
 
-            throllite = reciver.ch3;
+            throttle = reciver.ch3;
+            
             if start == 2 {
-                if throllite > 1800 { throllite = 1800; }
-                esc_1 = throllite as f32 - pid_output_pitch + pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 1 (front-right - CCW)
-                esc_2 = throllite as f32 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
-                esc_3 = throllite as f32 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
-                esc_4 = throllite as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
-                if esc_1 < 1100.0 {
-                    esc_1 = 1100.0;
-                } //Keep the motors running.
-                if esc_2 < 1100.0 {
-                    esc_2 = 1100.0;
-                }
-                if esc_3 < 1100.0 {
-                    esc_3 = 1100.0;
-                }
-                if esc_4 < 1100.0 {
-                    esc_4 = 1100.0;
-                }
+                if throttle > 1800 { throttle = 1800; }
+                esc_1 = throttle as f32 - pid_output_pitch + pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 1 (front-right - CCW)
+                esc_2 = throttle as f32 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
+                esc_3 = throttle as f32 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
+                esc_4 = throttle as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
+                if esc_1 < 1100.0 { esc_1 = 1100.0; } //Keep the motors running.
+                if esc_2 < 1100.0 { esc_2 = 1100.0; }
+                if esc_3 < 1100.0 { esc_3 = 1100.0; }
+                if esc_4 < 1100.0 { esc_4 = 1100.0; }
 
-                if esc_1 > 2000.0 {
-                    esc_1 = 2000.0;
-                }
-                if esc_2 > 2000.0 {
-                    esc_2 = 2000.0;
-                }
-                if esc_3 > 2000.0 {
-                    esc_3 = 2000.0;
-                }
-                if esc_4 > 2000.0 {
-                    esc_4 = 2000.0;
-                }
+                if esc_1 > 2000.0 { esc_1 = 2000.0; }
+                if esc_2 > 2000.0 { esc_2 = 2000.0; }
+                if esc_3 > 2000.0 { esc_3 = 2000.0; }
+                if esc_4 > 2000.0 { esc_4 = 2000.0; }
             }
             else {
                 esc_1 = 1000.0;
@@ -255,55 +238,41 @@ fn calculate_pid(pid: PIDS) {
         //roll calculation
         pid_error_temp = gyro_roll_input - pid_roll_setpoint;
         pid_i_mem_roll += pid.roll.i as f32 * pid_error_temp;
-        if pid_i_mem_roll > pid.roll.max as f32 {
-            pid_i_mem_roll = pid.roll.max as f32;
-        } else if pid_i_mem_roll < (pid.roll.max as f32 * -1.0) {
-            pid_i_mem_roll = pid.roll.max as f32 * -1.0;
-        }
+        if pid_i_mem_roll > pid.roll.max as f32 { pid_i_mem_roll = pid.roll.max as f32; } 
+        else if pid_i_mem_roll < (pid.roll.max as f32 * -1.0) { pid_i_mem_roll = pid.roll.max as f32 * -1.0; }
+
         pid_output_roll = pid.roll.p as f32 * pid_error_temp
             + pid_i_mem_roll
             + pid.roll.d as f32 * (pid_error_temp - pid_last_roll_d_error);
-        if pid_output_roll > pid.roll.max as f32 {
-            pid_output_roll = pid.roll.max as f32;
-        } else if pid_output_roll < (pid.roll.max as f32 * -1.0) {
-            pid_output_roll = pid.roll.max as f32 * -1.0;
-        }
+
+        if pid_output_roll > pid.roll.max as f32 { pid_output_roll = pid.roll.max as f32; } 
+        else if pid_output_roll < (pid.roll.max as f32 * -1.0) { pid_output_roll = pid.roll.max as f32 * -1.0; }
         pid_last_roll_d_error = pid_error_temp;
 
         //pitch calculation
         pid_error_temp = gyro_pitch_input - pid_pitch_setpoint;
         pid_i_mem_pitch += pid.pitch.i as f32 * pid_error_temp;
-        if pid_i_mem_pitch > pid.pitch.max as f32 {
-            pid_i_mem_pitch = pid.pitch.max as f32;
-        } else if pid_i_mem_pitch < (pid.pitch.max as f32 * -1.0) {
-            pid_i_mem_pitch = pid.pitch.max as f32 * -1.0;
-        }
+        if pid_i_mem_pitch > pid.pitch.max as f32 { pid_i_mem_pitch = pid.pitch.max as f32; } 
+        else if pid_i_mem_pitch < (pid.pitch.max as f32 * -1.0) { pid_i_mem_pitch = pid.pitch.max as f32 * -1.0; }
+
         pid_output_pitch = pid.pitch.p as f32 * pid_error_temp
             + pid_i_mem_pitch
             + pid.pitch.d as f32 * (pid_error_temp - pid_last_pitch_d_error);
-        if pid_output_pitch > pid.pitch.max as f32 {
-            pid_output_pitch = pid.pitch.max as f32;
-        } else if pid_output_pitch < (pid.pitch.max as f32 * -1.0) {
-            pid_output_pitch = pid.pitch.max as f32 * -1.0;
-        }
+
+        if pid_output_pitch > pid.pitch.max as f32 { pid_output_pitch = pid.pitch.max as f32; } 
+        else if pid_output_pitch < (pid.pitch.max as f32 * -1.0) { pid_output_pitch = pid.pitch.max as f32 * -1.0; }
         pid_last_pitch_d_error = pid_error_temp;
 
         //yaw calculation
         pid_error_temp = gyro_yaw_input - pid_yaw_setpoint;
         pid_i_mem_yaw += pid.yaw.i as f32 * pid_error_temp;
-        if pid_i_mem_yaw > pid.yaw.max as f32 {
-            pid_i_mem_yaw = pid.yaw.max as f32;
-        } else if pid_i_mem_yaw < (pid.yaw.max as f32 * -1.0) {
-            pid_i_mem_yaw = pid.yaw.max as f32 * -1.0;
-        }
+        if pid_i_mem_yaw > pid.yaw.max as f32 { pid_i_mem_yaw = pid.yaw.max as f32; } 
+        else if pid_i_mem_yaw < (pid.yaw.max as f32 * -1.0) { pid_i_mem_yaw = pid.yaw.max as f32 * -1.0; }
         pid_output_yaw = pid.yaw.p as f32 * pid_error_temp
             + pid_i_mem_yaw
             + pid.yaw.d as f32 * (pid_error_temp - pid_last_yaw_d_error);
-        if pid_output_yaw > pid.yaw.max as f32 {
-            pid_output_yaw = pid.yaw.max as f32;
-        } else if pid_output_yaw < (pid.yaw.max as f32 * -1.0) {
-            pid_output_yaw = pid.yaw.max as f32 * -1.0;
-        }
+        if pid_output_yaw > pid.yaw.max as f32 { pid_output_yaw = pid.yaw.max as f32; } 
+        else if pid_output_yaw < (pid.yaw.max as f32 * -1.0) { pid_output_yaw = pid.yaw.max as f32 * -1.0; }
         pid_last_yaw_d_error = pid_error_temp;
     }
 }
