@@ -77,14 +77,13 @@ pub fn main_loop() {
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
 
-        let raw_gyro_roll =  gyro.roll as f32;
-        let raw_gyro_pitch = gyro.pitch as f32;
-        let raw_gyro_yaw = gyro.yaw  as f32;
+        let raw_gyro_roll =  ABfilter(gyro.roll as f32,a,b);
+        let raw_gyro_pitch = ABfilter(gyro.pitch as f32,a,b);
+        let raw_gyro_yaw =ABfilter( gyro.yaw  as f32,a,b);
 
-        let gyro_roll = ABfilter(raw_gyro_roll, a, b);
-        let gyro_pitch = ABfilter(raw_gyro_pitch, a, b);
-        let gyro_yaw = ABfilter(raw_gyro_yaw, a, b);
-
+        let gyro_roll =ABfilter(raw_gyro_roll ,a,b);
+        let gyro_pitch =ABfilter(raw_gyro_pitch,a,b);
+        let gyro_yaw = ABfilter(raw_gyro_yaw,a,b);
 
 
         let raw_acc_x:f32 = acc.roll as f32;
@@ -92,9 +91,9 @@ pub fn main_loop() {
         let raw_acc_z:f32 = acc.yaw as f32;
 
 
-        let acc_x = ABfilter(raw_acc_x, a, b);
-        let acc_y = ABfilter(raw_acc_y, a, b);
-        let acc_z = ABfilter(raw_acc_z, a, b);
+        let acc_x = raw_acc_x;
+        let acc_y = raw_acc_y;
+        let acc_z =raw_acc_z;
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll / 65.5) * 0.3); //Gyro pid input is deg/sec.
@@ -121,8 +120,8 @@ pub fn main_loop() {
         angle_roll_acc -= 0.0;
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
-        pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
-        roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
+        pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
+        roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
             if reciver.ch3  < 1050 && reciver.ch4 < 1050 { start = 1; }
             if start == 1 && reciver.ch3  < 1050 && reciver.ch4 > 1450 {
