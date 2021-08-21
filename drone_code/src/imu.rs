@@ -1,10 +1,13 @@
 #[allow(non_camel_case_types)]
 
 
-use mpu6050::{Mpu6050Error, Mpu6050};
-use linux_embedded_hal::{I2cdev, Delay};
-use mpu6050::device::{AccelRange, GyroRange, ACCEL_HPF, GYRO_REGX_H, ACC_REGX_H};
+extern crate linux_embedded_hal as hal;
+use bmi160::{Bmi160, SlaveAddr, AccelerometerPowerMode, GyroscopePowerMode, SensorSelector};
+
 use crate::config_parse::config_parser;
+use self::hal::I2cdev;
+use bmi160::interface::I2cInterface;
+
 /// IMU unit struct
 /// so there are object of imu that has methods and functions .
 /// So the usage inside imu.rs is :
@@ -18,7 +21,7 @@ use crate::config_parse::config_parser;
 ///
 ///
 pub struct  imu {
-     imu: Mpu6050<I2cdev>,
+     imu: Bmi160<I2cInterface<I2cdev>>
 }
 ///ImuData that has i32 struct and has 3 axis
 /// roll or (x)
@@ -27,6 +30,7 @@ pub struct  imu {
 ///
 /// Also it is used in all functions that are as struct .
 /// ImuData is universal way to get pitch/yaw/roll in code
+#[derive(Clone, Copy)]
 pub struct ImuData {
     pub roll:i32,
     pub pitch:i32,
@@ -39,6 +43,7 @@ pub struct ImuData {
 /// The calibration gyro_pitch_calibration value where is stored the pitch  calibration value
 /// The calibration gyro_yaw_calibration value where is stored the yaw calibration value
 ///Value that counts loops of calibration loop_of_calib
+
 
 
 static mut gyro_roll_calibration: i32 = 0;
@@ -58,15 +63,14 @@ impl imu {
     /// ```
     /// As argument in requires the path of i2c (String)
     pub fn new() -> Self {
-        let  mut config = config_parser::new();
-        let i2c = I2cdev::new(config.imu_config_parser().port)
-            .map_err(Mpu6050Error::I2c).unwrap();
-        let mut delay = Delay;
-        let mut mpu = Mpu6050::new_with_sens(i2c, AccelRange::G8, GyroRange::D500);
-        mpu.init(&mut delay).unwrap();
-        mpu.set_accel_hpf(ACCEL_HPF::_5).unwrap();
-        mpu.set_sleep_enabled(false).unwrap();
-        imu { imu: mpu }
+        let dev = hal::I2cdev::new("/dev/i2c-2").unwrap();
+        let address = SlaveAddr::default();
+        let mut imu = Bmi160::new_with_i2c(dev, address);
+        let id = imu.chip_id().unwrap_or(0);
+        println!("Chip ID: {}", id);
+        imu.set_accel_power_mode(AccelerometerPowerMode::Normal).unwrap();
+        imu.set_gyro_power_mode(GyroscopePowerMode::Normal).unwrap();
+        imu { imu }
     }
      /// The get_acc_data() is function that return raw values acc the returns ImuData struct .
      /// Usage is :
@@ -75,14 +79,19 @@ impl imu {
      /// ```
      ///
      pub fn get_acc_data(&mut self) -> ImuData {
-        let  acc = self.imu.read_rot(ACC_REGX_H).unwrap();
-        let data=ImuData{
+         let data = self.imu.data(SensorSelector::new().gyro().accel()).unwrap();
+         let accel = data.accel.unwrap();
+        let  acc = accel;
+        let mut  output:ImuData=ImuData{
             roll: acc.x as i32,
             pitch: acc.y as i32,
             yaw: acc.z as i32
         };
 
-        data
+
+
+
+         output
     }
 /// Calibrate function .
 /// Is a funcion that calibrate only gyro before flight because the sensor can be tilted and to avoid it this function is used.
@@ -139,8 +148,8 @@ impl imu {
     ///
 
      fn get_gyro_data(&mut self) -> ImuData {
-        let  gyro = self.imu.read_rot(GYRO_REGX_H).unwrap();
-
+        let data = self.imu.data(SensorSelector::new().gyro()).unwrap();
+        let gyro = data.gyro.unwrap();
         let data=ImuData{
             roll: gyro.x as i32,
             pitch: gyro.y as i32,
