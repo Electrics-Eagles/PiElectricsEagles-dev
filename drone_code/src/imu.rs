@@ -1,13 +1,18 @@
 #[allow(non_camel_case_types)]
-
-
-extern crate linux_embedded_hal as hal;
+/*extern crate linux_embedded_hal as hal;
 use bmi160::{Bmi160, SlaveAddr, AccelerometerPowerMode, GyroscopePowerMode, SensorSelector};
 
 use crate::config_parse::config_parser;
-use self::hal::I2cdev;
+//use self::hal::I2cdev;
 use bmi160::interface::I2cInterface;
-
+use hal::i2cdev::core::I2CDevice;
+use std::thread;
+use std::time::Duration;*/
+extern crate linux_embedded_hal as hal;
+use bmi160::{AccelerometerPowerMode, Bmi160, GyroscopePowerMode, SensorSelector, SlaveAddr};
+use hal::i2cdev::core::I2CDevice;
+use std::thread;
+use std::time::Duration;
 /// IMU unit struct
 /// so there are object of imu that has methods and functions .
 /// So the usage inside imu.rs is :
@@ -20,8 +25,8 @@ use bmi160::interface::I2cInterface;
 /// ```
 ///
 ///
-pub struct  imu {
-     imu: Bmi160<I2cInterface<I2cdev>>
+pub struct imu {
+    imu: bmi160::Bmi160<bmi160::interface::I2cInterface<hal::I2cdev>>,
 }
 ///ImuData that has i32 struct and has 3 axis
 /// roll or (x)
@@ -32,19 +37,15 @@ pub struct  imu {
 /// ImuData is universal way to get pitch/yaw/roll in code
 #[derive(Clone, Copy)]
 pub struct ImuData {
-    pub roll:i32,
-    pub pitch:i32,
-    pub yaw:i32,
-
+    pub roll: i32,
+    pub pitch: i32,
+    pub yaw: i32,
 }
-
 
 /// The calibration gyro_roll_calibration value where is stored the roll calibration value
 /// The calibration gyro_pitch_calibration value where is stored the pitch  calibration value
 /// The calibration gyro_yaw_calibration value where is stored the yaw calibration value
 ///Value that counts loops of calibration loop_of_calib
-
-
 
 static mut gyro_roll_calibration: i32 = 0;
 static mut gyro_pitch_calibration: i32 = 0;
@@ -63,49 +64,57 @@ impl imu {
     /// ```
     /// As argument in requires the path of i2c (String)
     pub fn new() -> Self {
-        let dev = hal::I2cdev::new("/dev/i2c-2").unwrap();
+        let mut config = hal::I2cdev::new("/dev/i2c-2").unwrap();
+
+        config.set_slave_address(0x68 as u16);
+        thread::sleep(Duration::from_millis(10));
+        config.write(&[0x40, 0b0010_1001]).unwrap();
+        thread::sleep(Duration::from_millis(10));
+        config.write(&[0x41, 0b0000_1000]).unwrap();
+        thread::sleep(Duration::from_millis(10));
+        config.write(&[0x42, 0b0010_1001]).unwrap();
+        thread::sleep(Duration::from_millis(10));
+        config.write(&[0x43, 0b0000_0010]).unwrap();
+        thread::sleep(Duration::from_millis(10));
+
         let address = SlaveAddr::default();
-        let mut imu = Bmi160::new_with_i2c(dev, address);
-        let id = imu.chip_id().unwrap_or(0);
-        println!("Chip ID: {}", id);
+        let mut imu = Bmi160::new_with_i2c(hal::I2cdev::new("/dev/i2c-2").unwrap(), address);
+
         imu.set_accel_power_mode(AccelerometerPowerMode::Normal).unwrap();
+        thread::sleep(Duration::from_millis(10));
         imu.set_gyro_power_mode(GyroscopePowerMode::Normal).unwrap();
+        thread::sleep(Duration::from_millis(10));
         imu { imu }
     }
-     /// The get_acc_data() is function that return raw values acc the returns ImuData struct .
-     /// Usage is :
-     /// ```
-     /// let data=imu.get_acc_data();
-     /// ```
-     ///
-     pub fn get_acc_data(&mut self) -> ImuData {
-         let data = self.imu.data(SensorSelector::new().gyro().accel()).unwrap();
-         let accel = data.accel.unwrap();
-        let  acc = accel;
-        let mut  output:ImuData=ImuData{
+    /// The get_acc_data() is function that return raw values acc the returns ImuData struct .
+    /// Usage is :
+    /// ```
+    /// let data=imu.get_acc_data();
+    /// ```
+    ///
+    pub fn get_acc_data(&mut self) -> ImuData {
+        let data = self.imu.data(SensorSelector::new().gyro().accel()).unwrap();
+        let acc = data.accel.unwrap();
+        let output: ImuData = ImuData {
             roll: acc.x as i32,
             pitch: acc.y as i32,
-            yaw: acc.z as i32
+            yaw: acc.z as i32,
         };
-
-
-
-
-         output
+        output
     }
-/// Calibrate function .
-/// Is a funcion that calibrate only gyro before flight because the sensor can be tilted and to avoid it this function is used.
-/// Usage:
-/// ```
-/// imu.calibrate();
-/// ```
+    /// Calibrate function .
+    /// Is a funcion that calibrate only gyro before flight because the sensor can be tilted and to avoid it this function is used.
+    /// Usage:
+    /// ```
+    /// imu.calibrate();
+    /// ```
     pub fn calibrate(&mut self) {
         unsafe {
             while loop_of_calib < 2000 {
                 let reading = self.get_gyro_data();
                 gyro_roll_calibration += reading.pitch;
                 gyro_pitch_calibration += reading.roll;
-                gyro_yaw_calibration += reading.yaw ;
+                gyro_yaw_calibration += reading.yaw;
                 loop_of_calib += 1;
             }
             gyro_roll_calibration /= 2000;
@@ -126,16 +135,14 @@ impl imu {
     pub fn get_normalised_gyro_data(&mut self) -> ImuData {
         let data = self.get_gyro_data();
         unsafe {
-            if loop_of_calib == 2000
-            {
+            if loop_of_calib == 2000 {
                 return ImuData {
                     roll: data.roll - gyro_roll_calibration,
                     pitch: data.pitch - gyro_pitch_calibration,
                     yaw: data.yaw - gyro_yaw_calibration,
-                }
-            }
-            else {
-               panic!("No calibration . That is nightmare");
+                };
+            } else {
+                panic!("No calibration . That is nightmare");
             }
         }
     }
@@ -147,17 +154,15 @@ impl imu {
     /// ```
     ///
 
-     fn get_gyro_data(&mut self) -> ImuData {
+    fn get_gyro_data(&mut self) -> ImuData {
         let data = self.imu.data(SensorSelector::new().gyro()).unwrap();
         let gyro = data.gyro.unwrap();
-        let data=ImuData{
+        let data = ImuData {
             roll: gyro.x as i32,
             pitch: gyro.y as i32,
-            yaw: gyro.z as i32
+            yaw: gyro.z as i32,
         };
 
         data
-
     }
-
 }
