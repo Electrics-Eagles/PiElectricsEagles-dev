@@ -1,5 +1,4 @@
 #[allow(non_camel_case_types)]
-
 use std::fs::File;
 use std::io::prelude::*;
 const LOG_PATH: &str = "/var/pi_drone.log";
@@ -9,12 +8,12 @@ pub struct Logger {
     stream_buf: String,
 }
 pub struct LoggingStruct {
-    pub acc_z: f32,
-    pub acc_y: f32,
-    pub acc_x: f32,
-    pub gyro_x: f32,
-    pub gyro_y: f32,
-    pub gyro_z: f32,
+    pub acc_z: i32,
+    pub acc_y: i32,
+    pub acc_x: i32,
+    pub gyro_x: i32,
+    pub gyro_y: i32,
+    pub gyro_z: i32,
     pub reciver_ch1: u16,
     pub reciver_ch2: u16,
     pub reciver_ch3: u16,
@@ -116,7 +115,9 @@ impl Logger {
         self.stream_buf.push_str("\n");
     }
     pub fn save_file(&mut self) {
-        self.file_.write_all(self.stream_buf.as_bytes()).expect("Log write error");
+        self.file_
+            .write_all(self.stream_buf.as_bytes())
+            .expect("Log write error");
         self.stream_buf.clear();
     }
 }
