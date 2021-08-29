@@ -24,6 +24,27 @@ Code Style:
 Git Ignore file should help
 
 
+
+| 1)   | IDEA  + Rust Plugin              |
+|------|----------------------------------|
+| 2)   | Windows 10 + WSL                 |
+| 3)   | Disk Genius + LogCopyier         |
+| 4)   | Tabby                            |
+| 5)   | Telemetry soft                   |
+| 6)   | Docker Desktop                   |
+| 7)   | Python3                          |
+| 8)   | AdoptJDK 11                      |
+| 9)   | Excel / Word/OneNote             |
+| 10)  | Discord /WhatsApp .              |
+| 11)  | Test SD cards software.          |
+| 12)  | Github /git /Github desktop /gh. |
+| 13)  | Google Calendar.                 |
+| 14)  | Teedy for docs share.            |
+| 15)  | Google                           |
+| 16)  | Mozila for one more account.     |
+| 17)  | Rust                             |
+| 18)  | Python 3                         |
+| 19)  | Dia                              |
 **SOURCE CODE ONLY**
 
 
