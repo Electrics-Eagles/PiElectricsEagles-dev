@@ -13,8 +13,10 @@ jobs:
           toolchain: stable
           target: armv7-unknown-linux-gnueabihf
           override: true
+          working-directory: ./drone_code
       - uses: actions-rs/cargo@v1
         with:
+          working-directory: ./drone_code
           use-cross: true
           command: build
           args: --target armv7-unknown-linux-gnueabihf
