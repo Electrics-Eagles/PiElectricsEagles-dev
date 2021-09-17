@@ -1,22 +1,22 @@
-name: Rust
+on: [push]
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-env:
-  CARGO_TERM_COLOR: always
+name: ARMv7 build
 
 jobs:
-  build:
-
+  linux_arm7:
+    name: Linux ARM
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: sudo chmod 755 ./ci_cd_build.sh &&  sudo ./ci_cd_build.sh
-    - name: Run tests
-      run: sudo chmod 755 ./ci_cd_test.sh &&  sudo ./ci_cd_test.sh
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          working-directory: ./drone_code
+          toolchain: stable
+          target: arm-unknown-linux-musleabi
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target arm-unknown-linux-musleabi
+
