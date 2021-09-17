@@ -19,4 +19,4 @@ jobs:
     - name: Build
       run: sudo chmod 755 ./ci_cd_build.sh &&  sudo ./ci_cd_build.sh
     - name: Run tests
-      run: ./ci_cd_test.sh
+      run: sudo chmod 755 ./ci_cd_test.sh &&  sudo ./ci_cd_test.sh
