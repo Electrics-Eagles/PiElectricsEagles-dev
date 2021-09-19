@@ -1,9 +1,7 @@
 on: [push]
 
 name: ARMv7 build
-defaults:
-  run:
-    working-directory: ./drone_code
+
 jobs:
   linux_arm7:
     name: Linux ARMv7
@@ -17,8 +15,8 @@ jobs:
           target: armv7-unknown-linux-gnueabihf
           override: true
       - uses: actions-rs/cargo@v1
-      
         with:
+          working-directory: ./drone_code
           use-cross: true
           command: build
           args: --target armv7-unknown-linux-gnueabihf
