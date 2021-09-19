@@ -7,7 +7,7 @@ jobs:
     name: Linux ARMv7
     runs-on: ubuntu-latest
     steps:
-      - run: cd drone_code
+      - run: ls 
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
