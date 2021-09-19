@@ -19,3 +19,8 @@ jobs:
           use-cross: true
           command: build
           args: --target arm-unknown-linux-musleabi
+      - uses: actions/upload-artifact@v2
+        with:
+            name: drone binary
+            path: pielectricseagles
+  
