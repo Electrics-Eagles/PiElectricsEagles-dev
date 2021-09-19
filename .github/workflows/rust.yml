@@ -27,11 +27,6 @@ jobs:
         with:
             name: drone binary
             path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
-            
-      - name: Moving build to artifacts directory
-      - uses: actions/upload-artifact@v2
-      
-        with:
-            name: drone binary
-            path: data.txt
+
+
   
