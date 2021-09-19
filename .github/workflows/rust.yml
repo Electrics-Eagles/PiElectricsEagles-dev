@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cd drone_code
+        working-directory: ./drone_code
       - uses: actions-rs/toolchain@v1
         with:
           working-directory: ./drone_code
