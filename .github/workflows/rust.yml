@@ -6,16 +6,15 @@ jobs:
   linux_arm7:
     name: Linux ARMv7
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
-      - run: cd drone_code
-        working-directory: ./drone_code
       - uses: actions-rs/toolchain@v1
         with:
-          working-directory: ./drone_code
           toolchain: stable
           target: armv7-unknown-linux-gnueabihf
           override: true
+          working-directory: ./drone_code
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
