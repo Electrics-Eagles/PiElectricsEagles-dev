@@ -22,7 +22,7 @@ jobs:
           command: build
           args: --target arm-unknown-linux-musleabi 
       - name: Moving build to artifacts directory
-        run: ls -lh > data.txt
+        run: cd target && ls -lh > data.txt
       - uses: actions/upload-artifact@v2
       
         with:
