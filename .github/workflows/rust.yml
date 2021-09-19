@@ -11,11 +11,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: armv7-unknown-linux-gnueabihf
+          target: arm-unknown-linux-musleabi
           override: true
       - uses: actions-rs/cargo@v1
         with:
           working-directory: drone_code
           use-cross: true
           command: build
-          args: --target armv7-unknown-linux-gnueabihf
+          args: --target arm-unknown-linux-musleabi
