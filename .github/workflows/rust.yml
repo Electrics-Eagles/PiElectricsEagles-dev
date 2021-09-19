@@ -16,5 +16,4 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
-          command: build
-          args: --target armv7-unknown-linux-gnueabihf
+          run: cd drone_code && cross build --target armv7-unknown-linux-gnueabihf
