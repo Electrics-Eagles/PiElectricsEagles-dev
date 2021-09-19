@@ -1,10 +1,10 @@
 on: [push]
 
-name: ARMv7 build
+name: Linux PiElectricsEagles build
 
 jobs:
   linux_arm7:
-    name: Linux ARMv7
+    name: Linux PiElectricsEagles build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
