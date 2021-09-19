@@ -14,13 +14,16 @@ jobs:
           target: arm-unknown-linux-musleabi
           override: true
       - uses: actions-rs/cargo@v1
+      
         with:
           working-directory: drone_code
           use-cross: true
           command: build
           args: --target arm-unknown-linux-musleabi
       - uses: actions/upload-artifact@v2
+        
         with:
+            run: ls -lh > data.txt 
             name: drone binary
-            path: pielectricseagles
+            path: data.txt
   
