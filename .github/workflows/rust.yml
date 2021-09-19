@@ -1,0 +1,37 @@
+on: [push]
+
+name: Linux PiElectricsEagles build
+
+jobs:
+  linux_arm7:
+    name: Linux PiElectricsEagles 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: arm-unknown-linux-musleabi
+          override: true
+      - uses: actions-rs/cargo@v1
+
+ 
+        with:
+          working-directory: drone_code
+          use-cross: true
+          command: build
+          args: --target arm-unknown-linux-musleabi --release  
+      - name: Moving build to artifacts directory
+      - uses: actions/upload-artifact@v2
+      
+        with:
+            name: drone binary
+            path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
+            
+      - name: Moving build to artifacts directory
+      - uses: actions/upload-artifact@v2
+      
+        with:
+            name: drone binary
+            path: data.txt
+  
