@@ -27,5 +27,5 @@ jobs:
       
         with:
             name: drone binary
-            path: data.txt
+            path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
   
