@@ -17,7 +17,7 @@ jobs:
           working-directory: ./drone_code
       - uses: actions-rs/cargo@v1
         with:
-          run: cd /home
+          run: cd /home/runner/work/PiElectricsEagles/PiElectricsEagles/drone_code
           use-cross: true
           command: build
           args: --target armv7-unknown-linux-gnueabihf
