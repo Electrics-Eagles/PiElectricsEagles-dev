@@ -26,10 +26,9 @@ jobs:
             
       - uses: ncipollo/release-action@v1
       - uses: actions/checkout@v2
-      - name: test 
         with:
               artifacts: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
-              bodyFile: "relase.md"
+              bodyFile: "release.md"
               token: ${{ secrets.GITHUB_TOKEN }}
               tag: ${{ steps.vars.outputs.sha_short }}
               
