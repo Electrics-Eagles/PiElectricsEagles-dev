@@ -20,13 +20,14 @@ jobs:
           command: build
           args: --target arm-unknown-linux-musleabi 
       - uses: actions/upload-artifact@v2
-      - uses: actions/checkout@v2
         with:
             name: drone binary
             path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
+            
       - uses: ncipollo/release-action@v1
+      - uses: actions/checkout@v2
         with:
-              artifacts: "./target/arm-unknown-linux-musleabi/debug/pielectricseagles"
+              artifacts: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
               bodyFile: "relase.md"
               token: ${{ secrets.GITHUB_TOKEN }}
               
