@@ -25,13 +25,7 @@ jobs:
             name: drone binary
             path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
             
-      - uses: ncipollo/release-action@v1
-      - uses: actions/checkout@v2
-        with:
-              artifacts: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
-              bodyFile: "release.md"
-              token: ${{ secrets.GITHUB_TOKEN }}
-              tag: ${{ steps.vars.outputs.sha_short }}
+
               
               
   
