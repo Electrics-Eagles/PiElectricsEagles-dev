@@ -1,7 +1,6 @@
 on:  
   push:
-    tags:
-      - '*'
+
 
 name: ARM build
 
