@@ -14,19 +14,19 @@ jobs:
           toolchain: stable
           target: arm-unknown-linux-musleabi
           override: true
-      - uses: actions-rs/cargo@v1
-
- 
+      - uses: actions-rs/cargo@v1 
         with:
-          working-directory: drone_code
           use-cross: true
           command: build
           args: --target arm-unknown-linux-musleabi 
-      - name: Moving build to artifacts directory
-        run: cd target && ls -lh > data.txt
       - uses: actions/upload-artifact@v2
-      
         with:
             name: drone binary
             path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
+      - uses: ncipollo/release-action@v1
+        with:
+              artifacts: "./target/arm-unknown-linux-musleabi/debug/pielectricseagles"
+              bodyFile: "relase.md"
+              token: ${{ secrets.GITHUB_TOKEN }}
+              
   
