@@ -19,7 +19,7 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --target arm-unknown-linux-musleabi 
+          args: --target arm-unknown-linux-musleabi --release
       - uses: actions/upload-artifact@v2
         with:
             name: drone binary
