@@ -23,7 +23,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
             name: drone binary
-            path: ./target/arm-unknown-linux-musleabi/debug/pielectricseagles
+            path: ./target/arm-unknown-linux-musleabi/release/pielectricseagles
             
 
               
