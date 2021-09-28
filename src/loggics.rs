@@ -8,15 +8,13 @@ use crate::controller::*;
 use crate::filter::ABfilter;
 use crate::filter::Filter;
 use crate::ibus::*;
-use crate::imu;
+use crate::imu::imu;
 use crate::logger::*;
 use crate::utils::abs;
 use crate::utils::sin;
 use core::time;
 use std::thread;
 use std::time::SystemTime;
-use crate::lis3dh_driver::LIS3DH_Driver;
-use crate::l3dgh20::L3GD20H_Driver;
 static mut pid_error_temp: f32 = 0.0;
 
 static mut pid_i_mem_roll: f32 = 0.0;
@@ -64,17 +62,16 @@ pub fn main_loop() {
     let mut config = config_parser::new();
 
     let PIds = config.get_pids();
+
+    let mut imu =imu::new();
     thread::sleep(time::Duration::from_millis(5000));
-    let mut acc =LIS3DH_Driver::new();
-    let mut gyro =L3GD20H_Driver::new();
-    gyro.calibrate();
-    acc.init();
+    println!("Calibrate Gyro . Do not touch drone including squrrels");
+    imu.calibrate();
+
+    thread::sleep(time::Duration::from_millis(1000));
     println!("Initialize all devices finished!!! Welcome to PIEEA V2");
     loop {
         let now = SystemTime::now();
-
-
-
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
 
         /*let raw_gyro_roll = ABfilter(gyro.roll as f32, a, b);
@@ -84,24 +81,17 @@ pub fn main_loop() {
         let gyro_roll = ABfilter(raw_gyro_roll, a, b);
         let gyro_pitch = ABfilter(raw_gyro_pitch, a, b);
         let gyro_yaw = ABfilter(raw_gyro_yaw, a, b);*/
-        let gyro_data=gyro.raw_value();
-        let acc_data=acc.get_data_raw();
-        let gyro_roll =  gyro_data.x;
-        let gyro_pitch = gyro_data.y;
-        let gyro_yaw =  gyro_data.z;
+        let gyro_data=imu.get_normalised_gyro_data();
+        let acc_data=imu.get_acc_data();
 
-        let acc_x: f32 = acc_data.x as f32;
-        let acc_y: f32 = acc_data.y as f32;
-        let acc_z: f32 = acc_data.z as f32;
+        let gyro_roll =  gyro_data.roll;
+        let gyro_pitch = gyro_data.pitch;
+        let gyro_yaw =  gyro_data.yaw;
 
-        /*println!("Gyro X: {}, Gyro Y: {}, Gyro Y: {}, ACC X: {}, ACC Y: {}, ACC Z: {}", gyro.roll, gyro.pitch, gyro.yaw, acc_x, acc_y, acc_z);*/
-        /*let gyro_roll = gyro.roll;
-        let gyro_pitch = gyro.pitch;
-        let gyro_yaw = gyro.yaw;
-        let acc_x: f32 = acc.roll as f32;
-        let acc_y: f32 = acc.pitch as f32;
-        let acc_z: f32 = acc.yaw as f32;
-        println!("Gyro X: {}, Gyro Y: {}, Gyro Y: {}, ACC X: {}, ACC Y: {}, ACC Z: {}", gyro_roll, gyro_pitch, gyro_yaw, acc_x, acc_y, acc_z);*/
+        let acc_x: f32 = acc_data.roll as f32;
+        let acc_y: f32 = acc_data.pitch as f32;
+        let acc_z: f32 = acc_data.yaw as f32;
+
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
             gyro_roll_input = (gyro_roll_input * 0.7) + ((gyro_roll as f32 / 65.5) * 0.3); //Gyro pid input is deg/sec.
@@ -172,9 +162,9 @@ pub fn main_loop() {
 
             pid_yaw_setpoint = 0.0;
             if reciver.ch3 > 1050 {
-                if (reciver.ch4 > 1508) {
+                if reciver.ch4 > 1508 {
                     pid_yaw_setpoint = (reciver.ch4 as f32 - 1508 as f32) / 3.0;
-                } else if (reciver.ch4 < 1492) {
+                } else if reciver.ch4 < 1492 {
                     pid_yaw_setpoint = (reciver.ch4 as f32 - 1492 as f32) / 3.0;
                 }
             }
