@@ -97,7 +97,7 @@ pub fn main_loop() {
         let gyro_pitch = gyro_data.roll;
         let gyro_yaw =  (gyro_data.yaw)*-1;
 
-        let acc_x: f32 = (acc_data.roll as f32)*-1;
+        let acc_x: f32 = (acc_data.roll as f32)*-1.0;
         let acc_y: f32 = acc_data.pitch as f32;
         let acc_z: f32 = acc_data.yaw as f32;
 
