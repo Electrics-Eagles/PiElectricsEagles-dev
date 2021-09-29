@@ -84,11 +84,20 @@ pub fn main_loop() {
         let gyro_data=imu.get_normalised_gyro_data();
         let acc_data=imu.get_acc_data();
 
-        let gyro_roll =  gyro_data.roll;
-        let gyro_pitch = gyro_data.pitch;
-        let gyro_yaw =  gyro_data.yaw;
 
-        let acc_x: f32 = acc_data.roll as f32;
+        /*
+
+        roll=x
+        pitch = y
+        yaw = z
+
+
+                 */
+        let gyro_roll =  gyro_data.pitch;
+        let gyro_pitch = gyro_data.roll;
+        let gyro_yaw =  (gyro_data.yaw)*-1;
+
+        let acc_x: f32 = (acc_data.roll as f32)*-1;
         let acc_y: f32 = acc_data.pitch as f32;
         let acc_z: f32 = acc_data.yaw as f32;
 
