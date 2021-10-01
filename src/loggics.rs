@@ -43,6 +43,7 @@ fn sqrt(input: f32) -> f32 {
     input.sqrt()
 }
 pub fn main_loop() {
+    let init_throllite=1000;
     let mut logger = Logger::new();
     let mut reciver_driver = ibus_receiver::new();
     let mut controller = Controller::new();
@@ -60,6 +61,7 @@ pub fn main_loop() {
     let mut esc_4: f32;
     let mut acc_total_vector;
     let mut config = config_parser::new();
+    controller.set_throttle_external_pwm(init_throllite,init_throllite,init_throllite,init_throllite);
 
     let PIds = config.get_pids();
 
