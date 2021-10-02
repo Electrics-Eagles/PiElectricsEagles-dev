@@ -135,11 +135,14 @@ pub fn main_loop() {
         pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
-            if reciver.ch3 < 1050 && reciver.ch4 < 1050 {
+            if reciver.ch5 > 1450 && reciver.ch6 < 1050 {
                 start = 1;
+                println!("unlocked #1");
             }
-            if start == 1 && reciver.ch3 < 1050 && reciver.ch4 > 1450 {
+            if start == 1 && reciver.ch6 > 1450 && reciver.ch5 > 1450 {
                 start = 2;
+
+                println!("unlocked #2");
                 angle_pitch = angle_pitch_acc;
                 angle_roll = angle_roll_acc;
                 pid_i_mem_roll = 0.0;
@@ -262,7 +265,7 @@ pub fn main_loop() {
                 time_spent: time_spend,
             };
             logger.write_to_log(0, &logging_data);
-            logger.print_telemetry();
+            //logger.print_telemetry();
             logger.save_file();
         }
     }
