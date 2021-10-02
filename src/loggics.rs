@@ -262,11 +262,11 @@ pub fn main_loop() {
                 esc_2,
                 esc_3,
                 esc_4,
-                temp: 0.0,
+                temp: start as f32,
                 time_spent: time_spend,
             };
             logger.write_to_log(0, &logging_data);
-            logger.print_telemetry();
+            //logger.print_telemetry();
             logger.save_file();
         }
     }
