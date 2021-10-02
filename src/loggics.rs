@@ -152,8 +152,9 @@ pub fn main_loop() {
                 pid_i_mem_yaw = 0.0;
                 pid_last_yaw_d_error = 0.0;
             }
-            if start == 2 && reciver.ch3 < 1050 && reciver.ch4 > 1950 {
+            if start == 2 && reciver.ch5 < 1250 && reciver.ch5 < 1200 {
                 start = 0;
+                println!("locked #1");
             }
 
             pid_roll_setpoint = 0.0;
