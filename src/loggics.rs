@@ -265,7 +265,7 @@ pub fn main_loop() {
                 time_spent: time_spend,
             };
             logger.write_to_log(0, &logging_data);
-            //logger.print_telemetry();
+            logger.print_telemetry();
             logger.save_file();
         }
     }
