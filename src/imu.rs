@@ -62,7 +62,7 @@ impl imu {
         let mut delay = Delay;
         let mut mpu = Mpu6050::new_with_sens(i2c, AccelRange::G8, GyroRange::D500);
         mpu.init(&mut delay).unwrap();
-        //mpu.set_accel_hpf(ACCEL_HPF::_5);
+        mpu.set_accel_hpf(ACCEL_HPF::_5);
        // mpu.set_sleep_enabled(false);
         imu { imu: mpu }
     }
