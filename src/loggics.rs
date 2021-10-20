@@ -5,7 +5,7 @@ This code is a port of our verison of YMFC-AL
 */
 use crate::config_parse::*;
 use crate::controller::*;
-use crate::filter::{ABfilter, low_pass_filter};
+use crate::filter::{ABfilter, low_pass_filter,filter};
 use crate::filter::Filter;
 use crate::ibus::*;
 use crate::imu::imu;
@@ -96,13 +96,13 @@ pub fn main_loop() {
 
 
                  */
-        let gyro_roll =  low_pass_filter(gyro_data.pitch as f32 ,a,b);
-        let gyro_pitch = low_pass_filter(gyro_data.roll as f32 ,a,b);
-        let gyro_yaw =   low_pass_filter(gyro_data.yaw as f32,a,b) *-1.0;
+        let gyro_roll =  filter(gyro_data.pitch as f32 ,a,b);
+        let gyro_pitch = filter(gyro_data.roll as f32 ,a,b);
+        let gyro_yaw =   filter(gyro_data.yaw as f32,a,b) *-1.0;
 
-        let acc_x: f32 = low_pass_filter(acc_data.roll as f32 ,a,b)*-1.0;
-        let acc_y: f32 = low_pass_filter(acc_data.pitch as f32 ,a,b);
-        let acc_z: f32 = low_pass_filter(acc_data.yaw as f32 ,a,b);
+        let acc_x: f32 = filter(acc_data.roll as f32 ,a,b)*-1.0;
+        let acc_y: f32 = filter(acc_data.pitch as f32 ,a,b);
+        let acc_z: f32 = filter(acc_data.yaw as f32 ,a,b);
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
