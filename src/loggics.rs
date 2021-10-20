@@ -5,7 +5,7 @@ This code is a port of our verison of YMFC-AL
 */
 use crate::config_parse::*;
 use crate::controller::*;
-use crate::filter::ABfilter;
+use crate::filter::{ABfilter, low_pass_filter};
 use crate::filter::Filter;
 use crate::ibus::*;
 use crate::imu::imu;
@@ -36,8 +36,9 @@ static mut pid_last_yaw_d_error: f32 = 0.0;
 static mut gyro_roll_input: f32 = 0.0;
 static mut gyro_pitch_input: f32 = 0.0;
 static mut gyro_yaw_input: f32 = 0.0;
-const a: f32 = 2.0;
-const b: f32 = 0.7;
+const a: f32 = 0.006; //delta t
+const b: f32 = 0.05
+; // filtration delta
 
 fn sqrt(input: f32) -> f32 {
     input.sqrt()
@@ -95,13 +96,13 @@ pub fn main_loop() {
 
 
                  */
-        let gyro_roll =  ABfilter(gyro_data.pitch as f32 ,a,b);
-        let gyro_pitch = ABfilter(gyro_data.roll as f32 ,a,b);
-        let gyro_yaw =   ABfilter(gyro_data.yaw as f32,a,b) *-1.0;
+        let gyro_roll =  low_pass_filter(gyro_data.pitch as f32 ,a,b);
+        let gyro_pitch = low_pass_filter(gyro_data.roll as f32 ,a,b);
+        let gyro_yaw =   low_pass_filter(gyro_data.yaw as f32,a,b) *-1.0;
 
-        let acc_x: f32 = ABfilter(acc_data.roll as f32 ,a,b)*-1.0;
-        let acc_y: f32 = ABfilter(acc_data.pitch as f32 ,a,b);
-        let acc_z: f32 = ABfilter(acc_data.yaw as f32 ,a,b);
+        let acc_x: f32 = low_pass_filter(acc_data.roll as f32 ,a,b)*-1.0;
+        let acc_y: f32 = low_pass_filter(acc_data.pitch as f32 ,a,b);
+        let acc_z: f32 = low_pass_filter(acc_data.yaw as f32 ,a,b);
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {

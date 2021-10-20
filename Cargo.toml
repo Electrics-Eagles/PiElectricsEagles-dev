@@ -16,6 +16,7 @@ cgmath = "0.18.0"
 hex = "0.4.2"
 i2cdev = "0.3.1"
 mpu6050 = {git="https://github.com/Electrics-Eagles/mpu6050"}
+lowpass-filter = "0.2.3"
 
 [profile.release]
 opt-level = "z"  # Optimize for size.

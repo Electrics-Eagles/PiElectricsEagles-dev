@@ -50,6 +50,7 @@ def lpf(x, alpha,d):
  */
 use crate::config_parse::config_parser;
 use crate::utils::sqrt;
+use lowpass_filter::simple::sp::apply_lpf_i16_sp;
 
 pub struct Coff {
     a: f64,
@@ -89,22 +90,30 @@ pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32) -> f32 {
 }
 
 
-/*
-    pub  fn low_pass_filter(x: f64, delta_t: f64, filtration_period: f64) -> f64 {
-        unsafe {
-            let  alpha = delta_t / filtration_period;
-            result_lpf += alpha * (x - result_lpf);
-            return result_lpf;
-        }
-    }
 
 
-    pub fn filter(x: f64, delta_t: f64, filtration_period: f64)  -> f64 {
-        let result=selow_pass_filter(x,delta_t,filtration_period);
-        unsafe { result_lpf = 0.0; }
-        return result
+
+
+
+static mut result_lpf: f32 = 0.0;
+pub  fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32) -> f32 {
+    unsafe {
+        let mut alpha = delta_t / filtration_period;
+        result_lpf += alpha * (x - result_lpf);
+        return result_lpf;
     }
-*/
+}
+
+
+
+
+pub fn filter(x: f32, delta_t: f32, filtration_period: f32)  -> f32 {
+    let result=low_pass_filter(x,delta_t,filtration_period);
+    unsafe { result_lpf = 0.0; }
+    return result
+}
+
+
 
 // период дискретизации (измерений), process variation, noise variation
 /*
