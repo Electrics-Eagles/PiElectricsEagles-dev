@@ -2,7 +2,7 @@ on:
   push:
 
 
-name: ARM build
+name: Raspberry Pi Zero PiElectrics Eagles main core code build
 
 jobs:
   linux_arm7:
@@ -11,7 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
-      - uses: actions/setup-python@v2
         with:
           toolchain: stable
           target: arm-unknown-linux-musleabi
@@ -20,13 +19,7 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --target arm-unknown-linux-musleabi --release > build.txt
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-          with:
-            python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-            architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-      - run: python warring.py
+          args: --target arm-unknown-linux-musleabi --release
       - uses: actions/upload-artifact@v2
         with:
             name: drone binary
