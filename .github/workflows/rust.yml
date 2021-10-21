@@ -2,7 +2,7 @@ on:
   push:
 
 
-name: Raspberry Pi Zero PiElectrics Eagles main core code build
+name: ARM build
 
 jobs:
   linux_arm7:
