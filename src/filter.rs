@@ -108,9 +108,8 @@ pub  fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32) -> f32 {
 
 
 pub fn filter(x: f32, delta_t: f32, filtration_period: f32)  -> f32 {
-    let result=low_pass_filter(x,delta_t,filtration_period);
-    unsafe { result_lpf = 0.0; }
-    return result
+  
+    return x
 }
 
 
