@@ -25,6 +25,8 @@ Git Ignore file should help
 
 
 
+Project is not dead ... just temporally stopping commiting untill June 2022 
+
 
 
 
