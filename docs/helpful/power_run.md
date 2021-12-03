@@ -15,6 +15,7 @@
 12. https://docs.rust-embedded.org/book/intro/index.html
 13. https://rust-lang-nursery.github.io/rust-cookbook/
 14. https://doc.rust-lang.org/stable/book/
+15. https://m.habr.com/ru/post/433624/
 
 
 
