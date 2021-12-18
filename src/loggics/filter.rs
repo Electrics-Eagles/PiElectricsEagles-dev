@@ -15,7 +15,7 @@ pub struct Filter {
 
 const dt: f32 = 0.006;
 
-pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,bool:turned_on) -> f32 {
+pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,turned_on:bool) -> f32 {
     let mut xk_1: f32 = 0.0;
     let mut vk_1: f32 = 0.0;
     let mut a: f32 = 0.0;
@@ -51,7 +51,7 @@ pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,bool:turned_on) -> f32 {
 
 
 static mut result_lpf: f32 = 0.0;
-pub  fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32,bool:turned_on) -> f32 {
+pub  fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32,turned_on:bool) -> f32 {
 
     unsafe {
         if turned_on {

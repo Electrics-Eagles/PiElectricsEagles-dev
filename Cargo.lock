@@ -294,12 +294,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lowpass-filter"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f60d29f8340ffa017bc245b521b3fd9e580992d90cd1f111b824bc35d9a8daf8"
-
-[[package]]
 name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -455,7 +449,6 @@ dependencies = [
  "hex",
  "i2cdev 0.3.2",
  "linux-embedded-hal",
- "lowpass-filter",
  "mpu6050",
  "pwm-pca9685",
  "rppal",

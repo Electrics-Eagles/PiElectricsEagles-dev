@@ -90,12 +90,12 @@ pub fn main_loop() {
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         let gyro_data=imu.get_normalised_gyro_data();
         let acc_data=imu.get_acc_data();
-        let gyro_roll =  filter(gyro_data.pitch as f32 ,a,b);
-        let gyro_pitch = filter(gyro_data.roll as f32 ,a,b);
-        let gyro_yaw =   filter(gyro_data.yaw as f32,a,b) *-1.0;
-        let acc_x: f32 = filter(acc_data.roll as f32 ,a,b)*-1.0;
-        let acc_y: f32 = filter(acc_data.pitch as f32 ,a,b);
-        let acc_z: f32 = filter(acc_data.yaw as f32 ,a,b);
+        let gyro_roll =  filter(gyro_data.pitch as f32 ,a,b ,false);
+        let gyro_pitch = filter(gyro_data.roll as f32 ,a,b,false);
+        let gyro_yaw =   filter(gyro_data.yaw as f32,a,b,false) *-1.0;
+        let acc_x: f32 = filter(acc_data.roll as f32 ,a,b,false)*-1.0;
+        let acc_y: f32 = filter(acc_data.pitch as f32 ,a,b,false);
+        let acc_z: f32 = filter(acc_data.yaw as f32 ,a,b,false);
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
