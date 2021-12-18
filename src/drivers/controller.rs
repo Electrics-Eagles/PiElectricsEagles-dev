@@ -53,42 +53,5 @@ impl Controller {
         self.pwm.enable().unwrap();
     }
 
-    pub fn test_esc(&mut self, pwm_duty: u16) {
-        self.pwm
-            .set_channel_on_off(Channel::C0, 0, pwm_duty)
-            .unwrap();
-        self.pwm.enable();
-    }
 
-    pub fn calibrate_esc(&mut self) {
-        let value_pwm_max = map(2000, 0, 20000, 0, 4095) as u16;
-        self.pwm
-            .set_channel_on_off(Channel::C0, 0, value_pwm_max)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C1, 0, value_pwm_max)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C2, 0, value_pwm_max)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C3, 0, value_pwm_max)
-            .unwrap();
-        thread::sleep(time::Duration::from_millis(3000));
-
-        let value_pwm_min = map(1000, 0, 20000, 0, 4095) as u16;
-        self.pwm
-            .set_channel_on_off(Channel::C0, 0, value_pwm_min)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C1, 0, value_pwm_min)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C2, 0, value_pwm_min)
-            .unwrap();
-        self.pwm
-            .set_channel_on_off(Channel::C3, 0, value_pwm_min)
-            .unwrap();
-        thread::sleep(time::Duration::from_millis(3000));
-    }
 }

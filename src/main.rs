@@ -2,15 +2,21 @@
 use loggics::main_loop;
 
 
-mod clk_driver;
+#[path = "./drivers/config_parse.rs"]
 mod config_parse;
+#[path = "./drivers/controller.rs"]
 mod controller;
+#[path = "./loggics/filter.rs"]
 mod filter;
-mod ibus;
-
+#[path = "drivers/reciver.rs"]
+mod reciver;
+#[path = "drivers/reciver.rs"]
 mod logger;
+#[path = "drivers/reciver.rs"]
 mod loggics;
+#[path = "drivers/reciver.rs"]
 mod utils;
+#[path = "drivers/reciver.rs"]
 mod imu;
 
 

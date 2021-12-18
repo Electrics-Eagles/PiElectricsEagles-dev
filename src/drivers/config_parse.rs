@@ -91,6 +91,14 @@ pub struct Filter_Val{
     pub conf_b:f64,
 }
 
+pub struct Reciver {
+pub uart_port:String,
+    pub baudrate:u32,
+
+
+}
+
+
 
 impl config_parser {
     /// Returns config_parser object
@@ -325,6 +333,18 @@ impl config_parser {
         return data;
 
     }
+
+    pub fn reciver_config(&mut self) -> Reciver {
+        let esc_config = self.config_parser.section(Some("reciver")).unwrap();
+        let port = (esc_config.get("port")).unwrap();
+        let baudrate = (esc_config.get("baudrate")).unwrap();
+        let reciver = Reciver {
+            uart_port: port.parse().unwrap(),
+            baudrate: baudrate.parse().unwrap()
+        };
+        return reciver;
+    }
+
 
     pub fn esc_config_parser(&mut self) -> EscMotors {
         let esc_config = self.config_parser.section(Some("esc")).unwrap();

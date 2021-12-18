@@ -21,6 +21,7 @@ use rppal::uart::{Parity, Uart}; // crate for uart reading
 use std::iter::FromIterator; // std libary for convert into string via vec with char 
 use std::time::Duration;
 use std::vec::Vec;
+use crate::config_parse::config_parser;
 
 /// value for default value of channels when IBUS didn't get signal transmistion
 static mut value_before: [u16; 6] = [1000, 1000, 1000, 1000, 1000, 1000];
@@ -59,11 +60,11 @@ pub struct type_of_data_from_channels {
 /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver(); // Gets data of channels
 /// ```
 ///
-pub struct ibus_receiver {
+pub struct receiver {
     uart_mod: Uart,
 }
 
-impl ibus_receiver {
+impl receiver {
     /// Returns ibus_receiver object
     ///
     /// # Arguments
@@ -78,11 +79,13 @@ impl ibus_receiver {
     /// let mut reciver_driver = ibus_receiver::new();
     /// ```
     ///
-    pub fn new() -> ibus_receiver {
+    pub fn new() -> receiver {
+        let mut config = config_parser::new();
+        let config=config.reciver_config();
         let mut uart_def: Uart =
-            Uart::with_path("/dev/ttyUSB0", 115_200, Parity::None, 8, 1).unwrap();
+            Uart::with_path(config.uart_port, config.baudrate, Parity::None, 8, 1).unwrap();
         uart_def.set_read_mode(32, Duration::new(0, 7)).unwrap();
-        ibus_receiver { uart_mod: uart_def }
+        receiver { uart_mod: uart_def }
     }
 
     /// Function for getting data of ibus receiver

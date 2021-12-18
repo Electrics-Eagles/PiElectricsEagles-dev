@@ -15,6 +15,7 @@ use crate::utils::sin;
 use core::time;
 use std::thread;
 use std::time::SystemTime;
+
 static mut pid_error_temp: f32 = 0.0;
 
 static mut pid_i_mem_roll: f32 = 0.0;
@@ -37,12 +38,23 @@ static mut gyro_roll_input: f32 = 0.0;
 static mut gyro_pitch_input: f32 = 0.0;
 static mut gyro_yaw_input: f32 = 0.0;
 const a: f32 = 0.006; //delta t
-const b: f32 = 0.05
-; // filtration delta
+const b: f32 = 0.05; // filtration delta
 
 fn sqrt(input: f32) -> f32 {
     input.sqrt()
+}\
+
+fn normalize_esc(mut input: f32) {
+    if input > 2000.0 {
+        input=2000.0;
+    }
+    if input < 1000.0 {
+        input=1000.0;
+    }
+
 }
+
+
 pub fn main_loop() {
     let init_throllite=1000;
     let mut logger = Logger::new();
@@ -62,6 +74,7 @@ pub fn main_loop() {
     let mut esc_4: f32;
     let mut acc_total_vector;
     let mut config = config_parser::new();
+
     controller.set_throttle_external_pwm(init_throllite,init_throllite,init_throllite,init_throllite);
 
     let PIds = config.get_pids();
@@ -70,38 +83,16 @@ pub fn main_loop() {
     thread::sleep(time::Duration::from_millis(5000));
     println!("Calibrate Gyro . Do not touch drone including squrrels");
     imu.calibrate();
-
     thread::sleep(time::Duration::from_millis(1000));
     println!("Initialize all devices finished!!! Welcome to PIEEA V2");
     loop {
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-
-        /*let raw_gyro_roll = ABfilter(gyro.roll as f32, a, b);
-        let raw_gyro_pitch = ABfilter(gyro.pitch as f32, a, b);
-        let raw_gyro_yaw = ABfilter(gyro.yaw as f32, a, b);
-
-        let gyro_roll = ABfilter(raw_gyro_roll, a, b);
-        let gyro_pitch = ABfilter(raw_gyro_pitch, a, b);
-        let gyro_yaw = ABfilter(raw_gyro_yaw, a, b);*/
         let gyro_data=imu.get_normalised_gyro_data();
         let acc_data=imu.get_acc_data();
-
-
-        /*
-
-        roll=x
-        pitch = y
-        yaw = z
-
-
-                 */
-
-
         let gyro_roll =  filter(gyro_data.pitch as f32 ,a,b);
         let gyro_pitch = filter(gyro_data.roll as f32 ,a,b);
         let gyro_yaw =   filter(gyro_data.yaw as f32,a,b) *-1.0;
-
         let acc_x: f32 = filter(acc_data.roll as f32 ,a,b)*-1.0;
         let acc_y: f32 = filter(acc_data.pitch as f32 ,a,b);
         let acc_z: f32 = filter(acc_data.yaw as f32 ,a,b);
@@ -133,6 +124,7 @@ pub fn main_loop() {
         //Place the MPU-6050 spirit level and note the values in the following two lines for calibration.
         angle_pitch_acc -= 0.0; //Accelerometer calibration value for pitch.
         angle_roll_acc -= 0.0;
+
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
         pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
@@ -148,6 +140,7 @@ pub fn main_loop() {
                 println!("unlocked #2");
                 angle_pitch = angle_pitch_acc;
                 angle_roll = angle_roll_acc;
+
                 pid_i_mem_roll = 0.0;
                 pid_last_pitch_d_error = 0.0;
                 pid_i_mem_pitch = 0.0;
@@ -188,7 +181,6 @@ pub fn main_loop() {
             }
 
             calculate_pid(PIds.clone());
-
             throttle = reciver.ch3;
 
             if start == 2 {
@@ -199,37 +191,14 @@ pub fn main_loop() {
                 esc_2 = throttle as f32 + pid_output_pitch + pid_output_roll + pid_output_yaw; //Calculate the pulse for esc 2 (rear-right - CW)
                 esc_3 = throttle as f32 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
                 esc_4 = throttle as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
-                if esc_1 < 1100.0 {
-                    esc_1 = 1100.0;
-                } //Keep the motors running.
-                if esc_2 < 1100.0 {
-                    esc_2 = 1100.0;
-                }
-                if esc_3 < 1100.0 {
-                    esc_3 = 1100.0;
-                }
-                if esc_4 < 1100.0 {
-                    esc_4 = 1100.0;
-                }
 
-                if esc_1 > 2000.0 {
-                    esc_1 = 2000.0;
-                }
-                if esc_2 > 2000.0 {
-                    esc_2 = 2000.0;
-                }
-                if esc_3 > 2000.0 {
-                    esc_3 = 2000.0;
-                }
-                if esc_4 > 2000.0 {
-                    esc_4 = 2000.0;
-                }
-            } else {
-                esc_1 = 1000.0;
-                esc_2 = 1000.0;
-                esc_3 = 1000.0;
-                esc_4 = 1000.0;
-            }
+
+                normalize_esc(esc_1);
+                normalize_esc(esc_2);
+                normalize_esc(esc_3);
+                normalize_esc(esc_4);
+
+
 
             controller.set_throttle_external_pwm(
                 esc_1 as u16,
