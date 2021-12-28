@@ -53,9 +53,11 @@ pub struct IbusConfig {
     pub port: String,
 }
 /// It is MPU6050 gyroscope configuration struct
-pub struct Mpu6050Config {
+pub struct ImuConfig {
     /// Name port of connecting MPU6050 via I2C interface (String value)
     pub port: String,
+    pub axis_assignment:String,
+    pub reversed_axis:String,
 }
 /// It is esc driver configuration struct
 pub struct EscMotors {
@@ -370,12 +372,16 @@ impl config_parser {
     /// let mpu6050_conifg = config.mpu_config_parser(); // getting object value of configuartion for MPU6050 sensor
     /// ```
     ///
-    pub fn imu_config_parser(&mut self) -> Mpu6050Config {
+    pub fn imu_config_parser(&mut self) -> ImuConfig {
         let conf = Ini::load_from_file(file_path).unwrap();
         let imu_config_ = conf.section(Some("imu")).unwrap();
         let port = (imu_config_.get("port")).unwrap();
-        let imu_config = Mpu6050Config {
+        let axis_assignment = (imu_config_.get("axis_assignment")).unwrap();
+        let reversed_axis = (imu_config_.get("reversed_axis")).unwrap();
+        let imu_config = ImuConfig {
             port: port.parse().unwrap(),
+            axis_assignment: axis_assignment.parse().unwrap(),
+            reversed_axis: reversed_axis.parse().unwrap(),
         };
         return imu_config;
     }
