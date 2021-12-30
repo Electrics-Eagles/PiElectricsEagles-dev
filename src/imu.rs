@@ -46,7 +46,7 @@ impl imu {
     pub fn get_acc_data(&mut self,swapping:String) -> ImuData {
 
         let  acc = self.imu.read_rot(ACC_REGX_H).unwrap();
-        let swapped_data=self.swap(swapping,acc.x,acc.y,acc.z);
+        let swapped_data=self.swap(swapping, acc.x as i32, acc.y as i32, acc.z as i32);
         let data=ImuData{
             roll: swapped_data.0 as i32,
             pitch: swapped_data.1 as i32,
@@ -57,8 +57,8 @@ impl imu {
     }
 
 
-    pub  fn swap(order:String,x:u8,y:u8,z:u8)  -> (u8, u8, u8)  {
-        let data: (u8, u8, u8) = match order.as_str() {
+    pub  fn swap(&mut self,order:String,x:i32,y:i32,z:i32)  -> (i32, i32, i32)  {
+        let data: (i32, i32, i32) = match order.as_str() {
             "xzy" => (x, z, y),
             "xzy" => (x, z, y),
             "yxz" =>  (y, x, z),
@@ -95,9 +95,9 @@ impl imu {
 
                 let swapped_data=self.swap(swapping,data.roll,data.pitch,data.yaw);
                 return ImuData {
-                    roll: swapped_data.0,
-                    pitch: swapped_data.1,
-                    yaw: swapped_data.2,
+                    roll: swapped_data.0 as i32,
+                    pitch: swapped_data.1 as i32,
+                    yaw: swapped_data.2 as i32,
                 }
             }
             else {
