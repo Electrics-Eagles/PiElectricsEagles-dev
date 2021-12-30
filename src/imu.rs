@@ -84,6 +84,20 @@ impl imu {
         }
     }
 
+    fn swap(order:String,x:u8,y:u8,z:u8)  -> (u8, u8, u8)  {
+        let data: (u8, u8, u8) = match order.as_str() {
+            "xzy" => (x, z, y),
+            "xzy" => (x, z, y),
+            "yxz" =>  (y, x, z),
+            "yzx" => (y, z, x),
+            "zxy" => (z, x, y),
+            "zyx" => (z, y, x),
+            _ => (0, 0, 0),
+        };
+
+     return data
+    }
+
     fn get_gyro_data(&mut self) -> ImuData {
         let  gyro = self.imu.read_rot(GYRO_REGX_H).unwrap();
 
