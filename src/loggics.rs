@@ -80,7 +80,8 @@ pub fn main_loop() {
     controller.set_throttle_external_pwm(init_throllite, init_throllite, init_throllite, init_throllite);
 
     let PIds = config.get_pids();
-
+    let axis_assignment_gyro = config.imu_config_parser().axis_assignment_gyro;
+    let axis_assignment_acc = config.imu_config_parser().axis_assignment_acc;
     let mut imu = imu::new();
     thread::sleep(time::Duration::from_millis(5000));
     println!("Calibrate Gyro . Do not touch drone including squrrels");
@@ -90,8 +91,8 @@ pub fn main_loop() {
     loop {
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        let gyro_data = imu.get_normalised_gyro_data();
-        let acc_data = imu.get_acc_data();
+        let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone());
+        let acc_data = imu.get_acc_data(axis_assignment_acc.clone());
         let gyro_roll = ABfilter(gyro_data.pitch as f32, a, b, false);
         let gyro_pitch = ABfilter(gyro_data.roll as f32, a, b, false);
         let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, false) * -1.0;

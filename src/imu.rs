@@ -43,16 +43,34 @@ impl imu {
         imu { imu: mpu }
     }
 
-    pub fn get_acc_data(&mut self) -> ImuData {
+    pub fn get_acc_data(&mut self,swapping:String) -> ImuData {
+
         let  acc = self.imu.read_rot(ACC_REGX_H).unwrap();
+        let swapped_data=self.swap(swapping,acc.x,acc.y,acc.z);
         let data=ImuData{
-            roll: acc.x as i32,
-            pitch: acc.y as i32,
-            yaw: acc.z as i32
+            roll: swapped_data.0 as i32,
+            pitch: swapped_data.1 as i32,
+            yaw: swapped_data.2 as i32
         };
 
         data
     }
+
+
+    pub  fn swap(order:String,x:u8,y:u8,z:u8)  -> (u8, u8, u8)  {
+        let data: (u8, u8, u8) = match order.as_str() {
+            "xzy" => (x, z, y),
+            "xzy" => (x, z, y),
+            "yxz" =>  (y, x, z),
+            "yzx" => (y, z, x),
+            "zxy" => (z, x, y),
+            "zyx" => (z, y, x),
+            _ => (0, 0, 0),
+        };
+
+        return data
+    }
+
     pub fn calibrate(&mut self) {
         unsafe {
             while loop_of_calib < 2000 {
@@ -67,35 +85,25 @@ impl imu {
             gyro_yaw_calibration /= 2000;
         }
     }
-    pub fn get_normalised_gyro_data(&mut self) -> ImuData {
+    pub fn get_normalised_gyro_data(&mut self,swapping:String) -> ImuData {
         let data = self.get_gyro_data();
+
         unsafe {
             if loop_of_calib == 2000
             {
+
+
+                let swapped_data=self.swap(swapping,data.roll,data.pitch,data.yaw);
                 return ImuData {
-                    roll: data.roll - gyro_roll_calibration,
-                    pitch: data.pitch - gyro_pitch_calibration,
-                    yaw: data.yaw - gyro_yaw_calibration,
+                    roll: swapped_data.0,
+                    pitch: swapped_data.1,
+                    yaw: swapped_data.2,
                 }
             }
             else {
                 panic!("No calibration . That is nightmare");
             }
         }
-    }
-
-    fn swap(order:String,x:u8,y:u8,z:u8)  -> (u8, u8, u8)  {
-        let data: (u8, u8, u8) = match order.as_str() {
-            "xzy" => (x, z, y),
-            "xzy" => (x, z, y),
-            "yxz" =>  (y, x, z),
-            "yzx" => (y, z, x),
-            "zxy" => (z, x, y),
-            "zyx" => (z, y, x),
-            _ => (0, 0, 0),
-        };
-
-     return data
     }
 
     fn get_gyro_data(&mut self) -> ImuData {

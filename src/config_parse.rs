@@ -56,8 +56,10 @@ pub struct IbusConfig {
 pub struct ImuConfig {
     /// Name port of connecting MPU6050 via I2C interface (String value)
     pub port: String,
-    pub axis_assignment:String,
-    pub reversed_axis:String,
+    pub axis_assignment_gyro:String,
+    pub axis_assignment_acc:String,
+    pub reversed_axis_gyro:String,
+    pub reversed_axis_acc:String,
 }
 /// It is esc driver configuration struct
 pub struct EscMotors {
@@ -376,12 +378,16 @@ impl config_parser {
         let conf = Ini::load_from_file(file_path).unwrap();
         let imu_config_ = conf.section(Some("imu")).unwrap();
         let port = (imu_config_.get("port")).unwrap();
-        let axis_assignment = (imu_config_.get("axis_assignment")).unwrap();
-        let reversed_axis = (imu_config_.get("reversed_axis")).unwrap();
+        let axis_assignment_gyro = (imu_config_.get("axis_assignment_gyro")).unwrap();
+        let axis_assignment_acc = (imu_config_.get("axis_assignment_acc")).unwrap();
+        let reversed_axis_acc = (imu_config_.get("reversed_axis_acc")).unwrap();
+        let reversed_axis_gyro = (imu_config_.get("reversed_axis_gyro")).unwrap();
         let imu_config = ImuConfig {
             port: port.parse().unwrap(),
-            axis_assignment: axis_assignment.parse().unwrap(),
-            reversed_axis: reversed_axis.parse().unwrap(),
+            axis_assignment_gyro: axis_assignment_gyro.parse().unwrap(),
+            axis_assignment_acc: axis_assignment_acc.parse().unwrap(),
+            reversed_axis_gyro: reversed_axis_gyro.parse().unwrap(),
+            reversed_axis_acc: reversed_axis_acc.parse().unwrap())
         };
         return imu_config;
     }
