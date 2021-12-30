@@ -387,7 +387,7 @@ impl config_parser {
             axis_assignment_gyro: axis_assignment_gyro.parse().unwrap(),
             axis_assignment_acc: axis_assignment_acc.parse().unwrap(),
             reversed_axis_gyro: reversed_axis_gyro.parse().unwrap(),
-            reversed_axis_acc: reversed_axis_acc.parse().unwrap())
+            reversed_axis_acc: reversed_axis_acc.parse().unwrap()
         };
         return imu_config;
     }
