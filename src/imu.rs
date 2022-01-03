@@ -43,14 +43,15 @@ impl imu {
         imu { imu: mpu }
     }
 
-    pub fn get_acc_data(&mut self,swapping:String) -> ImuData {
+    pub fn get_acc_data(&mut self,swapping:String,reverse:String) -> ImuData {
 
         let  acc = self.imu.read_rot(ACC_REGX_H).unwrap();
         let swapped_data=self.swap(swapping, acc.x as i32, acc.y as i32, acc.z as i32);
+        let reversed_data=self.reverse(reverse,swapped_data.0,swapped_data.1,swapped_data.2);
         let data=ImuData{
-            roll: swapped_data.0 as i32,
-            pitch: swapped_data.1 as i32,
-            yaw: swapped_data.2 as i32
+            roll: reversed_data.0 as i32,
+            pitch: reversed_data.1 as i32,
+            yaw: reversed_data.2 as i32
         };
 
         data
@@ -60,7 +61,7 @@ impl imu {
     pub  fn swap(&mut self,order:String,x:i32,y:i32,z:i32)  -> (i32, i32, i32)  {
         let data: (i32, i32, i32) = match order.as_str() {
             "xzy" => (x, z, y),
-            "xzy" => (x, z, y),
+            "xyz" => (x, y, z),
             "yxz" =>  (y, x, z),
             "yzx" => (y, z, x),
             "zxy" => (z, x, y),
@@ -70,6 +71,22 @@ impl imu {
 
         return data
     }
+
+
+
+        pub  fn reverse(&mut self,order:String,x:i32,y:i32,z:i32)  -> (i32, i32, i32)  {
+            let data: (i32, i32, i32) = match order.as_str() {
+                "rrr" => (x*-1, y*-1, z*-1),
+                "rnr" => (x*-1, y*-1, z*-1),
+                "nnr" => (x, y, z*-1),
+                "rnn" => (x*-1, y, z),
+                "nnn" => (x, y, z),
+                _ => (0, 0, 0),
+            };
+
+            return data
+        }
+
 
     pub fn calibrate(&mut self) {
         unsafe {
@@ -85,7 +102,7 @@ impl imu {
             gyro_yaw_calibration /= 2000;
         }
     }
-    pub fn get_normalised_gyro_data(&mut self,swapping:String) -> ImuData {
+    pub fn get_normalised_gyro_data(&mut self,swapping:String,reverse:String) -> ImuData {
         let data = self.get_gyro_data();
 
         unsafe {
@@ -94,6 +111,7 @@ impl imu {
 
 
                 let swapped_data=self.swap(swapping,data.roll,data.pitch,data.yaw);
+                let reversed_data=self.reverse(reverse,swapped_data.0,swapped_data.1,swapped_data.2);
                 return ImuData {
                     roll: swapped_data.0 as i32,
                     pitch: swapped_data.1 as i32,

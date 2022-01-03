@@ -82,6 +82,9 @@ pub fn main_loop() {
     let PIds = config.get_pids();
     let axis_assignment_gyro = config.imu_config_parser().axis_assignment_gyro;
     let axis_assignment_acc = config.imu_config_parser().axis_assignment_acc;
+    let gyro_axis_reverse = config.imu_config_parser().reversed_axis_gyro;
+    let acc_axis_reverse = config.imu_config_parser().reversed_axis_acc;
+
     let mut imu = imu::new();
     thread::sleep(time::Duration::from_millis(5000));
     println!("Calibrate Gyro . Do not touch drone including squrrels");
@@ -91,12 +94,14 @@ pub fn main_loop() {
     loop {
         let now = SystemTime::now();
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
-        let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone());
-        let acc_data = imu.get_acc_data(axis_assignment_acc.clone());
+        let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone(),gyro_axis_reverse.clone());
+        let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
+
+
         let gyro_roll = ABfilter(gyro_data.pitch as f32, a, b, false);
         let gyro_pitch = ABfilter(gyro_data.roll as f32, a, b, false);
-        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, false) * -1.0;
-        let acc_x: f32 = ABfilter(acc_data.roll as f32, a, b, false) * -1.0;
+        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, false);
+        let acc_x: f32 = ABfilter(acc_data.roll as f32, a, b, false);
         let acc_y: f32 = ABfilter(acc_data.pitch as f32, a, b, false);
         let acc_z: f32 = ABfilter(acc_data.yaw as f32, a, b, false);
 
