@@ -25,9 +25,11 @@ Git Ignore file should help
 
 
 
-Project is not dead ... just temporally stopping commiting untill June 2022 
 
 
-
+Well motor reversed direction is requred. From betaflight code i found that string : 
+```C
+     float signYaw = (getRcDeflection(FD_YAW) < 0 ? 1 : -1) * (mixerConfig()->yaw_motors_reversed ? 1 : -1);
+```
 
 
