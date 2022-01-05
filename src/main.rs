@@ -11,7 +11,7 @@ mod logger;
 mod utils;
 mod imu;
 mod loggics;
-
+mod batterycontroller;
 
 fn main() {
     main_loop();
