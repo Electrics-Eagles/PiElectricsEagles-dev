@@ -101,7 +101,17 @@ pub uart_port:String,
 
 
 }
-
+/// It is LIPO battery controller configuration struct
+pub struct BatteryController {
+    /// i2c selected port (example /dev/i2c-4)
+    pub port: String,
+    /// Maximum range voltage to measure common cell of battery (from 1st to 3rd cell of LIPO battery)
+    pub max_vol_ch0: f32,
+    /// Maximum range voltage to measure common 2nd cell of battery (from 1st to 2nd cell of LIPO battery)
+    pub max_vol_ch1: f32,
+    /// Maximum range voltage to measure 1st cell of battery 
+    pub max_vol_ch2: f32,
+}
 
 
 impl config_parser {
@@ -421,6 +431,40 @@ impl config_parser {
         };
         return Ibus;
     }
+    
+    /// Return data of LIPO battery controller configuration from pasring ini-file
+    ///
+    /// # Arguments
+    ///
+    /// No arguments required
+    ///
+    /// # Return
+    /// ```BatteryController```
+    ///
+    /// # Example
+    /// ```
+    /// use crate::config_parse::*;
+    /// let battery_config = config.battery_controller_parser();
+    /// ```
+    /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
+    ///
+    ///
+    pub fn battery_controller_parser(&mut self) -> BatteryController
+    {
+        let battery_controller = self.config_parser.section(Some("batterycontroller")).unwrap();
+        let port = (battery_controller.get("port")).unwrap();
+        let max_vol_ch0 = (battery_controller.get("maximum_voltage_ch0")).unwrap();
+        let max_vol_ch1 = (battery_controller.get("maximum_voltage_ch1")).unwrap();
+        let max_vol_ch2 = (battery_controller.get("maximum_voltage_ch2")).unwrap();
+          
+        BatteryController {
+            port: port.parse().unwrap(),
+            max_vol_ch0: max_vol_ch0.parse::<f32>().unwrap(),
+            max_vol_ch1: max_vol_ch1.parse::<f32>().unwrap(),
+            max_vol_ch2: max_vol_ch2.parse::<f32>().unwrap(),
+        }
+    }
+    
     /// PID parse for selected section from ini file
     ///
     /// # Arguments
