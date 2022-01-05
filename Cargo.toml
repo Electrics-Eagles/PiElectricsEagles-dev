@@ -16,6 +16,7 @@ hex = "0.4.2"
 i2cdev = "0.3.1"
 nb = "1.0.0"
 ads1x1x = "0.2.2"
+embedded-hal = "0.2.6"
 mpu6050 = {git="https://github.com/Electrics-Eagles/mpu6050"}
 
 
