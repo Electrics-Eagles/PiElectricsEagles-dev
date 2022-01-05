@@ -108,7 +108,7 @@ impl BatteryController {
     ///
     pub fn init() -> BatteryController 
     {
-        let mut config = configParser::new(); 
+        let mut config = config_parser::new(); 
         let batt_config = config.battery_controller_parser();
         let dev = I2cdev::new(batt_config.port).unwrap();
 
