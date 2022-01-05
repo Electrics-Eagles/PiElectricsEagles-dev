@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["LIS3DH_Driver",""],["data_acc_angles",""],["raw_acc_data",""]]});

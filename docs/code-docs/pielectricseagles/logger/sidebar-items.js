@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["LOG_PATH",""]],"struct":[["Logger",""],["LoggingStruct",""]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["CLK_GPIO","This constant is a port where is a CLK pin connected."]],"struct":[["ClkDriver","It is a ClkDriver object ClkDriver class (crate)"]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["PRESCALER","Clock prescaler of MCU raspberry pi zero"]],"fn":[["map",""]],"struct":[["Controller","It is a Controller object Controller class (crate)"]]});

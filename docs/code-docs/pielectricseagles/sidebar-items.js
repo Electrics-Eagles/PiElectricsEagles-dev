@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["main",""]],"mod":[["clk_driver",""],["config_parse",""],["controller",""],["filter",""],["ibus",""],["l3dgh20",""],["lis3dh_driver",""],["logger",""],["loggics",""],["untils",""]]});
