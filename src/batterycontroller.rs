@@ -51,23 +51,35 @@ pub enum BATTERYCELL {
     Trindcell,
 }
 /// It is a BatteryController object
+/// 
 /// BatteryController class (crate)
 ///
 /// Made by: Misha Zaslavskis (Electrics Eagles) 2022
 /// 
 /// ---------------- Battery controller --------------------
+/// 
 /// This simple software that measuring voltage of LIPO battery and alert of critical dischanging battery
+/// 
 /// This software is designed for prevent overdischanging, damaging, fire battery, when battery is used for drone with low voltage
+/// 
 /// Battery also prevent lower minimun voltage for LIPO cell, which software will alert when cell is lower voltage than minimun working voltage
+/// 
 /// Each cell of LIPO battery is minimun 3.0 volts
+/// 
 /// Each cell of LIPO battery is maximum 4.2 volts
+/// 
 /// Using LIPO battery, please handle very carefully to prevent serious injury and fire
-/// NB: I2C address of ADS1115 is set default address, but you cannot change address via core. This default I2C address is 0x48.  
+/// 
+/// NB: I2C address of ADS1115 is set default address, but you cannot change address via core. This default I2C address is 0x48.
+///   
 /// NB: Please make sure that ADS1115 I2C adress via essesntial pins of ADC chip is set to 0x48.
-/// NB: Each channel of this ADC chip measure maximum voltage is 2.048V connecting with potential divider, because we set default value FSR (Full-Scale Range) in library of ADS1115
-/// ---------------------------------------------------------
+/// 
+/// NB: Each channel of this ADC chip measure maximum voltage is 2.048V connecting without potential divider, because we set default value FSR (Full-Scale Range) in library of ADS1115
+/// 
+/// 
 /// 
 /// # Examples
+/// 
 /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
 ///
 /// ```
@@ -157,7 +169,7 @@ impl BatteryController {
     /// ```cell``` is selecting position of cell of battery (BATTERYCELL)
     /// 
     /// # Return
-    /// ```f32```
+    /// ```f32``` is value of volatge of selected cell of battery in volts
     /// 
     /// # Example
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
@@ -188,7 +200,7 @@ impl BatteryController {
     /// No arguments required
     /// 
     /// # Return
-    /// ```f32```
+    /// ```f32``` is value of volatge of LIPO battery in volts
     /// 
     /// # Example
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
@@ -211,9 +223,12 @@ impl BatteryController {
     /// No arguments required
     /// 
     /// # Return
-    /// ```bool```
+    /// ```bool``` is state of dischanged some cells of LIPO battery
+    /// 
     /// ```true``` is means that some of cell of LIPO battery is dischanged, which cell is required to charge (Will alert)
+    /// 
     /// ```false``` is means that all cells of LIPO battery is OKAY, which they follow LIPO range voltage (such not below that 3V each cell of LIPO battery)
+    /// 
     /// 
     /// # Example
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
