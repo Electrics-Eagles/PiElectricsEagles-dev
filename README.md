@@ -28,3 +28,9 @@ Git Ignore file should help
 legacy outdated verison is there [PiElectricsEagles-dev-master.zip](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/7818303/PiElectricsEagles-dev-master.zip)
 
 [API Level Explain.pdf](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/7818307/API.Level.Explain.pdf)
+
+
+Now you can to check all hardware using 
+```
+pielectricseagles --testing_hardware 
+```
