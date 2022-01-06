@@ -1,18 +1,27 @@
 #[allow(non_camel_case_types)]
 use loggics::main_loop;
-
-
-
+use testing_hardware::test;
+mod batterycontroller;
 mod config_parse;
 mod controller;
 mod filter;
-mod reciver;
-mod logger;
-mod utils;
 mod imu;
+mod logger;
 mod loggics;
-mod batterycontroller;
-
+mod reciver;
+mod testing_hardware;
+mod utils;
 fn main() {
-    main_loop();
+    let  mut args = std::env::args();
+    if args.len() > 0 {
+        let mode = args.nth(1).unwrap();
+        if mode == "--testing_hardware" { test(); }
+        if mode == "--debug_imu" {}
+        else {
+            panic!("I can`t understand you");
+        }
+    } else {
+        main_loop();
+    }
 }
+
