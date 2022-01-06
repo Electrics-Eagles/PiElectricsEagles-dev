@@ -16,7 +16,7 @@ fn main() {
     if args.len() > 0 {
         let mode = args.nth(1).unwrap();
         if mode == "--testing_hardware" { test(); }
-        if mode == "--debug_imu" {}
+        if mode == "--test_imu" {}
         else {
             panic!("I can`t understand you");
         }
@@ -24,4 +24,3 @@ fn main() {
         main_loop();
     }
 }
-

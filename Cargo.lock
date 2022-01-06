@@ -3,6 +3,16 @@
 version = 3
 
 [[package]]
+name = "ads1x1x"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b44310e48193933db0cd788961f450a86f35fdad022e4373883fa8e4640488e"
+dependencies = [
+ "embedded-hal",
+ "nb 1.0.0",
+]
+
+[[package]]
 name = "ahash"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -444,12 +454,15 @@ dependencies = [
 name = "pielectricseagles"
 version = "0.1.0"
 dependencies = [
+ "ads1x1x",
  "cgmath",
  "chrono",
+ "embedded-hal",
  "hex",
  "i2cdev 0.3.2",
  "linux-embedded-hal",
  "mpu6050",
+ "nb 1.0.0",
  "pwm-pca9685",
  "rppal",
  "rust-ini",

@@ -11,7 +11,7 @@ use core::time;
 use std::thread;
 use std::time::SystemTime;
 use crate::reciver;
-
+use crate::utils::delay;
 #[allow(non_camel_case_types)]
 /*
 This code is a port of our verison of YMFC-AL
@@ -86,10 +86,10 @@ pub fn main_loop() {
     let acc_axis_reverse = config.imu_config_parser().reversed_axis_acc;
 
     let mut imu = imu::new();
-    thread::sleep(time::Duration::from_millis(5000));
+    delay(5000);
     println!("Calibrate Gyro . Do not touch drone including squrrels");
     imu.calibrate();
-    thread::sleep(time::Duration::from_millis(1000));
+    delay(1000);
     println!("Initialize all devices finished!!! Welcome to PIEEA V2");
     loop {
         let now = SystemTime::now();
