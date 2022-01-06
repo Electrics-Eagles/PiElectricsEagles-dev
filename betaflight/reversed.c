@@ -1,5 +1,5 @@
 //
-
+     float signYaw = (getRcDeflection(FD_YAW) < 0 ? 1 : -1) * (mixerConfig()->yaw_motors_reversed ? 1 : -1);
 
 int main(int argc,char *argv[])
 {
