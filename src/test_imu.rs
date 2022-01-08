@@ -38,7 +38,7 @@ pub fn test_imu() {
         let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
 
 
-        println("{},{},{},{},{},{}",gyro_data.roll,gyro_data.pitch,gyro_data.yaw,acc_data.roll,acc_data.pitch,acc_data.yaw);
+        println!("{},{},{},{},{},{}",gyro_data.roll,gyro_data.pitch,gyro_data.yaw,acc_data.roll,acc_data.pitch,acc_data.yaw);
         delay(1000);
 
     }
