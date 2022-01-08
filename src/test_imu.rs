@@ -39,7 +39,7 @@ pub fn test_imu() {
 
 
         println!("{},{},{},{},{},{}",gyro_data.roll,gyro_data.pitch,gyro_data.yaw,acc_data.roll,acc_data.pitch,acc_data.yaw);
-        delay(1000);
+        delay(100);
 
     }
 
