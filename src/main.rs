@@ -21,6 +21,7 @@ fn main() {
         let mode = args.nth(1).unwrap();
         if mode == "--testing_hardware" { test(); }
         if mode == "--test_imu" {test_imu();}
+        if mode == "--normal" { main_loop(); }
         else {
             panic!("I can`t understand you");
         }
