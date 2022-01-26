@@ -51,7 +51,7 @@ impl imu {
         let data=ImuData{
             roll: reversed_data.0 as i32,
             pitch: reversed_data.1 as i32,
-            yaw: reversed_data.2 as i32
+            yaw: 0 as i32
         };
 
         data
