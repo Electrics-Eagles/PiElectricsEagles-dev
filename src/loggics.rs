@@ -135,8 +135,8 @@ pub fn main_loop() {
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
-        pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
-        roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
+        pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
+        roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
             if reciver.ch5 > 1450 && reciver.ch6 < 1050 {
                 start = 1;
