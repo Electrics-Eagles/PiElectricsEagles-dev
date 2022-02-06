@@ -2,6 +2,9 @@
 use loggics::main_loop;
 use testing_hardware::test;
 use test_imu::test_imu;
+use crate::perpare_esc::calibrate_esc;
+use crate::perpare_esc::esc_test;
+
 mod batterycontroller;
 mod config_parse;
 mod controller;
@@ -13,6 +16,7 @@ mod reciver;
 mod testing_hardware;
 mod utils;
 mod test_imu;
+mod perpare_esc;
 
 
 fn main() {
