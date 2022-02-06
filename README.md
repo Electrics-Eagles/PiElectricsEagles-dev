@@ -34,8 +34,14 @@ Now you can to check all hardware using
 ```
 pielectricseagles --testing_hardware 
 ```
-Now you can calibrate motor via : 
+Now you can calibrate esc via : 
 ```
 pielectricseagles --calibrate_esc 1 
 ```
-Where one is motor number.
+Where one is esc number.
+Also you can test esc via:
+```
+pielectricseagles --esc_test 1 1200
+```
+Where 1 is its number and 1200 the throllite.
+
