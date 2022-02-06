@@ -34,3 +34,8 @@ Now you can to check all hardware using
 ```
 pielectricseagles --testing_hardware 
 ```
+Now you can calibrate motor via : 
+```
+pielectricseagles --calibrate_esc 1 
+```
+Where one is motor number.
