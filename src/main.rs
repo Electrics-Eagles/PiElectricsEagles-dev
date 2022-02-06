@@ -23,6 +23,7 @@ fn main() {
         if mode == "--test_imu" {test_imu();}
         if mode == "--normal" { main_loop(); }
         if mode == "--calibrate_esc" { calibrate_esc(); }
+        if mode == "--esc_test" { esc_test(); }
         else {
             panic!("I can`t understand you");
         }
