@@ -34,7 +34,7 @@ pub fn esc_test() {
     let mut args = std::env::args();
     if args.len() > 2 {
         let esc_number = args.nth(2).unwrap().parse::<i32>().unwrap();
-        let throttle = args.nth(3).unwrap().parse::<u16>().unwrap();
+        let throttle = args.nth(3).unwrap().parse::<i32>().unwrap();
         let mut controller = Controller::new();
         set_throttle_single_esc(&mut controller, esc_number, throttle);
     }
