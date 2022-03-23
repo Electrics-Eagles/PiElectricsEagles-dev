@@ -46,12 +46,12 @@ fn sqrt(input: f32) -> f32 {
     input.sqrt()
 }
 
-fn normalize_esc(mut input: f32) {
-    if input > 2000.0 {
-        input=2000.0;
+fn normalize_esc(mut input: &mut f32) {
+    if *input > 2000.0 {
+        *input = 2000.0;
     }
-    if input < 1000.0 {
-        input=1000.0;
+    if *input < 1000.0 {
+        *input = 1000.0;
     }
 
 }
@@ -98,12 +98,12 @@ pub fn main_loop() {
         let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
 
 
-        let gyro_roll = ABfilter(gyro_data.pitch as f32, a, b, true);
-        let gyro_pitch = ABfilter(gyro_data.roll as f32, a, b, true);
-        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, true);
-        let acc_x: f32 = ABfilter(acc_data.roll as f32, a, b, true);
-        let acc_y: f32 = ABfilter(acc_data.pitch as f32, a, b, true);
-        let acc_z: f32 = ABfilter(acc_data.yaw as f32, a, b, true);
+        let gyro_roll = gyro_data.roll;//ABfilter(gyro_data.roll as f32, a, b, true);
+        let gyro_pitch = gyro_data.pitch; //ABfilter(gyro_data.pitch as f32, a, b, true);
+        let gyro_yaw = gyro_data.yaw;//ABfilter(gyro_data.yaw as f32, a, b, true);
+        let acc_x: f32 = acc_data.roll as f32;//ABfilter(acc_data.roll as f32, a, b, true);
+        let acc_y: f32 = acc_data.pitch as f32;//ABfilter(acc_data.pitch as f32, a, b, true);
+        let acc_z: f32 = acc_data.yaw as f32;//ABfilter(acc_data.yaw as f32, a, b, true);
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
@@ -201,10 +201,10 @@ pub fn main_loop() {
                 esc_4 = throttle as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
 
 
-                normalize_esc(esc_1);
-                normalize_esc(esc_2);
-                normalize_esc(esc_3);
-                normalize_esc(esc_4);
+                normalize_esc(&mut esc_1);
+                normalize_esc(&mut esc_2);
+                normalize_esc(&mut esc_3);
+                normalize_esc(&mut esc_4);
 
 
                 controller.set_throttle_external_pwm(
