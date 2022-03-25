@@ -96,11 +96,11 @@ pub fn main_loop() {
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone(),gyro_axis_reverse.clone());
         let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
+         //To do ! Add the filter setup to config file.
 
-
-        let gyro_roll = gyro_data.roll;//ABfilter(gyro_data.roll as f32, a, b, true);
-        let gyro_pitch = gyro_data.pitch; //ABfilter(gyro_data.pitch as f32, a, b, true);
-        let gyro_yaw = gyro_data.yaw;//ABfilter(gyro_data.yaw as f32, a, b, true);
+        let gyro_roll = ABfilter(gyro_data.roll as f32, a, b, true);
+        let gyro_pitch = ABfilter(gyro_data.pitch as f32, a, b, true);
+        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, true);
         let acc_x: f32 = acc_data.roll as f32;//ABfilter(acc_data.roll as f32, a, b, true);
         let acc_y: f32 = acc_data.pitch as f32;//ABfilter(acc_data.pitch as f32, a, b, true);
         let acc_z: f32 = acc_data.yaw as f32;//ABfilter(acc_data.yaw as f32, a, b, true);
