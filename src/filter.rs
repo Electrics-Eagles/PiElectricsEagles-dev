@@ -13,7 +13,7 @@ pub struct Filter {
 }
 
 
-const dt: f32 = 0.006;
+const dt: f32 = 0.03;
 
 pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,turned_on:bool) -> f32 {
     let mut xk_1: f32 = 0.0;
