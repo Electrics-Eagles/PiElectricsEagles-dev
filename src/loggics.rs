@@ -98,12 +98,12 @@ pub fn main_loop() {
         let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
          //To do ! Add the filter setup to config file.
 
-        let gyro_roll = ABfilter(gyro_data.roll as f32, a, b, true);
-        let gyro_pitch = ABfilter(gyro_data.pitch as f32, a, b, true);
-        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, true);
-        let acc_x: f32 = ABfilter(acc_data.roll as f32, a, b, true);
-        let acc_y: f32 = ABfilter(acc_data.pitch as f32, a, b, true);
-        let acc_z: f32 = ABfilter(acc_data.yaw as f32, a, b, true);
+        let gyro_roll = ABfilter(gyro_data.roll as f32, a, b, false);
+        let gyro_pitch = ABfilter(gyro_data.pitch as f32, a, b, false);
+        let gyro_yaw = ABfilter(gyro_data.yaw as f32, a, b, false);
+        let acc_x: f32 = ABfilter(acc_data.roll as f32, a, b, false);
+        let acc_y: f32 = ABfilter(acc_data.pitch as f32, a, b, false);
+        let acc_z: f32 = ABfilter(acc_data.yaw as f32, a, b, false);
 
         //65.5 = 1 deg/sec (check the datasheet of the MPU-6050 for mre information).
         unsafe {
@@ -135,8 +135,8 @@ pub fn main_loop() {
 
         angle_pitch = angle_pitch * 0.9996 + angle_pitch_acc * 0.0004; //Correct the drift of the gyro pitch angle with the accelerometer pitch angle.
         angle_roll = angle_roll * 0.9996 + angle_roll_acc * 0.0004; //Correct the drift of the gyro roll angle with the accelerometer roll angle.
-        pitch_level_correction = angle_pitch * 15.0; //Calculate the pitch angle correction
-        roll_level_correction = angle_roll * 15.0; //Calculate the roll angle correction
+        pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
+        roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
             if reciver.ch5 > 1450 && reciver.ch6 < 1050 {
                 start = 1;
