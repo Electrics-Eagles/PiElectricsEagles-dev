@@ -45,3 +45,16 @@ pielectricseagles --esc_test 1 1200
 ```
 Where 1 is its number and 1200 the throllite.
 
+
+
+
+# Our contacts:
+Telegram Channel: https://t.me/electricseagles  
+Discord Channel: https://discord.gg/dKFBpybQEN
+
+E-mail:electricseagles2020@gmail.com
+
+
+
+
+<iframe src="https://discordapp.com/widget?id=936205033601634335&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
