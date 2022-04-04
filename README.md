@@ -2,17 +2,17 @@
 
 Our code is YMFC-AL based. So we are not a full developers of code. But the PCB Design is developed by us.
 
+# What it is ?
+Description on English: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(English)  
+Description on Russian: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(Russian)  
+Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/wiki or www.eeagles.net  
 
-Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/wiki or www.eeagles.net
 
 
-** As we don`t have the stablie verison that do it stabilly we will do not had the dev/stabile folders. For now is redudant **
 
-Description on Russian: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(Russian)
 
 
 # PiElectricsEagles
-
 
 Code Style:
 
@@ -25,13 +25,9 @@ Code Style:
 
 
 **DO NOT COMMIT TARGET FOLDER WITH DOCS AND BUILD RESULT**
-Git Ignore file should help
 
 
 
-legacy outdated verison is there [PiElectricsEagles-dev-master.zip](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/7818303/PiElectricsEagles-dev-master.zip)
-
-[API Level Explain.pdf](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/7818307/API.Level.Explain.pdf)
 
 
 Now you can to check all hardware using 
