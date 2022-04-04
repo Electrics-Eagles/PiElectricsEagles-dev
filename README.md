@@ -51,7 +51,6 @@ Where 1 is its number and 1200 the throllite.
 # Our contacts:
 Telegram Channel: https://t.me/electricseagles  
 Discord Channel: https://discord.gg/dKFBpybQEN
-
 E-mail:electricseagles2020@gmail.com
 
 
