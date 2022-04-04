@@ -8,6 +8,8 @@ Read more about project : https://github.com/Electrics-Eagles/PiElectricsEagles/
 
 ** As we don`t have the stablie verison that do it stabilly we will do not had the dev/stabile folders. For now is redudant **
 
+Description on Russian: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(Russian)
+
 
 # PiElectricsEagles
 
