@@ -21,7 +21,7 @@ use crate::utils::delay;
 
 pub fn test() {
     let mut reciver_driver = receiver::new();
-    let ibus_throllite = reciver_driver.get_datas_of_channel_form_ibus_receiver().ch3;
+    let ibus_throllite = reciver_driver.get_datas_of_channel_form_ibus_receiver()[2];
 
     println!("{}", "Set reciver throlite to max value");
     delay(5000);

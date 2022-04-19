@@ -43,7 +43,6 @@ static mut data_of_channels_before: [u16; 14] = [1000; 14];
 /// ch13: u16 - value of channel 13 joystick
 /// ch14: u16 - value of channel 14 joystick
 
-
 /// It is a ibus_receiver object
 /// ibus_receiver class (crate)
 
@@ -108,7 +107,7 @@ impl receiver {
     /// let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
     /// ```
     ///
-    pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> type_of_data_from_channels {
+    pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> [u16; 14] {
 
         // buffer for reading uart before convert into hexidecimal value
         let mut buffer = [0u8; 32];
@@ -196,6 +195,7 @@ impl receiver {
             .expect("error");
 
         // return into struct of data of channels from usual array
-       resultant_data_of_channels 
+        resultant_data_of_channels 
+            
     }
 }

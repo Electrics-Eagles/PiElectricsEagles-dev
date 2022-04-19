@@ -76,7 +76,7 @@ pub fn main_loop() {
     let mut esc_4: f32;
     let mut acc_total_vector;
     let mut config = config_parser::new();
-
+    
     controller.set_throttle_external_pwm(init_throllite, init_throllite, init_throllite, init_throllite);
 
     let PIds = config.get_pids();
@@ -93,7 +93,11 @@ pub fn main_loop() {
     println!("Initialize all devices finished!!! Welcome to PIEEA V2");
     loop {
         let now = SystemTime::now();
+        let mut final_v: [u16; 16] = [0; 16];
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
+        for address_in_array in 0..reciver.len() {
+            final_v[(address_in_array+1) as usize]=reciver[address_in_array];
+        }
         let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone(),gyro_axis_reverse.clone());
         let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
          //To do ! Add the filter setup to config file.
@@ -138,11 +142,11 @@ pub fn main_loop() {
         pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
-            if reciver.ch5 > 1450 && reciver.ch6 < 1050 {
+            if reciver[5] > 1450 && reciver[6] < 1050 {
                 start = 1;
                 println!("unlocked #1");
             }
-            if start == 1 && reciver.ch6 > 1450 && reciver.ch5 > 1450 {
+            if start == 1 && reciver[6] > 1450 && reciver[5] > 1450 {
                 start = 2;
 
                 println!("unlocked #2");
@@ -156,40 +160,40 @@ pub fn main_loop() {
                 pid_i_mem_yaw = 0.0;
                 pid_last_yaw_d_error = 0.0;
             }
-            if start == 2 && reciver.ch5 < 1250 && reciver.ch5 < 1200 {
+            if start == 2 && reciver[5] < 1250 && reciver[5] < 1200 {
                 start = 0;
                 println!("locked #1");
             }
 
             pid_roll_setpoint = 0.0;
-            if reciver.ch1 > 1508 {
-                pid_roll_setpoint = (reciver.ch1 as f32 - 1508 as f32) as f32;
-            } else if reciver.ch1 < 1492 {
-                pid_roll_setpoint = (reciver.ch1 as f32 - 1492 as f32) as f32;
+            if reciver[1] > 1508 {
+                pid_roll_setpoint = (reciver[1] as f32 - 1508 as f32) as f32;
+            } else if reciver[1] < 1492 {
+                pid_roll_setpoint = (reciver[1] as f32 - 1492 as f32) as f32;
             }
             pid_roll_setpoint -= roll_level_correction;
             pid_roll_setpoint /= 3.0;
 
             pid_pitch_setpoint = 0.0;
-            if reciver.ch2 > 1508 {
-                pid_pitch_setpoint = (reciver.ch2 as f32 - 1508 as f32) as f32;
-            } else if reciver.ch2 < 1492 {
-                pid_pitch_setpoint = (reciver.ch2 as f32 - 1492 as f32) as f32;
+            if reciver[2] > 1508 {
+                pid_pitch_setpoint = (reciver[2] as f32 - 1508 as f32) as f32;
+            } else if reciver[2] < 1492 {
+                pid_pitch_setpoint = (reciver[2] as f32 - 1492 as f32) as f32;
             }
             pid_pitch_setpoint -= pitch_level_correction;
             pid_pitch_setpoint /= 3.0;
 
             pid_yaw_setpoint = 0.0;
-            if reciver.ch3 > 1050 {
-                if reciver.ch4 > 1508 {
-                    pid_yaw_setpoint = (reciver.ch4 as f32 - 1508 as f32) / 3.0;
-                } else if reciver.ch4 < 1492 {
-                    pid_yaw_setpoint = (reciver.ch4 as f32 - 1492 as f32) / 3.0;
+            if reciver[3] > 1050 {
+                if reciver[4] > 1508 {
+                    pid_yaw_setpoint = (reciver[4] as f32 - 1508 as f32) / 3.0;
+                } else if reciver[4] < 1492 {
+                    pid_yaw_setpoint = (reciver[4] as f32 - 1492 as f32) / 3.0;
                 }
             }
 
             calculate_pid(PIds.clone());
-            throttle = reciver.ch3;
+            throttle = reciver[3];
 
             if start == 2 {
                 if throttle > 1800 {
@@ -222,12 +226,12 @@ pub fn main_loop() {
                     gyro_x: gyro_roll as i32,
                     gyro_y: gyro_pitch as i32,
                     gyro_z: gyro_yaw as i32,
-                    reciver_ch1: reciver.ch1,
-                    reciver_ch2: reciver.ch2,
-                    reciver_ch3: reciver.ch3,
-                    reciver_ch4: reciver.ch4,
-                    reciver_ch5: reciver.ch5,
-                    reciver_ch6: reciver.ch6,
+                    reciver_ch1: reciver[1],
+                    reciver_ch2: reciver[2],
+                    reciver_ch3: reciver[3],
+                    reciver_ch4: reciver[4],
+                    reciver_ch5: reciver[5],
+                    reciver_ch6: reciver[6],
                     pitch_level_correction,
                     roll_level_correction,
                     angle_pitch_acc,
