@@ -42,23 +42,8 @@ static mut data_of_channels_before: [u16; 14] = [1000; 14];
 /// ch12: u16 - value of channel 12 joystick
 /// ch13: u16 - value of channel 13 joystick
 /// ch14: u16 - value of channel 14 joystick
-pub struct type_of_data_from_channels {
-    pub ch1: u16,
-    pub ch2: u16,
-    pub ch3: u16,
-    pub ch4: u16,
-    pub ch5: u16,
-    pub ch6: u16,
-    pub ch7: u16,
-    pub ch8: u16,
-    pub ch9: u16,
-    pub ch10: u16,
-    pub ch11: u16,
-    pub ch12: u16,
-    pub ch13: u16,
-    pub ch14: u16,
 
-}
+
 /// It is a ibus_receiver object
 /// ibus_receiver class (crate)
 
@@ -211,21 +196,6 @@ impl receiver {
             .expect("error");
 
         // return into struct of data of channels from usual array
-        type_of_data_from_channels {
-            ch1: resultant_data_of_channels[0],
-            ch2: resultant_data_of_channels[1],
-            ch3: resultant_data_of_channels[2],
-            ch4: resultant_data_of_channels[3],
-            ch5: resultant_data_of_channels[4],
-            ch6: resultant_data_of_channels[5],
-            ch7: resultant_data_of_channels[6],
-            ch8: resultant_data_of_channels[7],
-            ch9: resultant_data_of_channels[8],
-            ch10: resultant_data_of_channels[9],
-            ch11: resultant_data_of_channels[10],
-            ch12: resultant_data_of_channels[11],
-            ch13: resultant_data_of_channels[12],
-            ch14: resultant_data_of_channels[13],
-        }
+       resultant_data_of_channels 
     }
 }
