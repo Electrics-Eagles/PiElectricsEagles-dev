@@ -46,8 +46,8 @@ pub struct config_parser {
 }
 
 pub struct ArmSwitchConfig {
-    pub arm_switch_1: u16,
-    pub arm_switch_2: u16,
+    pub arm_switch_1: usize,
+    pub arm_switch_2: usize,
 }
 /// It is a UART/Sbus/Ibus configuration struct
 pub struct IbusConfig {
@@ -366,8 +366,8 @@ impl config_parser {
         let arm_switch_1 = (arm_config.get("arm_switch_1")).unwrap();
         let arm_switch_2 = (arm_config.get("arm_switch_2")).unwrap();
         let arm_switch = ArmSwitchConfig {
-            arm_switch_1.parse::<i32>().unwrap() as u16,
-            arm_switch_2.parse::<i32>().unwrap() as u16,
+            arm_switch_1: arm_switch_1.parse::<usize>().unwrap(),
+            arm_switch_2: arm_switch_2.parse::<usize>().unwrap(),
         };
 
         return arm_switch;
