@@ -114,8 +114,7 @@ impl Logger {
         self.stream_buf.push_str(&log.temp.to_string());
         self.stream_buf.push_str("\n");
     }
-    pub fn print_telemetry(&mut self)
-    {
+    pub fn print_telemetry(&mut self) {
         println!("{}", self.stream_buf.to_string());
     }
     pub fn save_file(&mut self) {
@@ -124,8 +123,7 @@ impl Logger {
             .expect("Log write error");
         self.stream_buf.clear();
     }
-    pub fn clear_buffer(&mut self)
-    {
+    pub fn clear_buffer(&mut self) {
         self.stream_buf.clear();
     }
 }

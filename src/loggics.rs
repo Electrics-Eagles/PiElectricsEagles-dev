@@ -1,17 +1,17 @@
 use crate::config_parse::*;
 use crate::controller::*;
-use crate::filter::{ABfilter, low_pass_filter};
 use crate::filter::Filter;
-use crate::reciver::*;
+use crate::filter::{low_pass_filter, ABfilter};
 use crate::imu::imu;
 use crate::logger::*;
+use crate::reciver;
+use crate::reciver::*;
 use crate::utils::abs;
+use crate::utils::delay;
 use crate::utils::sin;
 use core::time;
 use std::thread;
 use std::time::SystemTime;
-use crate::reciver;
-use crate::utils::delay;
 #[allow(non_camel_case_types)]
 /*
 This code is a port of our verison of YMFC-AL
@@ -53,9 +53,7 @@ fn normalize_esc(mut input: &mut f32) {
     if *input < 1000.0 {
         *input = 1000.0;
     }
-
 }
-
 
 pub fn main_loop() {
     let init_throllite = 1000;
@@ -76,15 +74,20 @@ pub fn main_loop() {
     let mut esc_4: f32;
     let mut acc_total_vector;
     let mut config = config_parser::new();
-    
-    controller.set_throttle_external_pwm(init_throllite, init_throllite, init_throllite, init_throllite);
+
+    controller.set_throttle_external_pwm(
+        init_throllite,
+        init_throllite,
+        init_throllite,
+        init_throllite,
+    );
 
     let PIds = config.get_pids();
     let axis_assignment_gyro = config.imu_config_parser().axis_assignment_gyro;
     let axis_assignment_acc = config.imu_config_parser().axis_assignment_acc;
     let gyro_axis_reverse = config.imu_config_parser().reversed_axis_gyro;
     let acc_axis_reverse = config.imu_config_parser().reversed_axis_acc;
-
+    let arm_switch = config.arm_switch_parse();
     let mut imu = imu::new();
     delay(5000);
     println!("Calibrate Gyro . Do not touch drone including squrrels");
@@ -96,11 +99,12 @@ pub fn main_loop() {
         let mut final_v: [u16; 16] = [0; 16];
         let reciver = reciver_driver.get_datas_of_channel_form_ibus_receiver();
         for address_in_array in 0..reciver.len() {
-            final_v[(address_in_array+1) as usize]=reciver[address_in_array];
+            final_v[(address_in_array + 1) as usize] = reciver[address_in_array];
         }
-        let gyro_data = imu.get_normalised_gyro_data(axis_assignment_gyro.clone(),gyro_axis_reverse.clone());
-        let acc_data = imu.get_acc_data(axis_assignment_acc.clone(),acc_axis_reverse.clone());
-         //To do ! Add the filter setup to config file.
+        let gyro_data =
+            imu.get_normalised_gyro_data(axis_assignment_gyro.clone(), gyro_axis_reverse.clone());
+        let acc_data = imu.get_acc_data(axis_assignment_acc.clone(), acc_axis_reverse.clone());
+        //To do ! Add the filter setup to config file.
 
         let gyro_roll = ABfilter(gyro_data.roll as f32, a, b, true);
         let gyro_pitch = ABfilter(gyro_data.pitch as f32, a, b, true);
@@ -120,10 +124,10 @@ pub fn main_loop() {
         //0.0000611 = 1 / (25Hz / 65.5)
         angle_pitch += gyro_pitch as f32 * 0.0000916; //Calculate the traveled pitch angle and add this to the angle_pitch variable.
         angle_roll += gyro_roll as f32 * 0.0000916; //Calculate the traveled roll angle and add this to the angle_roll variable.
-        //0.000001066 = (0.0000611 * 3.142) / 180degrThe Arduino sin function is in radians
+                                                    //0.000001066 = (0.0000611 * 3.142) / 180degrThe Arduino sin function is in radians
         angle_pitch -= angle_roll * sin(gyro_yaw as f64 * 0.000001599) as f32; //If the IMU has yawed transfer the roll angle to the pitch angel.
         angle_roll += angle_pitch * sin(gyro_yaw as f64 * 0.000001599) as f32; //If the IMU has yawed transfer the pitch angle to the roll angel.
-        //Accelerometer angle calculations
+                                                                               //Accelerometer angle calculations
         acc_total_vector = sqrt((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z)); //Calculate the total accelerometer vector.
         if abs(acc_y) < acc_total_vector {
             //Prevent the asin function to produce a NaN
@@ -142,11 +146,14 @@ pub fn main_loop() {
         pitch_level_correction = angle_pitch * 0.0; //Calculate the pitch angle correction
         roll_level_correction = angle_roll * 0.0; //Calculate the roll angle correction
         unsafe {
-            if reciver[5] > 1450 && reciver[6] < 1050 {
+            if reciver[arm_switch.arm_switch_1] > 1450 && reciver[arm_switch.arm_switch_2] < 1050 {
                 start = 1;
                 println!("unlocked #1");
             }
-            if start == 1 && reciver[6] > 1450 && reciver[5] > 1450 {
+            if start == 1
+                && reciver[arm_switch.arm_switch_1] > 1450
+                && reciver[arm_switch.arm_switch_2] > 1450
+            {
                 start = 2;
 
                 println!("unlocked #2");
@@ -160,7 +167,10 @@ pub fn main_loop() {
                 pid_i_mem_yaw = 0.0;
                 pid_last_yaw_d_error = 0.0;
             }
-            if start == 2 && reciver[5] < 1250 && reciver[5] < 1200 {
+            if start == 2
+                && reciver[arm_switch.arm_switch_1] < 1250
+                && reciver[arm_switch.arm_switch_2] < 1200
+            {
                 start = 0;
                 println!("locked #1");
             }
@@ -204,12 +214,10 @@ pub fn main_loop() {
                 esc_3 = throttle as f32 + pid_output_pitch - pid_output_roll - pid_output_yaw; //Calculate the pulse for esc 3 (rear-left - CCW)
                 esc_4 = throttle as f32 - pid_output_pitch - pid_output_roll + pid_output_yaw;
 
-
                 normalize_esc(&mut esc_1);
                 normalize_esc(&mut esc_2);
                 normalize_esc(&mut esc_3);
                 normalize_esc(&mut esc_4);
-
 
                 controller.set_throttle_external_pwm(
                     esc_1 as u16,
@@ -316,5 +324,4 @@ pub fn main_loop() {
             pid_last_yaw_d_error = pid_error_temp;
         }
     }
-
 }

@@ -15,9 +15,9 @@ use crate::controller::Controller;
 use crate::imu::imu;
 use crate::reciver;
 use crate::reciver::*;
+use crate::utils::delay;
 use rppal::gpio::Gpio;
 use std::{thread, time};
-use crate::utils::delay;
 
 pub fn test() {
     let mut reciver_driver = receiver::new();
@@ -63,4 +63,3 @@ pub fn test() {
 
     println!("Well done all working..");
 }
-

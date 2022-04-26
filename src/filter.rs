@@ -2,7 +2,6 @@
 use crate::config_parse::config_parser;
 use crate::utils::sqrt;
 
-
 pub struct Coff {
     a: f64,
     b: f64,
@@ -12,10 +11,9 @@ pub struct Filter {
     coff: Coff,
 }
 
-
 const dt: f32 = 0.03;
 
-pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,turned_on:bool) -> f32 {
+pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32, turned_on: bool) -> f32 {
     let mut xk_1: f32 = 0.0;
     let mut vk_1: f32 = 0.0;
     let mut a: f32 = 0.0;
@@ -38,37 +36,20 @@ pub fn ABfilter(newVal: f32, conf_a: f32, conf_b: f32,turned_on:bool) -> f32 {
         xk_1 = xk;
         vk_1 = vk;
         return xk_1;
-    }
-    else {
+    } else {
         return newVal;
     }
 }
 
-
-
-
-
-
-
 static mut result_lpf: f32 = 0.0;
-pub  fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32,turned_on:bool) -> f32 {
-
+pub fn low_pass_filter(x: f32, delta_t: f32, filtration_period: f32, turned_on: bool) -> f32 {
     unsafe {
         if turned_on {
             let mut alpha = delta_t / filtration_period;
             result_lpf += alpha * (x - result_lpf);
             return result_lpf;
-        }
-        else {
+        } else {
             return x;
         }
     }
 }
-
-
-
-
-
-
-
-

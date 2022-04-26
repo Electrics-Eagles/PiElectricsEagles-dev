@@ -14,17 +14,16 @@
 // let channel_6_value = reciver.ch6;
 //
 // Enjoy
-
 extern crate hex; // crate for convert from u8 to hex
+use crate::config_parse::config_parser;
 use rppal::uart::{Parity, Uart}; // crate for uart reading
-use std::iter::FromIterator; // std libary for convert into string via vec with char 
+use std::iter::FromIterator; // std libary for convert into string via vec with char
 use std::time::Duration;
 use std::vec::Vec;
-use crate::config_parse::config_parser;
 /// value for default value of channels when IBUS didn't get signal transmistion
 static mut defualt_value: [u16; 14] = [1500; 14];
 /// value for returning value from pervious value of channel if checksum was failed
-static mut data_of_channels_before: [u16; 14] = [1000; 14]; 
+static mut data_of_channels_before: [u16; 14] = [1000; 14];
 
 /// It is a struct for getting data from ibus receiver
 /// ibus_receiver class (crate)
@@ -82,7 +81,7 @@ impl receiver {
     ///
     pub fn new() -> receiver {
         let mut config = config_parser::new();
-        let config=config.reciver_config();
+        let config = config.reciver_config();
         let mut uart_def: Uart =
             Uart::with_path(config.uart_port, config.baudrate, Parity::None, 8, 1).unwrap();
         uart_def.set_read_mode(32, Duration::new(0, 7)).unwrap();
@@ -108,7 +107,6 @@ impl receiver {
     /// ```
     ///
     pub fn get_datas_of_channel_form_ibus_receiver(&mut self) -> [u16; 14] {
-
         // buffer for reading uart before convert into hexidecimal value
         let mut buffer = [0u8; 32];
         // array for getting a data
@@ -143,7 +141,7 @@ impl receiver {
                         // make reorder each two bytes by using calculating position of char with support this rules of convert bytes in this situation (little endian bytes principle)
                         // we get 16bit value of each channel, so we use 4 characters of 16-bit (2 bytes) hex value in each channel
                         // each new channel, we multiply by 4 of position of bytes, because we use 4 character of each channels
-                        // 1 byte is 2 characters of hex value 
+                        // 1 byte is 2 characters of hex value
                         let ch1_raw_hex = vec![
                             input_string_in_char[6 + (4 * x)],
                             input_string_in_char[7 + (4 * x)],
@@ -151,42 +149,49 @@ impl receiver {
                             input_string_in_char[5 + (4 * x)],
                         ];
                         // convert into u16 from hex string
-                        let value: u16 = u16::from_str_radix(String::from_iter(ch1_raw_hex).as_str(), 16).unwrap();
+                        let value: u16 =
+                            u16::from_str_radix(String::from_iter(ch1_raw_hex).as_str(), 16)
+                                .unwrap();
                         // write a new value of channel into array
                         data_of_channels[x] = value;
                     }
-                    
+
                     // Testing checksum buffer
                     let mut total_bytes: u16 = 0;
-                    for index in 0..30 
-                    {
+                    for index in 0..30 {
                         total_bytes = total_bytes + buffer[index] as u16;
-                    } 
+                    }
                     // Difference between our 0xFFFF and total bytes value to obtain checksum
                     let our_checksum: u16 = 65535 - total_bytes;
                     let real_checksum_raw_hex = String::from_iter(vec![
                         input_string_in_char[62],
-                        input_string_in_char[63], 
-                        input_string_in_char[60], 
-                        input_string_in_char[61]]);
+                        input_string_in_char[63],
+                        input_string_in_char[60],
+                        input_string_in_char[61],
+                    ]);
 
-                    let real_checksum_value = u16::from_str_radix(real_checksum_raw_hex.as_str(), 16).unwrap();
+                    let real_checksum_value =
+                        u16::from_str_radix(real_checksum_raw_hex.as_str(), 16).unwrap();
                     // checksum check sucessful, data will return from current data of channels-
-                    if our_checksum == real_checksum_value 
-                    {
-                        unsafe {  data_of_channels_before = data_of_channels }
+                    if our_checksum == real_checksum_value {
+                        unsafe { data_of_channels_before = data_of_channels }
                         resultant_data_of_channels = data_of_channels;
                     }
                     // if checksum failed, data will return from pervious getting data of channels
                     else {
-                        unsafe { resultant_data_of_channels = data_of_channels_before; }
+                        unsafe {
+                            resultant_data_of_channels = data_of_channels_before;
+                        }
                     }
-
                 } else {
-                    unsafe { resultant_data_of_channels = data_of_channels_before; }
+                    unsafe {
+                        resultant_data_of_channels = data_of_channels_before;
+                    }
                 }
             } else {
-                unsafe { resultant_data_of_channels = data_of_channels_before; }
+                unsafe {
+                    resultant_data_of_channels = data_of_channels_before;
+                }
             }
         }
         //thread::sleep(Duration::from_millis(1));
@@ -195,7 +200,6 @@ impl receiver {
             .expect("error");
 
         // return into struct of data of channels from usual array
-        resultant_data_of_channels 
-            
+        resultant_data_of_channels
     }
 }

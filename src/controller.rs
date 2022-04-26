@@ -1,4 +1,3 @@
-
 const PRESCALER: u8 = 120;
 
 use crate::config_parse::config_parser;
@@ -16,7 +15,6 @@ pub struct Controller {
 }
 
 impl Controller {
-
     pub fn new() -> Controller {
         let mut config = config_parser::new();
         let dev = I2cdev::new(config.esc_config_parser().port).unwrap();
@@ -52,6 +50,4 @@ impl Controller {
             .unwrap();
         self.pwm.enable().unwrap();
     }
-
-
 }

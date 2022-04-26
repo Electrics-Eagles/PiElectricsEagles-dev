@@ -1,5 +1,4 @@
 #[allow(non_camel_case_types)]
-
 //
 //
 // Alex Zaslavkis (Electrics Eagles) 2021
@@ -45,6 +44,11 @@ static file_path: &str = "/etc/pielectricseagles/config.ini";
 pub struct config_parser {
     config_parser: ini::Ini,
 }
+
+pub struct ArmSwitchConfig {
+    pub arm_switch_1: u32,
+    pub arm_switch_2: u32,
+}
 /// It is a UART/Sbus/Ibus configuration struct
 pub struct IbusConfig {
     /// baudrate (u32 value)
@@ -56,14 +60,13 @@ pub struct IbusConfig {
 pub struct ImuConfig {
     /// Name port of connecting MPU6050 via I2C interface (String value)
     pub port: String,
-    pub axis_assignment_gyro:String,
-    pub axis_assignment_acc:String,
-    pub reversed_axis_gyro:String,
-    pub reversed_axis_acc:String,
+    pub axis_assignment_gyro: String,
+    pub axis_assignment_acc: String,
+    pub reversed_axis_gyro: String,
+    pub reversed_axis_acc: String,
 }
 /// It is esc driver configuration struct
 pub struct EscMotors {
-
     /// Name port of connecting ESC driver via I2C inferface (String value)
     pub port: String,
 }
@@ -90,16 +93,14 @@ pub struct PIDS {
     pub yaw: PID,
 }
 
-pub struct Filter_Val{
-    pub conf_a:f64,
-    pub conf_b:f64,
+pub struct Filter_Val {
+    pub conf_a: f64,
+    pub conf_b: f64,
 }
 
 pub struct Reciver {
-pub uart_port:String,
-    pub baudrate:u32,
-
-
+    pub uart_port: String,
+    pub baudrate: u32,
 }
 /// It is LIPO battery controller configuration struct
 pub struct BatteryController {
@@ -109,10 +110,9 @@ pub struct BatteryController {
     pub max_vol_ch0: f32,
     /// Maximum range voltage to measure common 2nd cell of battery (from 1st to 2nd cell of LIPO battery)
     pub max_vol_ch1: f32,
-    /// Maximum range voltage to measure 1st cell of battery 
+    /// Maximum range voltage to measure 1st cell of battery
     pub max_vol_ch2: f32,
 }
-
 
 impl config_parser {
     /// Returns config_parser object
@@ -341,11 +341,13 @@ impl config_parser {
     ///
     pub fn filter_config(&mut self) -> Filter_Val {
         let filter_config = self.config_parser.section(Some("filter")).unwrap();
-        let a=filter_config.get("conf_a").unwrap();
-        let b=filter_config.get("conf_b").unwrap();
-        let data=Filter_Val{ conf_a: a.parse().unwrap(), conf_b: b.parse().unwrap() };
+        let a = filter_config.get("conf_a").unwrap();
+        let b = filter_config.get("conf_b").unwrap();
+        let data = Filter_Val {
+            conf_a: a.parse().unwrap(),
+            conf_b: b.parse().unwrap(),
+        };
         return data;
-
     }
 
     pub fn reciver_config(&mut self) -> Reciver {
@@ -354,11 +356,22 @@ impl config_parser {
         let baudrate = (esc_config.get("baudrate")).unwrap();
         let reciver = Reciver {
             uart_port: port.parse().unwrap(),
-            baudrate: baudrate.parse().unwrap()
+            baudrate: baudrate.parse().unwrap(),
         };
         return reciver;
     }
 
+    pub fn arm_switch_parse(&mut self) -> ArmSwitchConfig {
+        let arm_config = self.config_parser.section(Some("arm_switch")).unwrap();
+        let arm_switch_1 = (arm_config.get("arm_switch_1")).unwrap();
+        let arm_switch_2 = (arm_config.get("arm_switch_2")).unwrap();
+        let arm_switch = ArmSwitchConfig {
+            arm_switch_1,
+            arm_switch_2,
+        };
+
+        return arm_switch;
+    }
 
     pub fn esc_config_parser(&mut self) -> EscMotors {
         let esc_config = self.config_parser.section(Some("esc")).unwrap();
@@ -397,7 +410,7 @@ impl config_parser {
             axis_assignment_gyro: axis_assignment_gyro.parse().unwrap(),
             axis_assignment_acc: axis_assignment_acc.parse().unwrap(),
             reversed_axis_gyro: reversed_axis_gyro.parse().unwrap(),
-            reversed_axis_acc: reversed_axis_acc.parse().unwrap()
+            reversed_axis_acc: reversed_axis_acc.parse().unwrap(),
         };
         return imu_config;
     }
@@ -431,7 +444,7 @@ impl config_parser {
         };
         return Ibus;
     }
-    
+
     /// Return data of LIPO battery controller configuration from pasring ini-file
     ///
     /// # Arguments
@@ -449,14 +462,16 @@ impl config_parser {
     /// **** Already added to loggics file. Be careful. Editing code can break stability of devices. *****
     ///
     ///
-    pub fn battery_controller_parser(&mut self) -> BatteryController
-    {
-        let battery_controller = self.config_parser.section(Some("batterycontroller")).unwrap();
+    pub fn battery_controller_parser(&mut self) -> BatteryController {
+        let battery_controller = self
+            .config_parser
+            .section(Some("batterycontroller"))
+            .unwrap();
         let port = (battery_controller.get("port")).unwrap();
         let max_vol_ch0 = (battery_controller.get("maximum_voltage_ch0")).unwrap();
         let max_vol_ch1 = (battery_controller.get("maximum_voltage_ch1")).unwrap();
         let max_vol_ch2 = (battery_controller.get("maximum_voltage_ch2")).unwrap();
-          
+
         BatteryController {
             port: port.parse().unwrap(),
             max_vol_ch0: max_vol_ch0.parse::<f32>().unwrap(),
@@ -464,7 +479,7 @@ impl config_parser {
             max_vol_ch2: max_vol_ch2.parse::<f32>().unwrap(),
         }
     }
-    
+
     /// PID parse for selected section from ini file
     ///
     /// # Arguments
