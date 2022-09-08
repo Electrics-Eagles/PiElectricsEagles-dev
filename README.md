@@ -60,4 +60,9 @@ E-mail:electricseagles2020@gmail.com
 Long investigation was opened the window that is wrong with drone. By taking board in arduino and in rpi there are visible difference in graphs. The problem is that Acc values are vital for stabilization on Z axis; So we need to fix acceleromether.
 
 
+# It was an while since last message there but currently plans are: 
+1. Update logging system: (maybe make logs selectable )
+2. Update gyro system
+3. Create normal docs and video-docs 
+4. Create software to upload binary to drone
 
