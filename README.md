@@ -65,6 +65,9 @@ Long investigation was opened the window that is wrong with drone. By taking boa
 2. Update gyro system
 3. Create normal docs and video-docs 
 4. Create software to upload binary to drone
+# The second discovery
+
+PID for drone = REAL TIME
 
 [ElectricsEagles V2.0 Signal Discovery.docx](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/10530505/ElectricsEagles.V2.0.Signal.Discovery.docx)
 
