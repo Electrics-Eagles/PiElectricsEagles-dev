@@ -1,0 +1,11 @@
+/home/alex/Documents/GitHub/PiElectricsEagles-dev/target/debug/deps/error_chain-b8c5099013ca266c.rmeta: /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/lib.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/impl_error_chain_kind.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/error_chain.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/quick_main.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/backtrace.rs
+
+/home/alex/Documents/GitHub/PiElectricsEagles-dev/target/debug/deps/liberror_chain-b8c5099013ca266c.rlib: /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/lib.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/impl_error_chain_kind.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/error_chain.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/quick_main.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/backtrace.rs
+
+/home/alex/Documents/GitHub/PiElectricsEagles-dev/target/debug/deps/error_chain-b8c5099013ca266c.d: /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/lib.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/impl_error_chain_kind.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/error_chain.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/quick_main.rs /home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/backtrace.rs
+
+/home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/lib.rs:
+/home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/impl_error_chain_kind.rs:
+/home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/error_chain.rs:
+/home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/quick_main.rs:
+/home/alex/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.12.4/src/backtrace.rs:
