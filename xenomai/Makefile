@@ -1,4 +1,4 @@
-CC = gcc
+CC = arm-linux-gnueabihf-gcc
 SKIN = native
 CFLAGS = -std=gnu99 $(shell xeno-config --skin=$(SKIN) --cflags)
 LDFLAGS = $(shell xeno-config --skin=$(SKIN) --ldflags)
