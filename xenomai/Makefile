@@ -1,19 +1,12 @@
-CC = arm-linux-gnueabihf-gcc
+CC = gcc
 SKIN = native
-CFLAGS = -std=gnu99 $(shell xeno-config --skin=$(SKIN) --cflags)
+CFLAGS = -std=gnu99 $(shell xeno-config --skin=$(SKIN) --cflags) -Wl,--no-as-needed -ldl 
 LDFLAGS = $(shell xeno-config --skin=$(SKIN) --ldflags)
 
-EXE = rt_motor
-LOAD = eatmem
+EXE = pidrone
 
-all: main.c gpio.c
-	$(CC) $^ $(CFLAGS) $(LDFLAGS) -o $(EXE)
 
-no_rt:
-	$(CC) no_rt_motor.c -o no_rt_motor
+all: libxenomai.c gpio.h libgpio.a
+	$(CC) $^ $(CFLAGS)  $(LDFLAGS)   -o $(EXE)
 
-load:
-	$(CC) eatmem.c -o $(LOAD)
 
-clean:
-	rm $(EXE) $(LOAD) no_rt_motor
