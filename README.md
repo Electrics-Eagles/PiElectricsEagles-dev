@@ -53,7 +53,7 @@ We would love to hear from you! You can get in touch with us through the followi
 
 
 - Discord: [https://discord.gg/fACmjJN4dR](https://discord.gg/fACmjJN4dR)
-- Email: [electricseagles2020@gmail.com](mailto:electricseagles2020@gmail.com)
+
 
 
 
