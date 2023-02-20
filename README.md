@@ -71,3 +71,4 @@ PID for drone = REAL TIME
 
 [ElectricsEagles V2.0 Signal Discovery.docx](https://github.com/Electrics-Eagles/PiElectricsEagles-dev/files/10530505/ElectricsEagles.V2.0.Signal.Discovery.docx)
 
+# BUILD IS BROKEN THAT FINE... WE ARE SWITCHING TO REAL TIME
