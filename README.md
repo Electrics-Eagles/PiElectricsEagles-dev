@@ -51,8 +51,7 @@ Where 1 is its number and 1200 the throllite.
 
 We would love to hear from you! You can get in touch with us through the following channels:
 
-- GitHub: [https://github.com/Electrics-Eagles](https://github.com/Electrics-Eagles)
-- Telegram: [https://t.me/electricseagles](https://t.me/electricseagles)
+
 - Discord: [https://discord.gg/fACmjJN4dR](https://discord.gg/fACmjJN4dR)
 - Email: [electricseagles2020@gmail.com](mailto:electricseagles2020@gmail.com)
 
