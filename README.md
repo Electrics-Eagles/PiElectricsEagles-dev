@@ -47,13 +47,17 @@ Where 1 is its number and 1200 the throllite.
 
 
 
+## Contact Us
 
-# Our contacts:
-Telegram Channel: https://t.me/electricseagles  
-Discord Channel: https://discord.gg/dKFBpybQEN  
-E-mail:electricseagles2020@gmail.com
+We would love to hear from you! You can get in touch with us through the following channels:
 
 
+- Discord: [https://discord.gg/fACmjJN4dR](https://discord.gg/fACmjJN4dR)
+
+
+
+
+# Log result 
 
 ![image](https://user-images.githubusercontent.com/20460747/189099203-3d3414b5-c4b4-4147-88d8-fa95045313e2.png)
 
