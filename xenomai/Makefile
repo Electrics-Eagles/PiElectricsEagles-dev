@@ -6,7 +6,7 @@ LDFLAGS = $(shell xeno-config --skin=$(SKIN) --ldflags)
 EXE = pidrone
 
 
-all: libxenomai.c pielectricseagles.h /usr/lib/lipielectricseagles.a
+all: libxenomai.c pielectricseagles.h ./libpielectricseagles.a
 	$(CC) $^ $(CFLAGS)  $(LDFLAGS)   -o $(EXE)
 
 

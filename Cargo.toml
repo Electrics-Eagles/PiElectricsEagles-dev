@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Aleksandrs Zaslavskis <sahsariga111@gmail.com> https://github.com/alex5250 ","Mihails Zaslavskis mishariga111@gmail.com https://github.com/misha-dig"]
 edition = "2018"
 
+[lib]
+
+name = "pielectricseagles"
+crate-type = ["staticlib"]
 
 [dependencies]
 chrono = "0.4"
