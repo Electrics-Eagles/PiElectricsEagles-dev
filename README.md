@@ -2,6 +2,8 @@
 
 Our code is YMFC-AL based. So we are not a full developers of code. But the PCB Design is developed by us.
 
+# Sorry now in Uni we had really many things to do that meansless much time to do project. Is not mean that been forgotten, is just means little less active as usual. Hope we will recover in summmer period.
+
 # What it is ?
 Description on English: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(English)  
 Description on Russian: https://github.com/Electrics-Eagles/PiElectricsEagles-dev/wiki/Descripiton-of-the-Project-(Russian)  
